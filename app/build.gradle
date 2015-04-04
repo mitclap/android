@@ -27,4 +27,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile files('libs/osmbonuspack_v5.1.jar')
+    compile 'com.koushikdutta.async:androidasync:2.+'
 }
