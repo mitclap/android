@@ -17,5 +17,6 @@
     <string name="log_in_password">Password</string>
     <string name="title_activity_home">Home</string>
     <string name="title_activity_new_event">New Event</string>
+    <string name="title_activity_map_event">MapEventActivity</string>
 
 </resources>
