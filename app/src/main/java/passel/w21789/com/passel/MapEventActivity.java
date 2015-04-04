@@ -2,26 +2,57 @@ package passel.w21789.com.passel;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+
+import java.util.ArrayList;
 
 
 public class MapEventActivity extends ActionBarActivity {
-
-    private MapView         mMapView;
+    Marker startMarker;
+    MapView map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_event);
 
-        mMapView = (MapView) findViewById(R.id.mapview);
-        mMapView.setTileSource(TileSourceFactory.MAPNIK);
-        mMapView.setBuiltInZoomControls(true);
+        map = (MapView) findViewById(R.id.mapview);
+        map.setTileSource(TileSourceFactory.MAPNIK);
+        map.setBuiltInZoomControls(true);
+        map.setMultiTouchControls(true);
+
+        IMapController mapController = map.getController();
+        mapController.setZoom(14);
+        GeoPoint startPoint = new GeoPoint(42.3736, -71.1106);
+        mapController.setCenter(startPoint);
+
+        startMarker = new Marker(map);
+        startMarker.setPosition(startPoint);
+        startMarker.setTitle("Hi");
+//        startMarker.setIcon(getResources().getDrawable(R.drawable.ic_action_action_room));
+
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        map.getOverlays().add(startMarker);
+
+        moveMarker();
     }
+
+    private void  moveMarker(){
+        double x = 42.3598;
+        double y = -71.0921;
+        startMarker.setPosition(new GeoPoint(x, y));
+        map.invalidate();
+    }
+
 
 
     @Override
