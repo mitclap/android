@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 public class MapEventActivity extends ActionBarActivity {
     Marker startMarker;
+    Marker eventMarker;
+
     MapView map;
 
     @Override
@@ -37,19 +39,42 @@ public class MapEventActivity extends ActionBarActivity {
 
         startMarker = new Marker(map);
         startMarker.setPosition(startPoint);
-        startMarker.setTitle("Hi");
+        startMarker.setTitle("Aneesh Aggarwal");
+        startMarker.setSubDescription("ETA: 12 min.");
+        startMarker.setIcon(getResources().getDrawable(R.drawable.marker_via));
 //        startMarker.setIcon(getResources().getDrawable(R.drawable.ic_action_action_room));
 
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(startMarker);
 
+        eventMarker = new Marker(map);
+        eventMarker.setPosition(startPoint);
+        eventMarker.setTitle("Team Passel Group Meeting");
+        eventMarker.setSubDescription("8:56 PM");
+        eventMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        map.getOverlays().add(eventMarker);
+
+
         moveMarker();
+
+        addPersonMarker(42.33,-71.07,"Lisandro", "ETA: 5 min.");
+        addPersonMarker(42.7,-71.11,"Carlos", "ETA: 9 min.");
     }
 
     private void  moveMarker(){
         double x = 42.3598;
         double y = -71.0921;
         startMarker.setPosition(new GeoPoint(x, y));
+        map.invalidate();
+    }
+
+    private void addPersonMarker(double lat, double lon, String name, String eta){
+        Marker personMarker = new Marker(map);
+        personMarker.setPosition(new GeoPoint(lat,lon));
+        personMarker.setTitle(name);
+        personMarker.setSubDescription(eta);
+        personMarker.setIcon(getResources().getDrawable(R.drawable.marker_via));
+        map.getOverlays().add(personMarker);
         map.invalidate();
     }
 
