@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx version="1.1" creator="http://www.geoplaner.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<wpt lat="42.35794" lon="-71.09346">
+<ele>3.4</ele>
+<name>WP01-A</name>
+</wpt>
+<wpt lat="42.35794" lon="-71.09345">
+<ele>3.4</ele>
+<name>WP02-B</name>
+</wpt>
+<wpt lat="42.35795" lon="-71.09344">
+<ele>3.4</ele>
+<name>WP03-C</name>
+</wpt>
+<wpt lat="42.35795" lon="-71.09342">
+<ele>3.4</ele>
+<name>WP04-D</name>
+</wpt>
+<wpt lat="42.35794" lon="-71.0934">
+<ele>3.4</ele>
+<name>WP05-E</name>
+</wpt>
+<wpt lat="42.35793" lon="-71.09339">
+<ele>3.5</ele>
+<name>WP06-F</name>
+</wpt>
+<wpt lat="42.35792" lon="-71.09338">
+<ele>3.5</ele>
+<name>WP07-G</name>
+</wpt>
+<wpt lat="42.35792" lon="-71.09338">
+<ele>3.5</ele>
+<name>WP08-H</name>
+</wpt>
+<wpt lat="42.35791" lon="-71.09337">
+<ele>3.5</ele>
+<name>WP09-I</name>
+</wpt>
+<wpt lat="42.3579" lon="-71.09337">
+<ele>3.5</ele>
+<name>WP10-J</name>
+</wpt>
+<wpt lat="42.35789" lon="-71.09336">
+<ele>3.5</ele>
+<name>WP11-K</name>
+</wpt>
+<wpt lat="42.35788" lon="-71.09335">
+<ele>3.5</ele>
+<name>WP12-L</name>
+</wpt>
+<wpt lat="42.35787" lon="-71.09334">
+<ele>3.5</ele>
+<name>WP13-M</name>
+</wpt>
+<wpt lat="42.35786" lon="-71.09333">
+<ele>3.5</ele>
+<name>WP14-N</name>
+</wpt>
+<wpt lat="42.35785" lon="-71.09332">
+<ele>3.5</ele>
+<name>WP15-O</name>
+</wpt>
+<wpt lat="42.35783" lon="-71.09332">
+<ele>3.6</ele>
+<name>WP16-P</name>
+</wpt>
+<wpt lat="42.35782" lon="-71.09332">
+<ele>3.6</ele>
+<name>WP17-Q</name>
+</wpt>
+<wpt lat="42.35781" lon="-71.09334">
+<ele>3.6</ele>
+<name>WP18-R</name>
+</wpt>
+<wpt lat="42.35781" lon="-71.09335">
+<ele>3.6</ele>
+<name>WP19-S</name>
+</wpt>
+<wpt lat="42.3578" lon="-71.09336">
+<ele>3.6</ele>
+<name>WP20-T</name>
+</wpt>
+<wpt lat="42.3578" lon="-71.09337">
+<ele>3.5</ele>
+<name>WP21-U</name>
+</wpt>
+<wpt lat="42.35779" lon="-71.09339">
+<ele>3.5</ele>
+<name>WP22-V</name>
+</wpt>
+<wpt lat="42.35778" lon="-71.0934">
+<ele>3.5</ele>
+<name>WP23-W</name>
+</wpt>
+<wpt lat="42.35778" lon="-71.09341">
+<ele>3.5</ele>
+<name>WP24-X</name>
+</wpt>
+<wpt lat="42.35777" lon="-71.09343">
+<ele>3.5</ele>
+<name>WP25-Y</name>
+</wpt>
+<wpt lat="42.35777" lon="-71.09345">
+<ele>3.5</ele>
+<name>WP26-Z</name>
+</wpt>
+<wpt lat="42.35776" lon="-71.09347">
+<ele>3.5</ele>
+<name>WP27</name>
+</wpt>
+<wpt lat="42.35777" lon="-71.09348">
+<ele>3.5</ele>
+<name>WP28</name>
+</wpt>
+<wpt lat="42.35779" lon="-71.09349">
+<ele>3.5</ele>
+<name>WP29</name>
+</wpt>
+<wpt lat="42.3578" lon="-71.0935">
+<ele>3.5</ele>
+<name>WP30</name>
+</wpt>
+<wpt lat="42.35782" lon="-71.09351">
+<ele>3.5</ele>
+<name>WP31</name>
+</wpt>
+<wpt lat="42.35784" lon="-71.09352">
+<ele>3.4</ele>
+<name>WP32</name>
+</wpt>
+<wpt lat="42.35786" lon="-71.09353">
+<ele>3.4</ele>
+<name>WP33</name>
+</wpt>
+<wpt lat="42.35788" lon="-71.09354">
+<ele>3.4</ele>
+<name>WP34</name>
+</wpt>
+<wpt lat="42.3579" lon="-71.09354">
+<ele>3.4</ele>
+<name>WP35</name>
+</wpt>
+<wpt lat="42.35793" lon="-71.09354">
+<ele>3.3</ele>
+<name>WP36</name>
+</wpt>
+<wpt lat="42.35795" lon="-71.09354">
+<ele>3.3</ele>
+<name>WP37</name>
+</wpt>
+<wpt lat="42.35797" lon="-71.09353">
+<ele>3.3</ele>
+<name>WP38</name>
+</wpt>
+<wpt lat="42.35799" lon="-71.09352">
+<ele>3.2</ele>
+<name>WP39</name>
+</wpt>
+<wpt lat="42.35801" lon="-71.09351">
+<ele>3.2</ele>
+<name>WP40</name>
+</wpt>
+<wpt lat="42.35803" lon="-71.0935">
+<ele>3.2</ele>
+<name>WP41</name>
+</wpt>
+<wpt lat="42.35804" lon="-71.09349">
+<ele>3.3</ele>
+<name>WP42</name>
+</wpt>
+<wpt lat="42.35805" lon="-71.09347">
+<ele>3.3</ele>
+<name>WP43</name>
+</wpt>
+<wpt lat="42.35806" lon="-71.09345">
+<ele>3.3</ele>
+<name>WP44</name>
+</wpt>
+<wpt lat="42.35806" lon="-71.09343">
+<ele>3.4</ele>
+<name>WP45</name>
+</wpt>
+<wpt lat="42.35807" lon="-71.0934">
+<ele>3.4</ele>
+<name>WP46</name>
+</wpt>
+<wpt lat="42.35807" lon="-71.09338">
+<ele>3.4</ele>
+<name>WP47</name>
+</wpt>
+<wpt lat="42.35808" lon="-71.09335">
+<ele>3.4</ele>
+<name>WP48</name>
+</wpt>
+<wpt lat="42.35809" lon="-71.09332">
+<ele>3.5</ele>
+<name>WP49</name>
+</wpt>
+<wpt lat="42.3581" lon="-71.0933">
+<ele>3.5</ele>
+<name>WP50</name>
+</wpt>
+<wpt lat="42.3581" lon="-71.09326">
+<ele>3.5</ele>
+<name>WP51</name>
+</wpt>
+<wpt lat="42.35811" lon="-71.09325">
+<ele>3.5</ele>
+<name>WP52</name>
+</wpt>
+<wpt lat="42.35812" lon="-71.09322">
+<ele>3.6</ele>
+<name>WP53</name>
+</wpt>
+<wpt lat="42.35813" lon="-71.09319">
+<ele>3.6</ele>
+<name>WP54</name>
+</wpt>
+<wpt lat="42.35814" lon="-71.09316">
+<ele>3.5</ele>
+<name>WP55</name>
+</wpt>
+<wpt lat="42.35815" lon="-71.09314">
+<ele>3.5</ele>
+<name>WP56</name>
+</wpt>
+<wpt lat="42.35815" lon="-71.09313">
+<ele>3.5</ele>
+<name>WP57</name>
+</wpt>
+<wpt lat="42.35815" lon="-71.09312">
+<ele>3.5</ele>
+<name>WP58</name>
+</wpt>
+<wpt lat="42.35816" lon="-71.09311">
+<ele>3.4</ele>
+<name>WP59</name>
+</wpt>
+<wpt lat="42.35817" lon="-71.09309">
+<ele>3.3</ele>
+<name>WP60</name>
+</wpt>
+<wpt lat="42.35818" lon="-71.09307">
+<ele>3.3</ele>
+<name>WP61</name>
+</wpt>
+<wpt lat="42.3582" lon="-71.09308">
+<ele>3.3</ele>
+<name>WP62</name>
+</wpt>
+<wpt lat="42.35821" lon="-71.09309">
+<ele>3.3</ele>
+<name>WP63</name>
+</wpt>
+<wpt lat="42.35824" lon="-71.0931">
+<ele>3.3</ele>
+<name>WP64</name>
+</wpt>
+<wpt lat="42.35826" lon="-71.09311">
+<ele>3.3</ele>
+<name>WP65</name>
+</wpt>
+<wpt lat="42.35829" lon="-71.09312">
+<ele>3.3</ele>
+<name>WP66</name>
+</wpt>
+<wpt lat="42.35831" lon="-71.09314">
+<ele>3.3</ele>
+<name>WP67</name>
+</wpt>
+<wpt lat="42.35833" lon="-71.09314">
+<ele>3.3</ele>
+<name>WP68</name>
+</wpt>
+<wpt lat="42.35835" lon="-71.09315">
+<ele>3.3</ele>
+<name>WP69</name>
+</wpt>
+<wpt lat="42.35838" lon="-71.09316">
+<ele>3.2</ele>
+<name>WP70</name>
+</wpt>
+<wpt lat="42.3584" lon="-71.09317">
+<ele>3.2</ele>
+<name>WP71</name>
+</wpt>
+<wpt lat="42.35842" lon="-71.09318">
+<ele>3.2</ele>
+<name>WP72</name>
+</wpt>
+<wpt lat="42.35845" lon="-71.09319">
+<ele>3.2</ele>
+<name>WP73</name>
+</wpt>
+<wpt lat="42.35849" lon="-71.0932">
+<ele>3.2</ele>
+<name>WP74</name>
+</wpt>
+<wpt lat="42.35852" lon="-71.09321">
+<ele>3.2</ele>
+<name>WP75</name>
+</wpt>
+<wpt lat="42.35856" lon="-71.09322">
+<ele>3.3</ele>
+<name>WP76</name>
+</wpt>
+<wpt lat="42.35858" lon="-71.09323">
+<ele>3.3</ele>
+<name>WP77</name>
+</wpt>
+<wpt lat="42.3586" lon="-71.09324">
+<ele>3.3</ele>
+<name>WP78</name>
+</wpt>
+<wpt lat="42.35863" lon="-71.09325">
+<ele>3.3</ele>
+<name>WP79</name>
+</wpt>
+<wpt lat="42.35865" lon="-71.09326">
+<ele>3.3</ele>
+<name>WP80</name>
+</wpt>
+<wpt lat="42.35867" lon="-71.09327">
+<ele>3.2</ele>
+<name>WP81</name>
+</wpt>
+<wpt lat="42.35871" lon="-71.09329">
+<ele>3.2</ele>
+<name>WP82</name>
+</wpt>
+<wpt lat="42.35873" lon="-71.0933">
+<ele>3.2</ele>
+<name>WP83</name>
+</wpt>
+<wpt lat="42.35875" lon="-71.09331">
+<ele>3.2</ele>
+<name>WP84</name>
+</wpt>
+<wpt lat="42.35878" lon="-71.09332">
+<ele>3.1</ele>
+<name>WP85</name>
+</wpt>
+<wpt lat="42.3588" lon="-71.09333">
+<ele>3.1</ele>
+<name>WP86</name>
+</wpt>
+<wpt lat="42.35883" lon="-71.09334">
+<ele>3.1</ele>
+<name>WP87</name>
+</wpt>
+<wpt lat="42.35885" lon="-71.09335">
+<ele>3.1</ele>
+<name>WP88</name>
+</wpt>
+<wpt lat="42.35887" lon="-71.09336">
+<ele>3.1</ele>
+<name>WP89</name>
+</wpt>
+<wpt lat="42.35889" lon="-71.09337">
+<ele>3</ele>
+<name>WP90</name>
+</wpt>
+<wpt lat="42.35891" lon="-71.09338">
+<ele>3</ele>
+<name>WP91</name>
+</wpt>
+<wpt lat="42.35893" lon="-71.09339">
+<ele>3</ele>
+<name>WP92</name>
+</wpt>
+<wpt lat="42.35895" lon="-71.0934">
+<ele>3</ele>
+<name>WP93</name>
+</wpt>
+<wpt lat="42.35898" lon="-71.09339">
+<ele>3</ele>
+<name>WP94</name>
+</wpt>
+<wpt lat="42.359" lon="-71.09338">
+<ele>2.9</ele>
+<name>WP95</name>
+</wpt>
+<wpt lat="42.35903" lon="-71.09336">
+<ele>2.8</ele>
+<name>WP96</name>
+</wpt>
+<wpt lat="42.35905" lon="-71.09334">
+<ele>2.7</ele>
+<name>WP97</name>
+</wpt>
+<wpt lat="42.35907" lon="-71.09331">
+<ele>2.6</ele>
+<name>WP98</name>
+</wpt>
+<wpt lat="42.35908" lon="-71.09329">
+<ele>2.5</ele>
+<name>WP99</name>
+</wpt>
+<wpt lat="42.3591" lon="-71.09327">
+<ele>2.4</ele>
+<name>WP100</name>
+</wpt>
+<wpt lat="42.35912" lon="-71.09325">
+<ele>2.3</ele>
+<name>WP101</name>
+</wpt>
+<wpt lat="42.35914" lon="-71.09322">
+<ele>2.1</ele>
+<name>WP102</name>
+</wpt>
+<wpt lat="42.35917" lon="-71.0932">
+<ele>2</ele>
+<name>WP103</name>
+</wpt>
+<wpt lat="42.35918" lon="-71.09317">
+<ele>1.9</ele>
+<name>WP104</name>
+</wpt>
+<wpt lat="42.35921" lon="-71.09314">
+<ele>1.7</ele>
+<name>WP105</name>
+</wpt>
+<wpt lat="42.35922" lon="-71.09311">
+<ele>1.6</ele>
+<name>WP106</name>
+</wpt>
+<wpt lat="42.35925" lon="-71.09307">
+<ele>1.4</ele>
+<name>WP107</name>
+</wpt>
+<wpt lat="42.35926" lon="-71.09301">
+<ele>1.3</ele>
+<name>WP108</name>
+</wpt>
+<wpt lat="42.35927" lon="-71.09297">
+<ele>1.1</ele>
+<name>WP109</name>
+</wpt>
+<wpt lat="42.35929" lon="-71.0929">
+<ele>1</ele>
+<name>WP110</name>
+</wpt>
+<wpt lat="42.35929" lon="-71.09285">
+<ele>1.1</ele>
+<name>WP111</name>
+</wpt>
+<wpt lat="42.35931" lon="-71.0928">
+<ele>1.3</ele>
+<name>WP112</name>
+</wpt>
+<wpt lat="42.35933" lon="-71.09273">
+<ele>1.6</ele>
+<name>WP113</name>
+</wpt>
+<wpt lat="42.35935" lon="-71.09268">
+<ele>1.7</ele>
+<name>WP114</name>
+</wpt>
+<wpt lat="42.35936" lon="-71.09264">
+<ele>1.8</ele>
+<name>WP115</name>
+</wpt>
+<wpt lat="42.35937" lon="-71.0926">
+<ele>1.9</ele>
+<name>WP116</name>
+</wpt>
+<wpt lat="42.35938" lon="-71.09257">
+<ele>2</ele>
+<name>WP117</name>
+</wpt>
+<wpt lat="42.35939" lon="-71.09253">
+<ele>2</ele>
+<name>WP118</name>
+</wpt>
+<wpt lat="42.3594" lon="-71.0925">
+<ele>2.1</ele>
+<name>WP119</name>
+</wpt>
+<wpt lat="42.35941" lon="-71.09246">
+<ele>2.1</ele>
+<name>WP120</name>
+</wpt>
+<wpt lat="42.35942" lon="-71.09241">
+<ele>2.2</ele>
+<name>WP121</name>
+</wpt>
+<wpt lat="42.35944" lon="-71.09238">
+<ele>2.2</ele>
+<name>WP122</name>
+</wpt>
+<wpt lat="42.35945" lon="-71.09234">
+<ele>2.2</ele>
+<name>WP123</name>
+</wpt>
+<wpt lat="42.35947" lon="-71.09228">
+<ele>2.3</ele>
+<name>WP124</name>
+</wpt>
+<wpt lat="42.35948" lon="-71.09223">
+<ele>2.4</ele>
+<name>WP125</name>
+</wpt>
+<wpt lat="42.35949" lon="-71.0922">
+<ele>2.4</ele>
+<name>WP126</name>
+</wpt>
+<wpt lat="42.35951" lon="-71.09217">
+<ele>2.4</ele>
+<name>WP127</name>
+</wpt>
+<wpt lat="42.35952" lon="-71.09213">
+<ele>2.4</ele>
+<name>WP128</name>
+</wpt>
+<wpt lat="42.35955" lon="-71.09209">
+<ele>2.4</ele>
+<name>WP129</name>
+</wpt>
+<wpt lat="42.35956" lon="-71.09205">
+<ele>2.5</ele>
+<name>WP130</name>
+</wpt>
+<wpt lat="42.35958" lon="-71.092">
+<ele>2.5</ele>
+<name>WP131</name>
+</wpt>
+<wpt lat="42.35962" lon="-71.09199">
+<ele>2.4</ele>
+<name>WP132</name>
+</wpt>
+<wpt lat="42.35966" lon="-71.09201">
+<ele>2.2</ele>
+<name>WP133</name>
+</wpt>
+<wpt lat="42.35966" lon="-71.09204">
+<ele>2.2</ele>
+<name>WP134</name>
+</wpt>
+<wpt lat="42.35965" lon="-71.09205">
+<ele>2.1</ele>
+<name>WP135</name>
+</wpt>
+<wpt lat="42.35965" lon="-71.09206">
+<ele>2.1</ele>
+<name>WP136</name>
+</wpt>
+<wpt lat="42.35964" lon="-71.09205">
+<ele>2.2</ele>
+<name>WP137</name>
+</wpt>
+<wpt lat="42.35965" lon="-71.09207">
+<ele>2.1</ele>
+<name>WP138</name>
+</wpt>
+<wpt lat="42.35965" lon="-71.09208">
+<ele>2.1</ele>
+<name>WP139</name>
+</wpt>
+<wpt lat="42.35965" lon="-71.09213">
+<ele>2.1</ele>
+<name>WP140</name>
+</wpt>
+<wpt lat="42.35965" lon="-71.09218">
+<ele>2</ele>
+<name>WP141</name>
+</wpt>
+<wpt lat="42.35969" lon="-71.09219">
+<ele>2.1</ele>
+<name>WP142</name>
+</wpt>
+<wpt lat="42.35974" lon="-71.09221">
+<ele>2.1</ele>
+<name>WP143</name>
+</wpt>
+<wpt lat="42.35979" lon="-71.09219">
+<ele>2.2</ele>
+<name>WP144</name>
+</wpt>
+<wpt lat="42.35982" lon="-71.09211">
+<ele>2.3</ele>
+<name>WP145</name>
+</wpt>
+<wpt lat="42.3598" lon="-71.09204">
+<ele>2.3</ele>
+<name>WP146</name>
+</wpt>
+<wpt lat="42.35977" lon="-71.09202">
+<ele>2.2</ele>
+<name>WP147</name>
+</wpt>
+<wpt lat="42.35974" lon="-71.09203">
+<ele>2.2</ele>
+<name>WP148</name>
+</wpt>
+<wpt lat="42.35974" lon="-71.09206">
+<ele>2.2</ele>
+<name>WP149</name>
+</wpt>
+<wpt lat="42.35974" lon="-71.09206">
+<ele>2.2</ele>
+<name>WP150</name>
+</wpt>
+</gpx>

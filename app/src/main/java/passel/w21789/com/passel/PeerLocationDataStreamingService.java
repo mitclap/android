@@ -34,17 +34,39 @@ public class PeerLocationDataStreamingService extends Service {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        final List<Location> peerLocations = decodeGPX(R.raw.waypoints);
+        final List<Location> peerLocationsAneesh = decodeGPX(R.raw.waypoints_aneesh1);
+        final List<Location> peerLocationsCarlos = decodeGPX(R.raw.waypoints_carlos1);
+        final List<Location> peerLocationsPriscilla = decodeGPX(R.raw.waypoints_priscilla1);
 
         int delay = 1000; // delay for 1 sec.
-        int period = 2000; // repeat every 2 sec.
+        int period = 500; // repeat every 2 sec.
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             int locationIndex = 0;
             public void run() {
-                if (locationIndex < peerLocations.size()){
-                sendMessage(peerLocations.get(locationIndex));
+                if (locationIndex < peerLocationsAneesh.size()){
+                sendMessage(peerLocationsAneesh.get(locationIndex), "Aneesh", Integer.toString((peerLocationsAneesh.size()-locationIndex)/10));
                 locationIndex++;
+                }
+            }
+        }, delay, period);
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int locationIndex = 0;
+            public void run() {
+                if (locationIndex < peerLocationsCarlos.size()){
+                    sendMessage(peerLocationsCarlos.get(locationIndex), "Carlos", Integer.toString((peerLocationsCarlos.size()-locationIndex)/10));
+                    locationIndex++;
+                }
+            }
+        }, delay, period);
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int locationIndex = 0;
+            public void run() {
+                if (locationIndex < peerLocationsPriscilla.size()){
+                    sendMessage(peerLocationsPriscilla.get(locationIndex), "Priscilla", Integer.toString((peerLocationsPriscilla.size()-locationIndex)/10));
+                    locationIndex++;
                 }
             }
         }, delay, period);
@@ -52,7 +74,7 @@ public class PeerLocationDataStreamingService extends Service {
         return START_NOT_STICKY;
     }
 
-    private void sendMessage(Location location) {
+    private void sendMessage(Location location, String name, String eta) {
         Log.d("sender", "Broadcasting message");
 
         double lat = location.getLatitude();
@@ -62,7 +84,8 @@ public class PeerLocationDataStreamingService extends Service {
         // You can also include some extra data.
         intent.putExtra("lat", lat);
         intent.putExtra("lng", lng);
-        intent.putExtra("name", "Aneesh");
+        intent.putExtra("name", name);
+        intent.putExtra("eta", eta);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

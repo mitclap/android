@@ -25,6 +25,9 @@ import java.util.HashMap;
 public class MapEventActivity extends ActionBarActivity {
     HashMap<String, Marker> peopleMarkerHashMap = new HashMap<>();
 
+    Intent BackgroundGPSIntent;
+    Intent PeerLocationIntent;
+
     Marker startMarker;
     Marker eventMarker;
     Marker selfMarker;
@@ -43,18 +46,8 @@ public class MapEventActivity extends ActionBarActivity {
 
         IMapController mapController = map.getController();
         mapController.setZoom(14);
-        GeoPoint startPoint = new GeoPoint(42.3736, -71.1106);
+        GeoPoint startPoint = new GeoPoint(42.35965, -71.09206);
         mapController.setCenter(startPoint);
-
-        startMarker = new Marker(map);
-        startMarker.setPosition(startPoint);
-        startMarker.setTitle("Aneesh");
-        startMarker.setSubDescription("ETA: 12 min.");
-        startMarker.setIcon(getResources().getDrawable(R.drawable.marker_via));
-//        startMarker.setIcon(getResources().getDrawable(R.drawable.ic_action_action_room));
-
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        map.getOverlays().add(startMarker);
 
         eventMarker = new Marker(map);
         eventMarker.setPosition(startPoint);
@@ -69,8 +62,6 @@ public class MapEventActivity extends ActionBarActivity {
         selfMarker.setIcon(getResources().getDrawable(R.drawable.marker_node));
         map.getOverlays().add(selfMarker);
 
-        moveMarker();
-
         addPersonMarker(42.33,-71.07,"Lisandro", "ETA: 5 min.");
         addPersonMarker(42.7,-71.11,"Carlos", "ETA: 9 min.");
 
@@ -81,18 +72,11 @@ public class MapEventActivity extends ActionBarActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(peerLocationMessageReceiver,
                 new IntentFilter("send-peer-location-data"));
 
-        Intent intentName = new Intent(getBaseContext(), BackgroundGPSService.class);
-        startService(intentName);
+        BackgroundGPSIntent = new Intent(getBaseContext(), BackgroundGPSService.class);
+        startService(BackgroundGPSIntent);
 
-        Intent PeerLocationIntent = new Intent(getBaseContext(), PeerLocationDataStreamingService.class);
+        PeerLocationIntent = new Intent(getBaseContext(), PeerLocationDataStreamingService.class);
         startService(PeerLocationIntent);
-    }
-
-    private void  moveMarker(){
-        double x = 42.3598;
-        double y = -71.0921;
-        startMarker.setPosition(new GeoPoint(x, y));
-        map.invalidate();
     }
 
     private void addPersonMarker(double lat, double lon, String name, String eta){
@@ -134,7 +118,8 @@ public class MapEventActivity extends ActionBarActivity {
             double lat = intent.getDoubleExtra("lat", 0);
             double lng = intent.getDoubleExtra("lng",0);
             String name = intent.getStringExtra("name");
-            addPersonMarker(lat,lng,name, "9 min.");
+            String eta = "ETA: " + Integer.toString(intent.getIntExtra("eta", 0)) + " min.";
+            addPersonMarker(lat,lng,name, eta);
 
             Log.d("receiver", "Got message");
         }
