@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.CalendarView;
 
@@ -16,6 +17,8 @@ import android.provider.CalendarContract;
 import android.text.format.DateFormat;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -41,9 +44,7 @@ public class NewEventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_new_event);
 
         // Opens Calendar app
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(new Date());
-        cal.add(Calendar.MONTH, 2);
+        Calendar cal = Calendar.getInstance();
         long time = cal.getTime().getTime();
         Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
         builder.appendPath("time");
