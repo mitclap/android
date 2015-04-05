@@ -1,8 +1,14 @@
 = Android Application for Passel.
 
+Some source files in this repository are licensed under different 
+licenses and are copyright their respective authors. Information
+about these copyrights is available at the top of those specific
+files. Unless otherwise explicitly stated, all files in this
+repository are licensed as follows.
+
 == License
 
-Copyright (C) 2015 Aneesh Agrawal, Lisandro Jimenez
+Copyright (C) 2015 Aneesh Agrawal, Lisandro Jimenez, Carlos Henriquez
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by

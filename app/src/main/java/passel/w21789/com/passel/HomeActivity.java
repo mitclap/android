@@ -78,6 +78,7 @@ public class HomeActivity extends ActionBarActivity {
                                 adapter.notifyDataSetChanged();
                             }
                         });
+        //TODO: Add undo functionality and handle AOOBException that sometimes pops up
         eventListView.setOnTouchListener(touchListener);
         // Setting this scroll listener is required to ensure that during ListView scrolling,
         // we don't look for swipes.
