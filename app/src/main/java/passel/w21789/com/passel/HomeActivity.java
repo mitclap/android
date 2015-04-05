@@ -49,6 +49,8 @@ public class HomeActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
 //                openSearch();
+                Intent settingsIntent = new Intent(HomeActivity.this, SettingsActivity.class);
+                HomeActivity.this.startActivity(settingsIntent);
                 return true;
             case R.id.action_create:
                 Intent myIntent = new Intent(HomeActivity.this, NewEventActivity.class);

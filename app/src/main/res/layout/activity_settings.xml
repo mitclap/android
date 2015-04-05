@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open venmo"
+        android:id="@+id/btnVenmo"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.03"
+        android:layout_below="@+id/btnDeleteAccount"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="140dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Account"
+        android:id="@+id/btnDeleteAccount"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.03"
+        android:layout_below="@+id/btnChangePassword"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="team@passel.com"
+        android:id="@+id/email"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/latenessGraph"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Password"
+        android:id="@+id/btnChangePassword"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.03"
+        android:layout_below="@+id/email"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="413 minutes"
+        android:id="@+id/totalLateness"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.03"
+        android:editable="false"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/latenessGraph"
+        android:src="@drawable/passel_logo"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="39dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="About Passel"
+        android:id="@+id/btnAbout"
+        android:layout_below="@+id/btnVenmo"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Licence"
+        android:id="@+id/btnLicense"
+        android:layout_below="@+id/btnAbout"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
