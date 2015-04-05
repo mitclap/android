@@ -150,7 +150,11 @@ public class MapEventActivity extends ActionBarActivity {
 
     @Override
     protected void onDestroy() {
+        Log.d("MapEventActivity: ", "Destroyed");
+        stopService(BackgroundGPSIntent);
+        stopService(PeerLocationIntent);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(locationMessageReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(peerLocationMessageReceiver);
         super.onDestroy();
     }
 }

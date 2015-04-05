@@ -82,4 +82,10 @@ public class BackgroundGPSService extends Service {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
+
+    public void onDestroy() {
+//        timer.cancel();
+        locationManager.removeUpdates(locationListener);
+        super.onDestroy();
+    }
 }
