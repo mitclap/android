@@ -30,7 +30,7 @@ public class ChangePasswordActivity extends ActionBarActivity {
     private boolean checkPasswordAndConfirmPassword(String password,String confirmPassword)
     {
         boolean confirmed = false;
-        if (confirmPassword != null && password != null)
+        if (confirmPassword != null && password != null && confirmPassword.length() > 0 && password.length() > 0)
         {
             if (password.equals(confirmPassword))
             {
@@ -70,7 +70,7 @@ public class ChangePasswordActivity extends ActionBarActivity {
 
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
-                    
+
                 }
 
             default:
