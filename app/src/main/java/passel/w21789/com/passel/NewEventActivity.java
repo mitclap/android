@@ -127,11 +127,10 @@ public class NewEventActivity extends ActionBarActivity {
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-
         fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener(){
-            @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
-                setDate.setText(dayOfMonth + '-' + (monthOfYear + 1) + '-' +year);
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+                System.out.println("Date Picker Set");
+                setDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year, TextView.BufferType.EDITABLE);
             }
         }, mYear, mMonth, mDay);
 
