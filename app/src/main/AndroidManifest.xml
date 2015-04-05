@@ -47,13 +47,15 @@
         <activity
             android:name=".MapEventActivity"
             android:label="@string/title_activity_map_event"
-            android:parentActivityName=".HomeActivity">
+            android:parentActivityName=".HomeActivity" >
         </activity>
+
         <service
             android:name=".BackgroundGPSService"
             android:enabled="true"
             android:exported="true" >
         </service>
+
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -65,11 +67,17 @@
         <activity
             android:name=".EditEventActivity"
             android:label="@string/title_activity_edit_event"
-            android:parentActivityName=".HomeActivity">
+            android:parentActivityName=".HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="passel.w21789.com.passel.HomeActivity" />
         </activity>
+
+        <service
+            android:name=".PeerLocationDataStreamingService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

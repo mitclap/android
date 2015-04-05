@@ -48,7 +48,7 @@ public class MapEventActivity extends ActionBarActivity {
 
         startMarker = new Marker(map);
         startMarker.setPosition(startPoint);
-        startMarker.setTitle("Aneesh Aggarwal");
+        startMarker.setTitle("Aneesh");
         startMarker.setSubDescription("ETA: 12 min.");
         startMarker.setIcon(getResources().getDrawable(R.drawable.marker_via));
 //        startMarker.setIcon(getResources().getDrawable(R.drawable.ic_action_action_room));
@@ -78,8 +78,14 @@ public class MapEventActivity extends ActionBarActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(locationMessageReceiver,
                 new IntentFilter("send-location-data"));
 
+        LocalBroadcastManager.getInstance(this).registerReceiver(peerLocationMessageReceiver,
+                new IntentFilter("send-peer-location-data"));
+
         Intent intentName = new Intent(getBaseContext(), BackgroundGPSService.class);
         startService(intentName);
+
+        Intent PeerLocationIntent = new Intent(getBaseContext(), PeerLocationDataStreamingService.class);
+        startService(PeerLocationIntent);
     }
 
     private void  moveMarker(){
@@ -103,6 +109,7 @@ public class MapEventActivity extends ActionBarActivity {
         personMarker.setTitle(name);
         personMarker.setSubDescription(eta);
         personMarker.setIcon(getResources().getDrawable(R.drawable.marker_via));
+        personMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(personMarker);
         map.invalidate();
     }
@@ -115,6 +122,19 @@ public class MapEventActivity extends ActionBarActivity {
             double lng = intent.getDoubleExtra("lng",0);
             selfMarker.setPosition(new GeoPoint(lat, lng));
             map.invalidate();
+
+            Log.d("receiver", "Got message");
+        }
+    };
+
+    private BroadcastReceiver peerLocationMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            double lat = intent.getDoubleExtra("lat", 0);
+            double lng = intent.getDoubleExtra("lng",0);
+            String name = intent.getStringExtra("name");
+            addPersonMarker(lat,lng,name, "9 min.");
 
             Log.d("receiver", "Got message");
         }
