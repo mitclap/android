@@ -1,6 +1,7 @@
 package passel.w21789.com.passel;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
@@ -23,6 +24,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.TimePicker;
+
+import org.osmdroid.ResourceProxy;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -35,45 +39,28 @@ import java.util.Locale;
 
 public class NewEventActivity extends ActionBarActivity {
     private EditText fromDateEtxt;
-    private EditText fromTimeEtxt;
+    private TextView fromTimeEtxt;
     private EditText toDateEtxt;
-    private EditText toTimeEtxt;
+    private TextView toTimeEtxt;
     private ImageButton fromDateButton;
     private ImageButton toDateButton;
 
-    private DatePickerDialog fromDatePickerDialog;
-    private DatePickerDialog toDatePickerDialog;
+    private Calendar calendar;
 
-    private SimpleDateFormat dateFormatter;
-
-    private CalendarView calendarView;
-
-    private PopupWindow calendarPopUp;
-    private LinearLayout layout;
-    private ViewGroup.LayoutParams params;
-    private LinearLayout mainLayout;
+    private DatePickerDialog dpDialog;
+    private TimePickerDialog tpDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-        // Opens Calendar app
-        /*
-        Calendar cal = Calendar.getInstance();
-        long time = cal.getTime().getTime();
-        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
-        builder.appendPath("time");
-        builder.appendPath(Long.toString(time));
-        Intent intent = new Intent(Intent.ACTION_VIEW, builder.build());
-        startActivity(intent);
-        */
-
         fromDateEtxt = (EditText) findViewById(R.id.start_date_data);
         toDateEtxt = (EditText) findViewById(R.id.end_date_data);
         fromDateButton = (ImageButton) findViewById(R.id.start_date_button);
         toDateButton = (ImageButton) findViewById(R.id.end_date_button);
-
+        fromTimeEtxt = (TextView) findViewById(R.id.start_time_data);
+        toTimeEtxt = (TextView) findViewById(R.id.end_time_data);
 
         fromDateButton.setOnClickListener(new OnClickListener(){
             public void onClick(View v){
@@ -87,6 +74,22 @@ public class NewEventActivity extends ActionBarActivity {
                 setDate(R.id.end_date_data);
             }
         });
+
+        fromTimeEtxt.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTime(R.id.start_time_data);
+            }
+        });
+
+        toTimeEtxt.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("we are clikcing");
+                setTime(R.id.end_time_data);
+            }
+        });
+
     }
 
     @Override
@@ -122,22 +125,59 @@ public class NewEventActivity extends ActionBarActivity {
 
         final EditText setDate = (EditText) findViewById(id);
 
-        Calendar c = Calendar.getInstance();
-        int mYear = c.get(Calendar.YEAR);
-        int mMonth = c.get(Calendar.MONTH);
-        int mDay = c.get(Calendar.DAY_OF_MONTH);
+        calendar = Calendar.getInstance();
+        int mYear = calendar.get(Calendar.YEAR);
+        int mMonth = calendar.get(Calendar.MONTH);
+        int mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-        fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener(){
+        dpDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener(){
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
                 System.out.println("Date Picker Set");
                 setDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year, TextView.BufferType.EDITABLE);
             }
         }, mYear, mMonth, mDay);
 
-        fromDatePickerDialog.show();
+        dpDialog.show();
     }
 
     private void setTime(int id){
 
+        final TextView setTime = (TextView) findViewById(id);
+        String setTimeText = setTime.getText().toString();
+        int mHour =  Integer.parseInt(setTimeText.substring(0,2));
+        int mMinute = Integer.parseInt(setTimeText.substring(3,5));
+        String textMeridiem = setTimeText.substring(6);
+
+        if (textMeridiem.equals("PM")){
+            System.out.println("In if loop");
+            mHour += 12;
+        } else if (textMeridiem.equals("AM") && mHour== 12){
+            mHour = 0;
+        }
+
+        tpDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener(){
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute){
+                int modHour = hourOfDay % 12;
+                String sHour = String.valueOf(modHour);
+                if (modHour == 0){
+                    sHour = "12";
+                }
+                String sMinute = String.valueOf(minute);
+                String meridiem = "AM";
+                if (modHour < 10 && modHour >0){
+                    sHour = "0" + sHour;
+                }
+                if (hourOfDay > 11){
+                    meridiem = "PM";
+                }
+
+                if (minute < 10){
+                    sMinute = "0" + minute;
+                }
+                setTime.setText(sHour + ":" + sMinute + " " + meridiem);
+            }
+        }, mHour, mMinute, false);
+
+        tpDialog.show();
     }
 }
