@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.CalendarView;
 
@@ -21,15 +23,20 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 
 public class NewEventActivity extends ActionBarActivity {
     private EditText fromDateEtxt;
+    private EditText fromTimeEtxt;
     private EditText toDateEtxt;
+    private EditText toTimeEtxt;
 
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
@@ -38,12 +45,18 @@ public class NewEventActivity extends ActionBarActivity {
 
     private CalendarView calendarView;
 
+    private PopupWindow calendarPopUp;
+    private LinearLayout layout;
+    private ViewGroup.LayoutParams params;
+    private LinearLayout mainLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
         // Opens Calendar app
+        /*
         Calendar cal = Calendar.getInstance();
         long time = cal.getTime().getTime();
         Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
@@ -51,10 +64,16 @@ public class NewEventActivity extends ActionBarActivity {
         builder.appendPath(Long.toString(time));
         Intent intent = new Intent(Intent.ACTION_VIEW, builder.build());
         startActivity(intent);
-    }
+        */
 
-    private boolean createEvent(){
-        return true;
+        fromDateEtxt = (EditText) findViewById(R.id.start_date_data);
+        toDateEtxt = (EditText) findViewById(R.id.end_date_data);
+
+        fromDateEtxt.setOnClickListener(new OnClickListener(){
+            public void onClick(View v){
+                setDate(R.id.start_date_data);
+            }
+        });
     }
 
     @Override
@@ -77,12 +96,53 @@ public class NewEventActivity extends ActionBarActivity {
                 finish();
                 return true;
             case R.id.new_event_check:
-                if (createEvent()){
-                    finish();
-                }
+                //if (createEvent()){
+                //    finish();
+                //}
+                return true;
+            case R.id.start_date_data:
+                System.out.println("is it going here?");
+                setDate(id);
+                return true;
+            case R.id.end_date_data:
+                setDate(id);
+                return true;
+            case R.id.start_time_data:
+                setTime(id);
+                return true;
+            case R.id.end_time_data:
+                setTime(id);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setDate(int id){
+
+        final EditText setDate = (EditText) findViewById(id);
+
+        Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener(){
+            @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+                setDate.setText(dayOfMonth + '-' + (monthOfYear + 1) + '-' +year);
+            }
+        }, mYear, mMonth, mDay);
+
+        fromDatePickerDialog.show();
+    }
+
+    private void setTime(int id){
+
+    }
+
+    public void setUp() throws IOException, GeneralSecurityException{
+        //HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     }
 }
