@@ -45,7 +45,7 @@ public class MapEventActivity extends ActionBarActivity {
         map.setMultiTouchControls(true);
 
         IMapController mapController = map.getController();
-        mapController.setZoom(14);
+        mapController.setZoom(18);
         GeoPoint startPoint = new GeoPoint(42.35965, -71.09206);
         mapController.setCenter(startPoint);
 
@@ -118,7 +118,7 @@ public class MapEventActivity extends ActionBarActivity {
             double lat = intent.getDoubleExtra("lat", 0);
             double lng = intent.getDoubleExtra("lng",0);
             String name = intent.getStringExtra("name");
-            String eta = "ETA: " + Integer.toString(intent.getIntExtra("eta", 0)) + " min.";
+            String eta = "ETA: " + intent.getStringExtra("eta") + " min.";
             addPersonMarker(lat,lng,name, eta);
 
             Log.d("receiver", "Got message");

@@ -42,7 +42,7 @@ public class PeerLocationDataStreamingService extends Service {
         final List<Location> peerLocationsPriscilla = decodeGPX(R.raw.waypoints_priscilla1);
 
         int delay = 1000; // delay for 1 sec.
-        int period = 500; // repeat every 2 sec.
+        int period = 1000; // repeat every 1 sec.
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             int locationIndex = 0;
@@ -50,9 +50,6 @@ public class PeerLocationDataStreamingService extends Service {
                 if (locationIndex < peerLocationsAneesh.size()){
                 sendMessage(peerLocationsAneesh.get(locationIndex), "Aneesh", Integer.toString((peerLocationsAneesh.size()-locationIndex)/10));
                 locationIndex++;
-                }
-                else {
-                    stopSelf();
                 }
             }
         }, delay, period);
@@ -64,9 +61,6 @@ public class PeerLocationDataStreamingService extends Service {
                     sendMessage(peerLocationsCarlos.get(locationIndex), "Carlos", Integer.toString((peerLocationsCarlos.size()-locationIndex)/10));
                     locationIndex++;
                 }
-                else{
-                    stopSelf();
-                }
             }
         }, delay, period);
 
@@ -76,9 +70,6 @@ public class PeerLocationDataStreamingService extends Service {
                 if (locationIndex < peerLocationsPriscilla.size()){
                     sendMessage(peerLocationsPriscilla.get(locationIndex), "Priscilla", Integer.toString((peerLocationsPriscilla.size()-locationIndex)/10));
                     locationIndex++;
-                }
-                else{
-                    stopSelf();
                 }
             }
         }, delay, period);
