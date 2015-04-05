@@ -60,7 +60,31 @@ public class HomeActivity extends ActionBarActivity {
         addItems("Weekly Study Group");
         addItems("Chipotle Fridays with Joe");
         addItems("Grab Coffee at Flour with ");
+
+
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        eventListView,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    adapter.remove(adapter.getItem(position));
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+        eventListView.setOnTouchListener(touchListener);
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        eventListView.setOnScrollListener(touchListener.makeScrollListener());
     }
+
+
 
 //    private void addMapButtonListener(){
 //        Button mapButton = (Button) findViewById(R.id.mapButton);
