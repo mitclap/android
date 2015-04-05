@@ -15,7 +15,8 @@
         android:layout_below="@+id/btnDeleteAccount"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="140dp" />
-
+<!-- TODO: Store lateness data -->
+<!-- TODO: Find way to visualize lateness data -->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -88,5 +89,32 @@
         android:id="@+id/btnLicense"
         android:layout_below="@+id/btnAbout"
         android:layout_centerHorizontal="true" />
+
+    <!--TODO: Make Venmo strings dynamic eventually -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Venmo: "
+        android:id="@+id/passwordOldLb"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/btnDeleteAccount"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="$$$ Total donated "
+        android:id="@+id/passwordNewLb"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/passwordOldLb"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
 
 </RelativeLayout>

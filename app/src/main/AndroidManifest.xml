@@ -72,12 +72,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="passel.w21789.com.passel.HomeActivity" />
         </activity>
-
         <service
             android:name=".PeerLocationDataStreamingService"
             android:enabled="true"
             android:exported="true" >
         </service>
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:label="@string/title_activity_change_password"
+            android:parentActivityName=".SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChangePasswordActivity" />
+        </activity>
     </application>
 
 </manifest>
