@@ -19,6 +19,7 @@ import android.provider.CalendarContract;
 import android.text.format.DateFormat;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -37,6 +38,8 @@ public class NewEventActivity extends ActionBarActivity {
     private EditText fromTimeEtxt;
     private EditText toDateEtxt;
     private EditText toTimeEtxt;
+    private ImageButton fromDateButton;
+    private ImageButton toDateButton;
 
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
@@ -68,10 +71,20 @@ public class NewEventActivity extends ActionBarActivity {
 
         fromDateEtxt = (EditText) findViewById(R.id.start_date_data);
         toDateEtxt = (EditText) findViewById(R.id.end_date_data);
+        fromDateButton = (ImageButton) findViewById(R.id.start_date_button);
+        toDateButton = (ImageButton) findViewById(R.id.end_date_button);
 
-        fromDateEtxt.setOnClickListener(new OnClickListener(){
+
+        fromDateButton.setOnClickListener(new OnClickListener(){
             public void onClick(View v){
                 setDate(R.id.start_date_data);
+            }
+        });
+
+        toDateButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDate(R.id.end_date_data);
             }
         });
     }
@@ -100,19 +113,6 @@ public class NewEventActivity extends ActionBarActivity {
                 //    finish();
                 //}
                 return true;
-            case R.id.start_date_data:
-                System.out.println("is it going here?");
-                setDate(id);
-                return true;
-            case R.id.end_date_data:
-                setDate(id);
-                return true;
-            case R.id.start_time_data:
-                setTime(id);
-                return true;
-            case R.id.end_time_data:
-                setTime(id);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -140,9 +140,5 @@ public class NewEventActivity extends ActionBarActivity {
 
     private void setTime(int id){
 
-    }
-
-    public void setUp() throws IOException, GeneralSecurityException{
-        //HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     }
 }
