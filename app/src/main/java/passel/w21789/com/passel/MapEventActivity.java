@@ -58,7 +58,7 @@ public class MapEventActivity extends ActionBarActivity {
 
         eventMarker = new Marker(map);
         eventMarker.setPosition(startPoint);
-        eventMarker.setTitle("Team Passel Group Meeting");
+        eventMarker.setTitle(getIntent().getStringExtra("item"));
         eventMarker.setSubDescription("8:56 PM");
         eventMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(eventMarker);
