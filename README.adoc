@@ -8,7 +8,7 @@ repository are licensed as follows.
 
 == License
 
-Copyright (C) 2015 Aneesh Agrawal, Lisandro Jimenez, Carlos Henriquez
+Copyright (C) 2015 Aneesh Agrawal, Lisandro Jimenez, Carlos Henriquez, Priscila Cortez
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by

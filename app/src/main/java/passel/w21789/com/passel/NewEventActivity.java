@@ -38,9 +38,7 @@ import java.util.Locale;
 
 
 public class NewEventActivity extends ActionBarActivity {
-    private EditText fromDateEtxt;
     private TextView fromTimeEtxt;
-    private EditText toDateEtxt;
     private TextView toTimeEtxt;
     private ImageButton fromDateButton;
     private ImageButton toDateButton;
@@ -55,13 +53,12 @@ public class NewEventActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-        fromDateEtxt = (EditText) findViewById(R.id.start_date_data);
-        toDateEtxt = (EditText) findViewById(R.id.end_date_data);
         fromDateButton = (ImageButton) findViewById(R.id.start_date_button);
         toDateButton = (ImageButton) findViewById(R.id.end_date_button);
         fromTimeEtxt = (TextView) findViewById(R.id.start_time_data);
         toTimeEtxt = (TextView) findViewById(R.id.end_time_data);
 
+        // Setting Date
         fromDateButton.setOnClickListener(new OnClickListener(){
             public void onClick(View v){
                 setDate(R.id.start_date_data);
@@ -75,6 +72,7 @@ public class NewEventActivity extends ActionBarActivity {
             }
         });
 
+        // Setting Time
         fromTimeEtxt.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,11 +83,9 @@ public class NewEventActivity extends ActionBarActivity {
         toTimeEtxt.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("we are clikcing");
                 setTime(R.id.end_time_data);
             }
         });
-
     }
 
     @Override
