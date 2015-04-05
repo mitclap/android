@@ -1,5 +1,10 @@
 package passel.w21789.com.passel;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +19,15 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class MapEventActivity extends ActionBarActivity {
+    HashMap<String, Marker> peopleMarkerHashMap = new HashMap<>();
+
     Marker startMarker;
     Marker eventMarker;
+    Marker selfMarker;
 
     MapView map;
 
@@ -54,11 +63,23 @@ public class MapEventActivity extends ActionBarActivity {
         eventMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(eventMarker);
 
+        selfMarker = new Marker(map);
+        selfMarker.setTitle("You");
+        selfMarker.setPosition(new GeoPoint(startPoint));
+        selfMarker.setIcon(getResources().getDrawable(R.drawable.marker_node));
+        map.getOverlays().add(selfMarker);
 
         moveMarker();
 
         addPersonMarker(42.33,-71.07,"Lisandro", "ETA: 5 min.");
         addPersonMarker(42.7,-71.11,"Carlos", "ETA: 9 min.");
+
+        //Local messages passed go through here
+        LocalBroadcastManager.getInstance(this).registerReceiver(locationMessageReceiver,
+                new IntentFilter("send-location-data"));
+
+        Intent intentName = new Intent(getBaseContext(), BackgroundGPSService.class);
+        startService(intentName);
     }
 
     private void  moveMarker(){
@@ -69,8 +90,16 @@ public class MapEventActivity extends ActionBarActivity {
     }
 
     private void addPersonMarker(double lat, double lon, String name, String eta){
-        Marker personMarker = new Marker(map);
-        personMarker.setPosition(new GeoPoint(lat,lon));
+        Marker personMarker;
+        if (peopleMarkerHashMap.containsKey(name)) {
+            personMarker = peopleMarkerHashMap.get(name);
+
+        }
+        else {
+            personMarker = new Marker(map);
+            peopleMarkerHashMap.put(name,personMarker);
+        }
+        personMarker.setPosition(new GeoPoint(lat, lon));
         personMarker.setTitle(name);
         personMarker.setSubDescription(eta);
         personMarker.setIcon(getResources().getDrawable(R.drawable.marker_via));
@@ -78,6 +107,18 @@ public class MapEventActivity extends ActionBarActivity {
         map.invalidate();
     }
 
+    private BroadcastReceiver locationMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            double lat = intent.getDoubleExtra("lat", 0);
+            double lng = intent.getDoubleExtra("lng",0);
+            selfMarker.setPosition(new GeoPoint(lat, lng));
+            map.invalidate();
+
+            Log.d("receiver", "Got message");
+        }
+    };
 
 
     @Override
@@ -100,5 +141,11 @@ public class MapEventActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(locationMessageReceiver);
+        super.onDestroy();
     }
 }
