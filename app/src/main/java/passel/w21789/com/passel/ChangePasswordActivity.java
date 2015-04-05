@@ -20,7 +20,7 @@ public class ChangePasswordActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_home, menu);
+        getMenuInflater().inflate(R.menu.menu_change_password, menu);
         return true;
 
 
@@ -33,13 +33,16 @@ public class ChangePasswordActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         switch (item.getItemId()) {
-            case R.id.action_settings:
-//                openSearch();
-                Intent settingsIntent = new Intent(ChangePasswordActivity.this, SettingsActivity.class);
-                ChangePasswordActivity.this.startActivity(settingsIntent);
-                return true;
-            case R.id.action_create:
-                Intent myIntent = new Intent(ChangePasswordActivity.this, NewEventActivity.class);
+//            case R.id.action_settings:
+////                openSearch();
+//                Intent settingsIntent = new Intent(ChangePasswordActivity.this, SettingsActivity.class);
+//                ChangePasswordActivity.this.startActivity(settingsIntent);
+//                return true;
+            case R.id.change_password_check:
+                // Go back to the settings page
+                //TODO: Insert password changing logic here
+                //TODO: Make it display that little text at the bottom if the pw was changed
+                Intent myIntent = new Intent(ChangePasswordActivity.this, SettingsActivity.class);
 //        myIntent.putExtra("key", value); //Optional parameters
                 ChangePasswordActivity.this.startActivity(myIntent);
                 return true;
