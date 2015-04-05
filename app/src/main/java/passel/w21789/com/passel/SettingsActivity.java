@@ -38,10 +38,19 @@ public class SettingsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        addChangePasswordButtonListener();
     }
 
-    private boolean createEvent(){
-        return true;
+    private void addChangePasswordButtonListener(){
+        Button changeButton = (Button) findViewById(R.id.btnChangePassword);
+        changeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(SettingsActivity.this, ChangePasswordActivity.class);
+//        myIntent.putExtra("key", value); //Optional parameters
+                SettingsActivity.this.startActivity(myIntent);
+            }
+        });
     }
 
     @Override
@@ -64,9 +73,9 @@ public class SettingsActivity extends ActionBarActivity {
                 finish();
                 return true;
             case R.id.new_event_check:
-                if (createEvent()){
-                    finish();
-                }
+//                if (createEvent()){
+//                    finish();
+//                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

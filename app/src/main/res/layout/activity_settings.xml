@@ -15,7 +15,8 @@
         android:layout_below="@+id/btnDeleteAccount"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="140dp" />
-
+<!-- TODO: Store lateness data -->
+<!-- TODO: Find way to visualize lateness data -->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,7 +98,7 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Venmo: "
-        android:id="@+id/venmoAccount"
+        android:id="@+id/passwordOldLb"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/btnDeleteAccount"
         android:layout_centerHorizontal="true"
@@ -110,9 +111,9 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="$$$ Total donated "
-        android:id="@+id/venmo"
+        android:id="@+id/passwordNewLb"
         android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/venmoAccount"
+        android:layout_below="@+id/passwordOldLb"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" />
 
