@@ -2,39 +2,22 @@ package passel.w21789.com.passel;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.CalendarView;
 
-import android.database.Cursor;
-import android.provider.CalendarContract;
-import android.text.format.DateFormat;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import org.osmdroid.ResourceProxy;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
+
+import .
 
 
 public class NewEventActivity extends ActionBarActivity {
@@ -86,6 +69,8 @@ public class NewEventActivity extends ActionBarActivity {
                 setTime(R.id.end_time_data);
             }
         });
+
+
     }
 
     @Override
