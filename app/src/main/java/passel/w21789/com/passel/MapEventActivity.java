@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,6 +12,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -48,14 +53,15 @@ public class MapEventActivity extends ActionBarActivity {
         map.setMultiTouchControls(true);
 
         ArrayList<Double> eventCoordinates = new ArrayList<>();
-        eventCoordinates.addAll(Arrays.asList(getIntent().getDoubleExtra("event_lat", 0),getIntent().getDoubleExtra("event_lng", 0)));
+        eventCoordinates.addAll(Arrays.asList(getIntent().getDoubleExtra("event_lat", 0), getIntent().getDoubleExtra("event_lng", 0)));
 
-        passelEvent = new PasselEvent(getIntent().getStringExtra("event_name"),
-                getIntent().getStringExtra("event_time"),
-                getIntent().getStringArrayListExtra("event_guests"),
-                eventCoordinates
-                );
-
+//        passelEvent = new PasselEvent(getIntent().getStringExtra("event_name"),
+//                getIntent().getStringExtra("event_time"),
+//                getIntent().getStringArrayListExtra("event_guests"),
+//                eventCoordinates
+//                );
+        Log.d("MapEventActivity", Integer.toString(getIntent().getIntExtra("index", -1)));
+        passelEvent = getPasselEvents().get(getIntent().getIntExtra("index", -1));
 
         IMapController mapController = map.getController();
         mapController.setZoom(18);
@@ -138,6 +144,43 @@ public class MapEventActivity extends ActionBarActivity {
             Log.d("receiver", "Got message");
         }
     };
+
+    public void setPasselEvents(ArrayList<PasselEvent> events) {
+        String eventsKey = "PASSEL_EVENTS";
+        Gson gson = new GsonBuilder().create();
+
+        Context context = getBaseContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (events == null) {
+            editor.putString(eventsKey, "").commit();
+        } else {
+            editor.putString(eventsKey, gson.toJson(events)).commit();
+        }
+    }
+
+    public ArrayList<PasselEvent> getPasselEvents() {
+        ArrayList<PasselEvent> parsedEvents = new ArrayList<>();
+        String eventsKey = "PASSEL_EVENTS";
+        Gson gson = new GsonBuilder().create();
+
+        Context context = getBaseContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        String savedValue = sharedPref.getString(eventsKey, "");
+        if (savedValue.equals("")) {
+            parsedEvents = null;
+        } else {
+            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<PasselEvent>>() {}.getType());
+        }
+
+        Log.d("HomeActivity: ", "Parsing successful!");
+        Log.d("HomeActivity: ", savedValue);
+
+        return parsedEvents;
+    }
 
 
     @Override

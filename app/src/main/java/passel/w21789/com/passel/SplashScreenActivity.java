@@ -1,7 +1,9 @@
 package passel.w21789.com.passel;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -9,8 +11,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 
 public class SplashScreenActivity extends Activity {
+    ArrayList<PasselEvent> eventList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +28,39 @@ public class SplashScreenActivity extends Activity {
         setContentView(R.layout.activity_splash_screen);
         addSignUpButtonListener();
         addLogInButtonListener();
+
+        setPasselEvents(eventList);
+
+        ArrayList<String> studyGuests = new ArrayList<>();
+        studyGuests.addAll(Arrays.asList("Aneesh", "Carlos"));
+
+        ArrayList<Double> studyLocation = new ArrayList<>();
+        studyLocation.addAll(Arrays.asList(42.35965, -71.09206));
+
+        eventList.add(new PasselEvent("Study Session", "8:00PM", studyGuests, studyLocation));
+
+        studyLocation = new ArrayList<>();
+        studyLocation.addAll(Arrays.asList(42.36100, -71.09649));
+
+        eventList.add(new PasselEvent("Grab Coffee at Flour with Aneesh", "10:00 PM", studyGuests, studyLocation));
+
+        studyLocation = new ArrayList<>();
+        studyLocation.addAll(Arrays.asList(42.35902, -71.09517));
+
+        eventList.add(new PasselEvent("Team Passel Group Meeting", "5:00 PM", studyGuests, studyLocation));
+
+        studyLocation = new ArrayList<>();
+        studyLocation.addAll(Arrays.asList(42.36634, -71.01661));
+
+        eventList.add(new PasselEvent("Meet at Airport", "9:00 PM", studyGuests, studyLocation));
+
+        studyLocation = new ArrayList<>();
+        studyLocation.addAll(Arrays.asList(42.35745, -71.09412));
+
+        eventList.add(new PasselEvent("DT Practice", "10:00 PM", studyGuests, studyLocation));
+
+        setPasselEvents(eventList);
+
     }
 
     private void addSignUpButtonListener(){
@@ -44,6 +87,43 @@ public class SplashScreenActivity extends Activity {
                 SplashScreenActivity.this.startActivity(myIntent);
             }
         });
+    }
+
+    public void setPasselEvents(ArrayList<PasselEvent> events) {
+        String eventsKey = "PASSEL_EVENTS";
+        Gson gson = new GsonBuilder().create();
+
+        Context context = getBaseContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (events == null) {
+            editor.putString(eventsKey, "").commit();
+        } else {
+            editor.putString(eventsKey, gson.toJson(events)).commit();
+        }
+    }
+
+    public ArrayList<PasselEvent> getPasselEvents() {
+        ArrayList<PasselEvent> parsedEvents = new ArrayList<>();
+        String eventsKey = "PASSEL_EVENTS";
+        Gson gson = new GsonBuilder().create();
+
+        Context context = getBaseContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        String savedValue = sharedPref.getString(eventsKey, "");
+        if (savedValue.equals("")) {
+            parsedEvents = null;
+        } else {
+            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<PasselEvent>>() {}.getType());
+        }
+
+        Log.d("HomeActivity: ", "Parsing successful!");
+        Log.d("HomeActivity: ", savedValue);
+
+        return parsedEvents;
     }
 
 
