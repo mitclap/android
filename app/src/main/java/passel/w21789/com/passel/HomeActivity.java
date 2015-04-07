@@ -112,7 +112,7 @@ public class HomeActivity extends ActionBarActivity {
                 .withDrawable(getResources().getDrawable(R.drawable.ic_action_content_add))
                 .withButtonColor(R.color.dark_primary_color)
                 .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
-                .withMargins(0, 0, 16, 16)
+                .withMargins(0, 0, 8, 8)
                 .create();
         fabButton.setFloatingActionButtonColor(getResources().getColor(R.color.dark_primary_color));
         addFABButtonListener(fabButton);
@@ -222,11 +222,11 @@ public class HomeActivity extends ActionBarActivity {
                 Intent settingsIntent = new Intent(HomeActivity.this, SettingsActivity.class);
                 HomeActivity.this.startActivity(settingsIntent);
                 return true;
-            case R.id.action_create:
+           /* case R.id.action_create:
                 Intent myIntent = new Intent(HomeActivity.this, NewEventActivity.class);
 //        myIntent.putExtra("key", value); //Optional parameters
                 HomeActivity.this.startActivity(myIntent);
-                return true;
+                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
         }
