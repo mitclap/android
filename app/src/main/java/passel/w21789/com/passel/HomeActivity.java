@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.view.Gravity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,10 +30,10 @@ public class HomeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        adapter=new ArrayAdapter<String>(this,
+        adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 eventList);
-        ListView eventListView = (ListView)findViewById(R.id.eventListView);
+        ListView eventListView = (ListView) findViewById(R.id.eventListView);
         eventListView.setAdapter(adapter);
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -70,6 +71,7 @@ public class HomeActivity extends ActionBarActivity {
                             public boolean canDismiss(int position) {
                                 return true;
                             }
+
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
@@ -83,9 +85,13 @@ public class HomeActivity extends ActionBarActivity {
         // Setting this scroll listener is required to ensure that during ListView scrolling,
         // we don't look for swipes.
         eventListView.setOnScrollListener(touchListener.makeScrollListener());
+        FloatingActionButton fabButton = new FloatingActionButton.Builder(this)
+                .withDrawable(getResources().getDrawable(R.drawable.ic_action_content_add))
+                .withButtonColor(R.color.dark_primary_color)
+                .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
+                .withMargins(0, 0, 16, 16)
+                .create();
     }
-
-
 
 //    private void addMapButtonListener(){
 //        Button mapButton = (Button) findViewById(R.id.mapButton);
