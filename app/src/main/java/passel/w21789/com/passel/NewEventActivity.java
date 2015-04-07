@@ -17,10 +17,10 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
-import .
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
-
-public class NewEventActivity extends ActionBarActivity {
+public class NewEventActivity extends ActionBarActivity{
     private TextView fromTimeEtxt;
     private TextView toTimeEtxt;
     private ImageButton fromDateButton;
@@ -30,6 +30,11 @@ public class NewEventActivity extends ActionBarActivity {
 
     private DatePickerDialog dpDialog;
     private TimePickerDialog tpDialog;
+
+    // Later to be used for autocomplete
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
+            new LatLng(-85, 180), new LatLng(85, -180)
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +74,6 @@ public class NewEventActivity extends ActionBarActivity {
                 setTime(R.id.end_time_data);
             }
         });
-
-
     }
 
     @Override

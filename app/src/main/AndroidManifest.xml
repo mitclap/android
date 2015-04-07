@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="passel.w21789.com.passel" >
+    xmlns:andoid="http://schemas.android.com/apk/res-auto"
+    package="passel.w21789.com.passel">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -9,6 +10,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -72,15 +79,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="passel.w21789.com.passel.HomeActivity" />
         </activity>
+
         <service
             android:name=".PeerLocationDataStreamingService"
             android:enabled="true"
             android:exported="true" >
         </service>
+
         <activity
             android:name=".ChangePasswordActivity"
             android:label="@string/title_activity_change_password"
-            android:parentActivityName=".SettingsActivity">
+            android:parentActivityName=".SettingsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ChangePasswordActivity" />
