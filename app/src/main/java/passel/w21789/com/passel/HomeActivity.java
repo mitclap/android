@@ -146,11 +146,11 @@ public class HomeActivity extends ActionBarActivity {
                 Intent settingsIntent = new Intent(HomeActivity.this, SettingsActivity.class);
                 HomeActivity.this.startActivity(settingsIntent);
                 return true;
-            case R.id.action_create:
+           /* case R.id.action_create:
                 Intent myIntent = new Intent(HomeActivity.this, NewEventActivity.class);
 //        myIntent.putExtra("key", value); //Optional parameters
                 HomeActivity.this.startActivity(myIntent);
-                return true;
+                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
         }
