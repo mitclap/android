@@ -21,7 +21,7 @@
     <string name="title_activity_edit_event">Edit Event</string>
     <string name="title_activity_map_event">Current Event</string>
     <string name="title_activity_change_password">Change Password</string>
-    <string name="str_atv_places">Enter Place Here</string>
     <string name="title_activity_maps">Map</string>
+    <string name="preference_file_key">passel.w21789.com.passel.PREFERENCE_FILE_KEY</string>
 
 </resources>

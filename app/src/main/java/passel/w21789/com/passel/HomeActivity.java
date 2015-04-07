@@ -1,7 +1,9 @@
 package passel.w21789.com.passel;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +16,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.view.Gravity;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -22,7 +29,8 @@ public class HomeActivity extends ActionBarActivity {
 
     HashMap<Integer, String> eventMap = new HashMap();
 
-    ArrayList<String> eventList=new ArrayList<String>();
+    ArrayList<String> eventNameList=new ArrayList<String>();
+    ArrayList<PasselEvent> eventList = new ArrayList<>();
     ArrayAdapter<String> adapter;
 
     @Override
@@ -32,20 +40,35 @@ public class HomeActivity extends ActionBarActivity {
 
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
-                eventList);
-        ListView eventListView = (ListView) findViewById(R.id.eventListView);
+                eventNameList);
+        final ListView eventListView = (ListView) findViewById(R.id.eventListView);
         eventListView.setAdapter(adapter);
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = adapter.getItem(position);
-
-                Intent intent = new Intent(HomeActivity.this, MapEventActivity.class);
                 Log.d("Item Clicked: ", item);
-                intent.putExtra("item", item);
+
+                PasselEvent event = eventList.get(position);
+                Intent intent = createEventIntent(event);
+
                 startActivity(intent);
             }
         });
+
+
+
+
+        ArrayList<String> studyGuests = new ArrayList<>();
+        studyGuests.addAll(Arrays.asList("Aneesh", "Carlos"));
+
+        ArrayList<Double> studyLocation = new ArrayList<>();
+        studyLocation.addAll(Arrays.asList(42.35965, -71.09206));
+
+        addEvent(new PasselEvent("Study Sesh", "8:00PM", studyGuests, studyLocation));
+        setPasselEvents(eventList);
+        eventList = new ArrayList<>();
+        eventList = getPasselEvents();
 
         addItems("Team Passel Group Meeting");
         addItems("Dinner With Friends");
@@ -89,7 +112,7 @@ public class HomeActivity extends ActionBarActivity {
                 .withDrawable(getResources().getDrawable(R.drawable.ic_action_content_add))
                 .withButtonColor(R.color.dark_primary_color)
                 .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
-                .withMargins(0, 0, 16, 16)
+                .withMargins(0, 0, 8, 8)
                 .create();
         fabButton.setFloatingActionButtonColor(getResources().getColor(R.color.dark_primary_color));
         addFABButtonListener(fabButton);
@@ -120,8 +143,61 @@ public class HomeActivity extends ActionBarActivity {
 
     //Adds a new row to the ListView with contents of message
     public void addItems(String message) {
-        eventList.add(message);
+        eventNameList.add(message);
         adapter.notifyDataSetChanged();
+    }
+
+    public void addEvent(PasselEvent event) {
+        eventList.add(event);
+        addItems(event.getEventName());
+    }
+
+    Intent createEventIntent(PasselEvent event){
+        Intent intent = new Intent(HomeActivity.this, MapEventActivity.class);
+        intent.putExtra("event_name", event.getEventName());
+        intent.putExtra("event_time", event.getEventTime());
+        intent.putStringArrayListExtra("event_guests", event.getEventGuests());
+        Log.d("HomeActivity: ", event.getEventCoordinates().toString());
+        intent.putExtra("event_lat", event.getEventCoordinates().get(0));
+        intent.putExtra("event_lng", event.getEventCoordinates().get(1));
+        return intent;
+
+    }
+
+    public void setPasselEvents(ArrayList<PasselEvent> events) {
+        String eventsKey = "PASSEL_EVENTS";
+        Gson gson = new GsonBuilder().create();
+
+        Context context = getBaseContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (events == null) {
+            editor.putString(eventsKey, "").commit();
+        } else {
+            editor.putString(eventsKey, gson.toJson(events)).commit();
+        }
+    }
+
+    public ArrayList<PasselEvent> getPasselEvents() {
+        ArrayList<PasselEvent> parsedEvents = new ArrayList<>();
+        String eventsKey = "PASSEL_EVENTS";
+        Gson gson = new GsonBuilder().create();
+
+        Context context = getBaseContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        String savedValue = sharedPref.getString(eventsKey, "");
+        if (savedValue.equals("")) {
+            parsedEvents = null;
+        } else {
+            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<PasselEvent>>() {}.getType());
+        }
+
+        Log.d("HomeActivity: ", "Parsing successful!");
+
+        return parsedEvents;
     }
 
 
@@ -146,11 +222,11 @@ public class HomeActivity extends ActionBarActivity {
                 Intent settingsIntent = new Intent(HomeActivity.this, SettingsActivity.class);
                 HomeActivity.this.startActivity(settingsIntent);
                 return true;
-            case R.id.action_create:
+           /* case R.id.action_create:
                 Intent myIntent = new Intent(HomeActivity.this, NewEventActivity.class);
 //        myIntent.putExtra("key", value); //Optional parameters
                 HomeActivity.this.startActivity(myIntent);
-                return true;
+                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
         }

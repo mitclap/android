@@ -19,6 +19,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -27,6 +28,8 @@ public class MapEventActivity extends ActionBarActivity {
 
     Intent BackgroundGPSIntent;
     Intent PeerLocationIntent;
+
+    PasselEvent passelEvent;
 
     Marker startMarker;
     Marker eventMarker;
@@ -44,15 +47,26 @@ public class MapEventActivity extends ActionBarActivity {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
+        ArrayList<Double> eventCoordinates = new ArrayList<>();
+        eventCoordinates.addAll(Arrays.asList(getIntent().getDoubleExtra("event_lat", 0),getIntent().getDoubleExtra("event_lng", 0)));
+
+        passelEvent = new PasselEvent(getIntent().getStringExtra("event_name"),
+                getIntent().getStringExtra("event_time"),
+                getIntent().getStringArrayListExtra("event_guests"),
+                eventCoordinates
+                );
+
+
         IMapController mapController = map.getController();
         mapController.setZoom(18);
-        GeoPoint startPoint = new GeoPoint(42.35965, -71.09206);
+        GeoPoint startPoint = new GeoPoint(passelEvent.getEventCoordinates().get(0), passelEvent.getEventCoordinates().get(1));
+//        GeoPoint startPoint = new GeoPoint(42.35965, -71.09206);
         mapController.setCenter(startPoint);
 
         eventMarker = new Marker(map);
         eventMarker.setPosition(startPoint);
-        eventMarker.setTitle(getIntent().getStringExtra("item"));
-        eventMarker.setSubDescription("8:56 PM");
+        eventMarker.setTitle(passelEvent.getEventName());
+        eventMarker.setSubDescription(passelEvent.getEventTime());
         eventMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(eventMarker);
 
@@ -92,7 +106,7 @@ public class MapEventActivity extends ActionBarActivity {
         personMarker.setPosition(new GeoPoint(lat, lon));
         personMarker.setTitle(name);
         personMarker.setSubDescription(eta);
-        personMarker.setIcon(getResources().getDrawable(R.drawable.marker_via));
+        personMarker.setIcon(getResources().getDrawable(R.drawable.ic_map_marker_red));
         personMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(personMarker);
         map.invalidate();

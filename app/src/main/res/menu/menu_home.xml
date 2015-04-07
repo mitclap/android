@@ -7,10 +7,10 @@
         android:orderInCategory="1"
         android:icon="@drawable/ic_action_action_settings"
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/action_create"
+   <!-- <item android:id="@+id/action_create"
         android:icon="@drawable/ic_action_content_add"
         android:title="Create"
         android:orderInCategory="2"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"/>-->
 
 </menu>
