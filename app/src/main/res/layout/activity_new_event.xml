@@ -9,7 +9,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/eventName"
         android:editable="true"
         android:enabled="true"
         android:hint="Event Name"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/start_date_data"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/eventName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:hint="Start Date"
@@ -35,7 +35,7 @@
         android:layout_height="30dp"
         android:id="@+id/start_date_button"
         android:src="@drawable/ic_calendar"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/eventName"
         android:layout_toLeftOf="@+id/start_time_data"
         android:layout_toStartOf="@+id/start_time_data"
         android:layout_marginRight="38dp"
@@ -88,7 +88,11 @@
         android:layout_below="@+id/end_date_data"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:hint="Please enter a location"/>
+        android:layout_alignRight="@+id/end_time_data"
+        android:layout_alignEnd="@+id/end_time_data"
+        android:hint="Please Enter a Location"
+        android:clickable="true"
+        android:focusable="false" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -109,7 +113,8 @@
         android:id="@+id/guest_label"
         android:layout_below="@+id/description_input"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_alignParentStart="true"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -140,5 +145,17 @@
         android:layout_alignEnd="@+id/end_time_data"
         android:layout_toRightOf="@+id/start_date_button"
         android:layout_toEndOf="@+id/start_date_button" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/guests"
+        android:layout_below="@+id/guest_input"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/description_input"
+        android:layout_alignEnd="@+id/description_input" />
 
 </RelativeLayout>

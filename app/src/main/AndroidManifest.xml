@@ -94,6 +94,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ChangePasswordActivity" />
         </activity>
+        <activity
+            android:name=".LocationPickerActivity"
+            android:label="Pick a Location">
+        </activity>
     </application>
 
 </manifest>

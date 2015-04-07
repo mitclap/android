@@ -6,6 +6,13 @@ import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,8 +27,21 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 
 import java.util.ArrayList;
+import org.osmdroid.ResourceProxy;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -43,6 +63,11 @@ public class NewEventActivity extends ActionBarActivity{
     private ListView guestList;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> guestNameList=new ArrayList<String>();
+
+    private double latitude = 0;
+    private double longitude = 0;
+
+    ArrayList<PasselEvent> eventList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +139,8 @@ public class NewEventActivity extends ActionBarActivity{
                 imm.hideSoftInputFromWindow(guestInput.getWindowToken(),0);
             }
         });
+
+        addMapPickerListener();
     }
 
     @Override
@@ -136,9 +163,13 @@ public class NewEventActivity extends ActionBarActivity{
                 finish();
                 return true;
             case R.id.new_event_check:
-                //if (createEvent()){
-                //    finish();
-                //}
+                if (createEvent()){
+                    Intent intent = new Intent();
+                    Bundle conData = new Bundle();
+                    intent.putExtras(conData);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -203,5 +234,122 @@ public class NewEventActivity extends ActionBarActivity{
         }, mHour, mMinute, false);
 
         tpDialog.show();
+    }
+
+    private void addMapPickerListener(){
+        EditText mapPickerButton = (EditText)findViewById(R.id.location_input);
+        mapPickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("NewEventActivity", "Here!");
+                Intent myIntent = new Intent(NewEventActivity.this, LocationPickerActivity.class);
+//        myIntent.putExtra("key", value); //Optional parameters
+                NewEventActivity.this.startActivityForResult(myIntent, 1);
+            }
+        });
+    }
+
+    /* Called when the map activity's finished */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    Bundle res = data.getExtras();
+                    String locationName = res.getString("loc_name");
+                    latitude = res.getDouble("lat");
+                    longitude = res.getDouble("lng");
+                    Log.d("FIRST", "result:"+locationName);
+
+                    EditText mapPickerButton = (EditText)findViewById(R.id.location_input);
+                    mapPickerButton.setText(locationName);
+                }
+                break;
+        }
+    }
+
+    private boolean createEvent(){
+        try {
+            eventList = getPasselEvents();
+
+            EditText eventNameField = (EditText) findViewById(R.id.eventName);
+            String eventName = eventNameField.getText().toString();
+            if(eventName == ""){
+                throw new UnsupportedOperationException("Please enter an event name");
+            }
+
+            EditText startDateField = (EditText) findViewById(R.id.start_date_data);
+            String startDate = startDateField.getText().toString();
+
+            EditText endDateField = (EditText) findViewById(R.id.end_date_data);
+            String endDate = endDateField.getText().toString();
+
+            TextView startTimeField = (TextView) findViewById(R.id.start_time_data);
+            String startTime = startTimeField.getText().toString();
+
+            if(startTime == ""){
+                throw new UnsupportedOperationException("Please enter a start time");
+            }
+
+            TextView endTimeField = (TextView) findViewById(R.id.end_time_data);
+            String endTime = endTimeField.getText().toString();
+
+            EditText descriptionField = (EditText) findViewById(R.id.description_input);
+            String description = descriptionField.getText().toString();
+
+            if(latitude == 0){
+                throw new UnsupportedOperationException("Please enter a location");
+            }
+
+            ArrayList<Double> location = new ArrayList<>();
+            location.addAll(Arrays.asList(latitude, longitude));
+
+            eventList.add(new PasselEvent(eventName, startTime, guestNameList, location));
+
+            setPasselEvents(eventList);
+
+            return true;
+        }
+        catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
+
+    public void setPasselEvents(ArrayList<PasselEvent> events) {
+        String eventsKey = "PASSEL_EVENTS";
+        Gson gson = new GsonBuilder().create();
+
+        Context context = getBaseContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (events == null) {
+            editor.putString(eventsKey, "").commit();
+        } else {
+            editor.putString(eventsKey, gson.toJson(events)).commit();
+        }
+    }
+
+    public ArrayList<PasselEvent> getPasselEvents() {
+        ArrayList<PasselEvent> parsedEvents = new ArrayList<>();
+        String eventsKey = "PASSEL_EVENTS";
+        Gson gson = new GsonBuilder().create();
+
+        Context context = getBaseContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        String savedValue = sharedPref.getString(eventsKey, "");
+        if (savedValue.equals("")) {
+            parsedEvents = null;
+        } else {
+            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<PasselEvent>>() {}.getType());
+        }
+
+        Log.d("HomeActivity: ", "Parsing successful!");
+        Log.d("HomeActivity: ", savedValue);
+
+        return parsedEvents;
     }
 }

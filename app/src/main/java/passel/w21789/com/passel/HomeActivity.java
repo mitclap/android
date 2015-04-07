@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.view.Gravity;
 
@@ -51,39 +52,26 @@ public class HomeActivity extends ActionBarActivity {
 
                 PasselEvent event = eventList.get(position);
                 Intent intent = createEventIntent(event);
+                intent.putExtra("index", position);
 
                 startActivity(intent);
             }
         });
 
+        for (PasselEvent currentEvent: getPasselEvents()){
+            addEvent(currentEvent);
+        }
+
+//        ArrayList<String> studyGuests = new ArrayList<>();
+//        studyGuests.addAll(Arrays.asList("Aneesh", "Carlos"));
+//
+//        ArrayList<Double> studyLocation = new ArrayList<>();
+//        studyLocation.addAll(Arrays.asList(42.35965, -71.09206));
+//
+//        addEvent(new PasselEvent("Study Sesh", "8:00PM", studyGuests, studyLocation));
+//        addEvent(new PasselEvent("Team Passel Meeting", "5:00 PM"));
 
 
-
-        ArrayList<String> studyGuests = new ArrayList<>();
-        studyGuests.addAll(Arrays.asList("Aneesh", "Carlos"));
-
-        ArrayList<Double> studyLocation = new ArrayList<>();
-        studyLocation.addAll(Arrays.asList(42.35965, -71.09206));
-
-        addEvent(new PasselEvent("Study Sesh", "8:00PM", studyGuests, studyLocation));
-        setPasselEvents(eventList);
-        eventList = new ArrayList<>();
-        eventList = getPasselEvents();
-
-        addItems("Team Passel Group Meeting");
-        addItems("Dinner With Friends");
-        addItems("Birthday Party!");
-        addItems("Hang out");
-        addItems("Interview With Company");
-        addItems("DT Practice");
-        addItems("Help Set Up For Event");
-        addItems("Baseball Practice");
-        addItems("Volunteer for something");
-        addItems("Meet at Airport");
-        addItems("Brunch With Friend");
-        addItems("Weekly Study Group");
-        addItems("Chipotle Fridays with Joe");
-        addItems("Grab Coffee at Flour with ");
 
 
         SwipeDismissListViewTouchListener touchListener =
@@ -124,7 +112,7 @@ public class HomeActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent myIntent = new Intent(HomeActivity.this, NewEventActivity.class);
                 //        myIntent.putExtra("key", value); //Optional parameters
-                HomeActivity.this.startActivity(myIntent);
+                HomeActivity.this.startActivityForResult(myIntent, 2);
             }
         });
     }
@@ -150,6 +138,7 @@ public class HomeActivity extends ActionBarActivity {
     public void addEvent(PasselEvent event) {
         eventList.add(event);
         addItems(event.getEventName());
+        setPasselEvents(eventList);
     }
 
     Intent createEventIntent(PasselEvent event){
@@ -196,6 +185,7 @@ public class HomeActivity extends ActionBarActivity {
         }
 
         Log.d("HomeActivity: ", "Parsing successful!");
+        Log.d("HomeActivity: ", savedValue);
 
         return parsedEvents;
     }
@@ -229,6 +219,32 @@ public class HomeActivity extends ActionBarActivity {
                 return true;*/
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void refreshEvents(){
+//        eventList = new ArrayList<>();
+//        eventNameList = new ArrayList<>();
+//
+//        adapter.notifyDataSetChanged();
+//
+//        for (PasselEvent currentEvent: getPasselEvents()){
+//            Log.d("HomeActivity: ",currentEvent.getEventName());
+//            addEvent(currentEvent);
+//        }
+
+        recreate();
+    }
+
+    /* Called when the map activity's finished */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    Log.d("I'm here!", "ok");
+                    refreshEvents();
+                }
+                break;
         }
     }
 }
