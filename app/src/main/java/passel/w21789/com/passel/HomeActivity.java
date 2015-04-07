@@ -92,6 +92,18 @@ public class HomeActivity extends ActionBarActivity {
                 .withMargins(0, 0, 16, 16)
                 .create();
         fabButton.setFloatingActionButtonColor(getResources().getColor(R.color.dark_primary_color));
+        addFABButtonListener(fabButton);
+    }
+
+    private void addFABButtonListener(FloatingActionButton fab) {
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(HomeActivity.this, NewEventActivity.class);
+                //        myIntent.putExtra("key", value); //Optional parameters
+                HomeActivity.this.startActivity(myIntent);
+            }
+        });
     }
 
 //    private void addMapButtonListener(){
