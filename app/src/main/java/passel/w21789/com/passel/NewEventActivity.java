@@ -74,72 +74,9 @@ public class NewEventActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-        adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                guestNameList);
-        fromDateButton = (ImageButton) findViewById(R.id.start_date_button);
-        toDateButton = (ImageButton) findViewById(R.id.end_date_button);
-        fromTimeEtxt = (TextView) findViewById(R.id.start_time_data);
-        toTimeEtxt = (TextView) findViewById(R.id.end_time_data);
-        guestInput = (EditText) findViewById(R.id.guest_input);
-        addGuestButton = (Button) findViewById(R.id.add_guest_button);
-        guestList = (ListView) findViewById(R.id.guest_list_view);
-        guestList.setAdapter(adapter);
-
-        // Setting Date
-        fromDateButton.setOnClickListener(new OnClickListener(){
-            public void onClick(View v){
-                setDate(R.id.start_date_data);
-            }
-        });
-
-        toDateButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDate(R.id.end_date_data);
-            }
-        });
-
-        // Setting Time
-        fromTimeEtxt.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setTime(R.id.start_time_data);
-            }
-        });
-
-        toTimeEtxt.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setTime(R.id.end_time_data);
-            }
-        });
-
-        //Listening to see if a user pressed enter if they are entering a Guest
-        guestInput.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER){
-                    addGuestButton.callOnClick();
-                }
-                return false;
-            }
-        });
-
-        addGuestButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("add guest");
-                String guestInputText = String.valueOf(guestInput.getText());
-                if (!guestInputText.equals("") && !guestInputText.equals(" ")){
-                    guestNameList.add(guestInputText);
-                }
-                guestInput.setText("");
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(guestInput.getWindowToken(),0);
-            }
-        });
-
+        addDateOnClickListeners();
+        addTimeOnClickListeners();
+        addGuestListeners();
         addMapPickerListener();
     }
 
@@ -174,6 +111,82 @@ public class NewEventActivity extends ActionBarActivity{
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void addDateOnClickListeners(){
+        fromDateButton = (ImageButton) findViewById(R.id.start_date_button);
+        toDateButton = (ImageButton) findViewById(R.id.end_date_button);
+
+        fromDateButton.setOnClickListener(new OnClickListener(){
+            public void onClick(View v){
+                setDate(R.id.start_date_data);
+            }
+        });
+
+        toDateButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDate(R.id.end_date_data);
+            }
+        });
+
+    }
+
+    private void addTimeOnClickListeners(){
+        fromTimeEtxt = (TextView) findViewById(R.id.start_time_data);
+        toTimeEtxt = (TextView) findViewById(R.id.end_time_data);
+
+        fromTimeEtxt.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTime(R.id.start_time_data);
+            }
+        });
+
+        toTimeEtxt.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTime(R.id.end_time_data);
+            }
+        });
+    }
+
+    private void addGuestListeners(){
+
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                guestNameList);
+
+        guestInput = (EditText) findViewById(R.id.guest_input);
+        addGuestButton = (Button) findViewById(R.id.add_guest_button);
+        guestList = (ListView) findViewById(R.id.guest_list_view);
+        guestList.setAdapter(adapter);
+
+        //Listening to see if a user pressed enter if they are entering a Guest
+        guestInput.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER){
+                    addGuestButton.callOnClick();
+                }
+                return false;
+            }
+        });
+
+        addGuestButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("add guest");
+                String guestInputText = String.valueOf(guestInput.getText());
+                System.out.println("S"+guestInputText+"E");
+                if (!guestInputText.matches("\n")){
+                    guestNameList.add(guestInputText);
+                }
+                guestInput.setText("");
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(guestInput.getWindowToken(),0);
+            }
+        });
     }
 
     private void setDate(int id){

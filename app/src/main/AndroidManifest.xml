@@ -46,7 +46,8 @@
         <activity
             android:name=".NewEventActivity"
             android:label="@string/title_activity_new_event"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName=".HomeActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="passel.w21789.com.passel.HomeActivity" />
@@ -74,7 +75,8 @@
         <activity
             android:name=".EditEventActivity"
             android:label="@string/title_activity_edit_event"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName=".HomeActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="passel.w21789.com.passel.HomeActivity" />
