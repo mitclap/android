@@ -91,6 +91,7 @@ public class HomeActivity extends ActionBarActivity {
                 .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
                 .withMargins(0, 0, 16, 16)
                 .create();
+        fabButton.setFloatingActionButtonColor(getResources().getColor(R.color.dark_primary_color));
     }
 
 //    private void addMapButtonListener(){
