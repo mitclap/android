@@ -89,7 +89,7 @@ public class HomeActivity extends ActionBarActivity {
                 .withDrawable(getResources().getDrawable(R.drawable.ic_action_content_add))
                 .withButtonColor(R.color.dark_primary_color)
                 .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
-                .withMargins(0, 0, 16, 16)
+                .withMargins(0, 0, 8, 8)
                 .create();
         fabButton.setFloatingActionButtonColor(getResources().getColor(R.color.dark_primary_color));
         addFABButtonListener(fabButton);
