@@ -19,9 +19,9 @@ public class LocationPickerActivity extends Activity {
 	private EditText searchText;
 	private Button searchButton;
 
-	private Double latitude = 33.35965;
-	private Double longitude = 71.09206;
-	private Integer zoom = 5;
+	private Double latitude = 42.359711;
+	private Double longitude = -71.094627;
+	private Integer zoom = 16;
 	private String locationName;
 
 	@Override
@@ -31,8 +31,8 @@ public class LocationPickerActivity extends Activity {
 		setContentView(R.layout.activity_location_picker);
 
 		if (savedInstanceState!=null) {
-			latitude = savedInstanceState.getDouble("latitude");
-			longitude = savedInstanceState.getDouble("longitude");
+//			latitude = savedInstanceState.getDouble("latitude");
+//			longitude = savedInstanceState.getDouble("longitude");
 			zoom = savedInstanceState.getInt("zoom");
 			locationName = savedInstanceState.getString("locationName");
 		}
@@ -50,7 +50,7 @@ public class LocationPickerActivity extends Activity {
 			@Override
 			public void onProgressChanged(WebView view, int progress) {
 				if (progress == 100) {
-					locationPickerView.loadUrl("javascript:activityInitialize(" + latitude + "," + longitude + "," + zoom + ")");
+					locationPickerView.loadUrl("javascript:activityInitialize(" + Double.toString(latitude) + "," + Double.toString(longitude) + "," + zoom + ")");
 				}
 			}
 		});
