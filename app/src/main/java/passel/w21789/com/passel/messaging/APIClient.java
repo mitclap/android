@@ -15,8 +15,10 @@ import java.io.IOException;
  */
 public class APIClient {
 
-    public static HttpResponse post(String uri, String json) throws IOException {
-        HttpPost httpPost = new HttpPost(uri);
+    private static final String API_BASE_URL = "http://18.189.28.225:5000";
+
+    public static HttpResponse post(String endpoint, String json) throws IOException {
+        HttpPost httpPost = new HttpPost(API_BASE_URL + endpoint);
         httpPost.setEntity(new StringEntity(json));
         httpPost.setHeader("Accept", "application/json");
         httpPost.setHeader("Content-type", "application/json");
