@@ -70,26 +70,7 @@ public class SplashScreenActivity extends Activity {
 
         setPasselEvents(eventList);
 
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    String message = APIClient.getObjectMapper().writeValueAsString(new SignupMessage("testUsername", "testPubKey"));
-                    Log.e("DEBUGGG", "Made a json :)");
-                    Log.e("DEBUGGG", message);
-                    HttpResponse response = APIClient.post("/accounts", message);
-                    Log.e("DEBUGGG", "Request was successful :)");
-                    Log.e("DEBUGGG", response.getEntity().toString());
-                } catch (JsonProcessingException e) {
-                    Log.e("DEBUGGG", "Couldn't serialize the json :(");
-                } catch (IOException e) {
-                    Log.e("DEBUGGG", "Error when trying to make the POST request :(", e);
-                } catch (RuntimeException e) {
-                    Log.e("DEBUGGG", "I just failed completely :(", e);
-                }
-                return null;
-            }
-        }.execute();
+        new APIClient().signup(new SignupMessage("testUsername", "testPubKey"));
     }
 
     private void addSignUpButtonListener(){

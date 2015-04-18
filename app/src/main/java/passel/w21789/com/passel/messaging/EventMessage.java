@@ -11,7 +11,7 @@ import java.util.Date;
 @Value
 // No need to call super implementation of equals and hashcode; explicitly let Lombok know this is OK
 @EqualsAndHashCode(callSuper = false)
-public class EventMessage {
+public class EventMessage implements Message {
 
     private final String name;
     private final Date start;
@@ -27,5 +27,10 @@ public class EventMessage {
         this.start = start;
         this.end = end;
         this.description= description;
+    }
+
+    @Override
+    public String getEndpoint() {
+        return "/events";
     }
 }
