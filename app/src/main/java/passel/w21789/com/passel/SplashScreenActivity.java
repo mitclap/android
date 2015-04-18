@@ -83,7 +83,7 @@ public class SplashScreenActivity extends Activity {
                 } catch (JsonProcessingException e) {
                     Log.e("DEBUGGG", "Couldn't serialize the json :(");
                 } catch (IOException e) {
-                    Log.e("DEBUGGG", "Error when trying to make the POST request :(");
+                    Log.e("DEBUGGG", "Error when trying to make the POST request :(", e);
                 } catch (RuntimeException e) {
                     Log.e("DEBUGGG", "I just failed completely :(", e);
                 }
