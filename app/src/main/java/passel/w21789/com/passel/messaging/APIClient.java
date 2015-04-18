@@ -23,7 +23,7 @@ public class APIClient {
     private static final String API_BASE_URL = "http://18.189.28.225:5000";
     public static final String LOGGING_TAG = "PASSEL_APICLIENT";
 
-    public HttpResponse signup(String username, String publicKey) {
+    public HttpResponse signup(final String username, final String publicKey) {
         return makeBlockingRequest(new SignupMessage(username, publicKey));
     }
 
@@ -31,7 +31,7 @@ public class APIClient {
         return makeBlockingRequest(message);
     }
 
-    private HttpResponse makeBlockingRequest(Message message) {
+    private HttpResponse makeBlockingRequest(final Message message) {
         // TODO: don't swallow exception but make the caller handle!
         // TODO: use custom exception type with parent pointer instead of exposing raw exceptions though
         // TODO: a la Rust's From<blah>
@@ -49,7 +49,7 @@ public class APIClient {
         return getObjectMapper().writeValueAsString(message);
     }
 
-    private static HttpResponse post(String endpoint, String json) throws IOException {
+    private static HttpResponse post(final String endpoint, final String json) throws IOException {
         HttpPost httpPost = new HttpPost(API_BASE_URL + endpoint);
         httpPost.setEntity(new StringEntity(json));
         httpPost.setHeader("Accept", "application/json");
