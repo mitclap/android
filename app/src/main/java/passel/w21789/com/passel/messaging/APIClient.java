@@ -23,8 +23,8 @@ public class APIClient {
     private static final String API_BASE_URL = "http://18.189.28.225:5000";
     public static final String LOGGING_TAG = "PASSEL_APICLIENT";
 
-    public HttpResponse signup(SignupMessage message) {
-        return makeBlockingRequest(message);
+    public HttpResponse signup(String username, String publicKey) {
+        return makeBlockingRequest(new SignupMessage(username, publicKey));
     }
 
     public HttpResponse addEvent(EventMessage message) {

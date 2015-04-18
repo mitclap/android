@@ -70,7 +70,7 @@ public class SplashScreenActivity extends Activity {
 
         setPasselEvents(eventList);
 
-        new APIClient().signup(new SignupMessage("testUsername", "testPubKey"));
+        new APIClient().signup("testUsername", "testPubKey");
     }
 
     private void addSignUpButtonListener(){
