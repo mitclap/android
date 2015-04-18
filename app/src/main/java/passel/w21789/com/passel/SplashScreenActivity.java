@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,12 +12,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import org.apache.http.HttpResponse;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import passel.w21789.com.passel.messaging.APIClient;
+import passel.w21789.com.passel.messaging.SignupMessage;
 
 
 public class SplashScreenActivity extends Activity {
@@ -61,6 +70,26 @@ public class SplashScreenActivity extends Activity {
 
         setPasselEvents(eventList);
 
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    String message = (new ObjectMapper()).writeValueAsString(new SignupMessage("testUsername", "testPubKey"));
+                    Log.e("DEBUGGG", "Made a json :)");
+                    Log.e("DEBUGGG", message);
+                    HttpResponse response = APIClient.post(Constants.API_BASE_URL + "/accounts", message);
+                    Log.e("DEBUGGG", "Request was successful :)");
+                    Log.e("DEBUGGG", response.getEntity().toString());
+                } catch (JsonProcessingException e) {
+                    Log.e("DEBUGGG", "Couldn't serialize the json :(");
+                } catch (IOException e) {
+                    Log.e("DEBUGGG", "Error when trying to make the POST request :(");
+                } catch (RuntimeException e) {
+                    Log.e("DEBUGGG", "I just failed completely :(", e);
+                }
+                return null;
+            }
+        }.execute();
     }
 
     private void addSignUpButtonListener(){
