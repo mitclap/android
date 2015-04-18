@@ -13,6 +13,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -27,8 +28,8 @@ public class APIClient {
         return makeBlockingRequest(new SignupMessage(username, publicKey));
     }
 
-    public HttpResponse addEvent(EventMessage message) {
-        return makeBlockingRequest(message);
+    public HttpResponse addEvent(String name, Date start, Date end, String description) {
+        return makeBlockingRequest(new EventMessage(name, start, end, description));
     }
 
     private HttpResponse makeBlockingRequest(final Message message) {
