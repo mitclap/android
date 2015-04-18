@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 public class APIClient {
 
     private static final String API_BASE_URL = "http://18.189.28.225:5000";
+    public static final String LOGGING_TAG = "PASSEL_APICLIENT";
 
     public HttpResponse signup(SignupMessage message) {
         return makeBlockingRequest(message);
@@ -39,7 +40,7 @@ public class APIClient {
             task.execute(message);
             return task.get();
         } catch (ExecutionException | InterruptedException e) {
-            Log.e("DEBUGGG", "had a problem posting " + message.toString(), e);
+            Log.e(LOGGING_TAG, "had a problem posting " + message.toString(), e);
             return null;
         }
     }
@@ -69,18 +70,18 @@ public class APIClient {
             Message message = messages[0];
             try {
                 String json = APIClient.serialize(message);
-                Log.e("DEBUGGG", "Made a json :)");
-                Log.e("DEBUGGG", json);
+                Log.e(LOGGING_TAG, "Made a json :)");
+                Log.e(LOGGING_TAG, json);
                 HttpResponse response = APIClient.post(message.getEndpoint(), json);
-                Log.e("DEBUGGG", "Request was successful :)");
-                Log.e("DEBUGGG", response.getEntity().toString());
+                Log.e(LOGGING_TAG, "Request was successful :)");
+                Log.e(LOGGING_TAG, response.getEntity().toString());
                 return response;
             } catch (JsonProcessingException e) {
-                Log.e("DEBUGGG", "Couldn't serialize the json :(");
+                Log.e(LOGGING_TAG, "Couldn't serialize the json :(");
             } catch (IOException e) {
-                Log.e("DEBUGGG", "Error when trying to make the POST request :(", e);
+                Log.e(LOGGING_TAG, "Error when trying to make the POST request :(", e);
             } catch (RuntimeException e) {
-                Log.e("DEBUGGG", "I just failed completely :(", e);
+                Log.e(LOGGING_TAG, "I just failed completely :(", e);
             }
             return null;
         }
