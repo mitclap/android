@@ -74,7 +74,7 @@ public class SplashScreenActivity extends Activity {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    String message = (new ObjectMapper()).writeValueAsString(new SignupMessage("testUsername", "testPubKey"));
+                    String message = APIClient.getObjectMapper().writeValueAsString(new SignupMessage("testUsername", "testPubKey"));
                     Log.e("DEBUGGG", "Made a json :)");
                     Log.e("DEBUGGG", message);
                     HttpResponse response = APIClient.post(Constants.API_BASE_URL + "/accounts", message);

@@ -6,24 +6,26 @@ import lombok.Value;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Date;
+
 @Value
 // No need to call super implementation of equals and hashcode; explicitly let Lombok know this is OK
 @EqualsAndHashCode(callSuper = false)
 public class EventMessage {
 
-    private final String eventName;
-    private final String startDateTime;
-    private final String stopDateTime;
+    private final String name;
+    private final Date start;
+    private final Date end;
     private final String description;
 
     @JsonCreator
-    public EventMessage(@JsonProperty("eventName") String eventName,
-                        @JsonProperty("startDateTime") String startDateTime,
-                        @JsonProperty("stopDateTime") String stopDateTime
-                        ,@JsonProperty("stopDateTime") String description) {
-        this.eventName = eventName;
-        this.startDateTime = startDateTime;
-        this.stopDateTime = stopDateTime;
+    public EventMessage(@JsonProperty("name") String name,
+                        @JsonProperty("start") Date start,
+                        @JsonProperty("end") Date end
+                        ,@JsonProperty("description") String description) {
+        this.name = name;
+        this.start = start;
+        this.end = end;
         this.description= description;
     }
 }
