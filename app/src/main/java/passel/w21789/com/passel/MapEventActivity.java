@@ -5,13 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,10 +22,12 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import passel.w21789.com.passel.data.Event;
 
 public class MapEventActivity extends ActionBarActivity {
     HashMap<String, Marker> peopleMarkerHashMap = new HashMap<>();
@@ -34,7 +35,7 @@ public class MapEventActivity extends ActionBarActivity {
     Intent BackgroundGPSIntent;
     Intent PeerLocationIntent;
 
-    PasselEvent passelEvent;
+    Event event;
 
     Marker startMarker;
     Marker eventMarker;
@@ -61,18 +62,18 @@ public class MapEventActivity extends ActionBarActivity {
 //                eventCoordinates
 //                );
         Log.d("MapEventActivity", Integer.toString(getIntent().getIntExtra("index", -1)));
-        passelEvent = getPasselEvents().get(getIntent().getIntExtra("index", -1));
+        event = getEvents().get(getIntent().getIntExtra("index", -1));
 
         IMapController mapController = map.getController();
         mapController.setZoom(18);
-        GeoPoint startPoint = new GeoPoint(passelEvent.getEventCoordinates().get(0), passelEvent.getEventCoordinates().get(1));
+        GeoPoint startPoint = new GeoPoint(event.getLocation().getLatitude(), event.getLocation().getLongitude());
 //        GeoPoint startPoint = new GeoPoint(42.35965, -71.09206);
         mapController.setCenter(startPoint);
 
         eventMarker = new Marker(map);
         eventMarker.setPosition(startPoint);
-        eventMarker.setTitle(passelEvent.getEventName());
-        eventMarker.setSubDescription(passelEvent.getEventTime());
+        eventMarker.setTitle(event.getName());
+        eventMarker.setSubDescription(new SimpleDateFormat("h:mm a").format(event.getStart()));
         eventMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(eventMarker);
 
@@ -145,7 +146,7 @@ public class MapEventActivity extends ActionBarActivity {
         }
     };
 
-    public void setPasselEvents(ArrayList<PasselEvent> events) {
+    public void setEvents(ArrayList<Event> events) {
         String eventsKey = "PASSEL_EVENTS";
         Gson gson = new GsonBuilder().create();
 
@@ -160,8 +161,8 @@ public class MapEventActivity extends ActionBarActivity {
         }
     }
 
-    public ArrayList<PasselEvent> getPasselEvents() {
-        ArrayList<PasselEvent> parsedEvents = new ArrayList<>();
+    public ArrayList<Event> getEvents() {
+        ArrayList<Event> parsedEvents = new ArrayList<>();
         String eventsKey = "PASSEL_EVENTS";
         Gson gson = new GsonBuilder().create();
 
@@ -173,7 +174,7 @@ public class MapEventActivity extends ActionBarActivity {
         if (savedValue.equals("")) {
             parsedEvents = null;
         } else {
-            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<PasselEvent>>() {}.getType());
+            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<Event>>() {}.getType());
         }
 
         Log.d("HomeActivity: ", "Parsing successful!");

@@ -1,37 +1,34 @@
 package passel.w21789.com.passel;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.view.Gravity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
+import passel.w21789.com.passel.data.Event;
 
 public class HomeActivity extends ActionBarActivity {
 
     HashMap<Integer, String> eventMap = new HashMap();
 
     ArrayList<String> eventNameList=new ArrayList<String>();
-    ArrayList<PasselEvent> eventList = new ArrayList<>();
+    ArrayList<Event> eventList = new ArrayList<>();
     ArrayAdapter<String> adapter;
 
     @Override
@@ -50,7 +47,7 @@ public class HomeActivity extends ActionBarActivity {
                 String item = adapter.getItem(position);
                 Log.d("Item Clicked: ", item);
 
-                PasselEvent event = eventList.get(position);
+                Event event = eventList.get(position);
                 Intent intent = createEventIntent(event);
                 intent.putExtra("index", position);
 
@@ -64,7 +61,7 @@ public class HomeActivity extends ActionBarActivity {
                 String item = adapter.getItem(position);
                 Log.d("Item Clicked: ", item);
 
-                PasselEvent event = eventList.get(position);
+                Event event = eventList.get(position);
                 Intent intent = createEventIntent(event);
                 intent.putExtra("index", position);
                 intent.putExtra("edit", true);
@@ -75,7 +72,7 @@ public class HomeActivity extends ActionBarActivity {
             }
         });
 
-        for (PasselEvent currentEvent: getPasselEvents()){
+        for (Event currentEvent: getPasselEvents()){
             addEvent(currentEvent);
         }
 
@@ -152,25 +149,25 @@ public class HomeActivity extends ActionBarActivity {
         adapter.notifyDataSetChanged();
     }
 
-    public void addEvent(PasselEvent event) {
+    public void addEvent(Event event) {
         eventList.add(event);
-        addItems(event.getEventName());
+        addItems(event.getName());
         setPasselEvents(eventList);
     }
 
-    Intent createEventIntent(PasselEvent event){
+    Intent createEventIntent(Event event){
         Intent intent = new Intent(HomeActivity.this, MapEventActivity.class);
-        intent.putExtra("event_name", event.getEventName());
-        intent.putExtra("event_time", event.getEventTime());
-        intent.putStringArrayListExtra("event_guests", event.getEventGuests());
-        Log.d("HomeActivity: ", event.getEventCoordinates().toString());
-        intent.putExtra("event_lat", event.getEventCoordinates().get(0));
-        intent.putExtra("event_lng", event.getEventCoordinates().get(1));
+        intent.putExtra("event_name", event.getName());
+        intent.putExtra("event_time", event.getStart().toString());
+        intent.putStringArrayListExtra("event_guests", new ArrayList<>(event.getGuests()));
+        Log.d("HomeActivity: ", event.getLocation().toString());
+        intent.putExtra("event_lat", event.getLocation().getLatitude());
+        intent.putExtra("event_lng", event.getLocation().getLongitude());
         return intent;
 
     }
 
-    public void setPasselEvents(ArrayList<PasselEvent> events) {
+    public void setPasselEvents(ArrayList<Event> events) {
         String eventsKey = "PASSEL_EVENTS";
         Gson gson = new GsonBuilder().create();
 
@@ -185,8 +182,8 @@ public class HomeActivity extends ActionBarActivity {
         }
     }
 
-    public ArrayList<PasselEvent> getPasselEvents() {
-        ArrayList<PasselEvent> parsedEvents = new ArrayList<>();
+    public ArrayList<Event> getPasselEvents() {
+        ArrayList<Event> parsedEvents = new ArrayList<>();
         String eventsKey = "PASSEL_EVENTS";
         Gson gson = new GsonBuilder().create();
 
@@ -198,7 +195,7 @@ public class HomeActivity extends ActionBarActivity {
         if (savedValue.equals("")) {
             parsedEvents = null;
         } else {
-            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<PasselEvent>>() {}.getType());
+            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<Event>>() {}.getType());
         }
 
         Log.d("HomeActivity: ", "Parsing successful!");

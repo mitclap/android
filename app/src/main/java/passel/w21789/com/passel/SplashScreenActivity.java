@@ -17,12 +17,16 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 import passel.w21789.com.passel.api.APIClient;
+import passel.w21789.com.passel.data.Event;
+import passel.w21789.com.passel.data.Location;
 
 
 public class SplashScreenActivity extends Activity {
-    ArrayList<PasselEvent> eventList = new ArrayList<>();
+    ArrayList<Event> eventList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,37 +35,40 @@ public class SplashScreenActivity extends Activity {
         addSignUpButtonListener();
         addLogInButtonListener();
 
-        setPasselEvents(eventList);
+        // TODO: switch to joda-time maybe
+        Calendar cal = Calendar.getInstance();
+        cal.setLenient(false);
+        cal.setTimeInMillis(0);
+        cal.set(2015, Calendar.APRIL, 21, 20, 0, 0);
+        Date start = cal.getTime();
+        cal.add(Calendar.HOUR_OF_DAY, 1);
+        Date end = cal.getTime();
 
-        ArrayList<String> studyGuests = new ArrayList<>();
-        studyGuests.addAll(Arrays.asList("Aneesh", "Carlos"));
+        eventList.add(new Event("Study Session",
 
-        ArrayList<Double> studyLocation = new ArrayList<>();
-        studyLocation.addAll(Arrays.asList(42.35965, -71.09206));
+                start, end,
+                "Study for 21W.789",
+                Arrays.asList("Aneesh", "Carlos"),
+                new Location(42.35965, -71.09206)));
 
-        eventList.add(new PasselEvent("Study Session", "8:00PM", studyGuests, studyLocation));
-
-        studyLocation = new ArrayList<>();
-        studyLocation.addAll(Arrays.asList(42.36100, -71.09649));
-
-        eventList.add(new PasselEvent("Grab Coffee at Flour with Aneesh", "10:00 PM", studyGuests, studyLocation));
-
-        studyLocation = new ArrayList<>();
-        studyLocation.addAll(Arrays.asList(42.35902, -71.09517));
-
-        eventList.add(new PasselEvent("Team Passel Group Meeting", "5:00 PM", studyGuests, studyLocation));
-
-        studyLocation = new ArrayList<>();
-        studyLocation.addAll(Arrays.asList(42.36634, -71.01661));
-
-        eventList.add(new PasselEvent("Meet at Airport", "9:00 PM", studyGuests, studyLocation));
-
-        studyLocation = new ArrayList<>();
-        studyLocation.addAll(Arrays.asList(42.35745, -71.09412));
-
-        eventList.add(new PasselEvent("DT Practice", "10:00 PM", studyGuests, studyLocation));
-
-        setPasselEvents(eventList);
+//        eventList.add(new PasselEvent("Grab Coffee at Flour with Aneesh", "10:00 PM", studyGuests, studyLocation));
+//
+//        studyLocation = new ArrayList<>();
+//        studyLocation.addAll(Arrays.asList(42.35902, -71.09517));
+//
+//        eventList.add(new PasselEvent("Team Passel Group Meeting", "5:00 PM", studyGuests, studyLocation));
+//
+//        studyLocation = new ArrayList<>();
+//        studyLocation.addAll(Arrays.asList(42.36634, -71.01661));
+//
+//        eventList.add(new PasselEvent("Meet at Airport", "9:00 PM", studyGuests, studyLocation));
+//
+//        studyLocation = new ArrayList<>();
+//        studyLocation.addAll(Arrays.asList(42.35745, -71.09412));
+//
+//        eventList.add(new PasselEvent("DT Practice", "10:00 PM", studyGuests, studyLocation));
+//
+        setEvents(eventList);
 
         new APIClient().signup("testUsername", "testPubKey");
     }
@@ -92,7 +99,7 @@ public class SplashScreenActivity extends Activity {
         });
     }
 
-    public void setPasselEvents(ArrayList<PasselEvent> events) {
+    public void setEvents(ArrayList<Event> events) {
         String eventsKey = "PASSEL_EVENTS";
         Gson gson = new GsonBuilder().create();
 
@@ -107,8 +114,8 @@ public class SplashScreenActivity extends Activity {
         }
     }
 
-    public ArrayList<PasselEvent> getPasselEvents() {
-        ArrayList<PasselEvent> parsedEvents = new ArrayList<>();
+    public ArrayList<Event> getPasselEvents() {
+        ArrayList<Event> parsedEvents = new ArrayList<>();
         String eventsKey = "PASSEL_EVENTS";
         Gson gson = new GsonBuilder().create();
 
@@ -120,7 +127,7 @@ public class SplashScreenActivity extends Activity {
         if (savedValue.equals("")) {
             parsedEvents = null;
         } else {
-            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<PasselEvent>>() {}.getType());
+            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<Event>>() {}.getType());
         }
 
         Log.d("HomeActivity: ", "Parsing successful!");

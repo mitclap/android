@@ -28,13 +28,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import passel.w21789.com.passel.api.APIClient;
 import passel.w21789.com.passel.api.APIError;
 import passel.w21789.com.passel.api.APIResponse;
+import passel.w21789.com.passel.data.Event;
+import passel.w21789.com.passel.data.Location;
 import passel.w21789.com.passel.util.Result;
 
 public class NewEventActivity extends ActionBarActivity{
@@ -44,7 +47,7 @@ public class NewEventActivity extends ActionBarActivity{
     private ImageButton toDateButton;
 
     private Calendar calendar;
-
+    private Location location;
     private DatePickerDialog dpDialog;
     private TimePickerDialog tpDialog;
 
@@ -54,12 +57,9 @@ public class NewEventActivity extends ActionBarActivity{
     private ArrayAdapter<String> adapter;
     private ArrayList<String> guestNameList=new ArrayList<String>();
 
-    private double latitude = 0;
-    private double longitude = 0;
-
     private boolean isEditing = false;
 
-    ArrayList<PasselEvent> eventList = new ArrayList<>();
+    ArrayList<Event> eventList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,21 +71,17 @@ public class NewEventActivity extends ActionBarActivity{
         addGuestListeners();
         addMapPickerListener();
 
-        if (getIntent().getBooleanExtra("edit", false)){
+        if (getIntent().getBooleanExtra("edit", false)) {
             isEditing = true;
             int index = getIntent().getIntExtra("index", 0);
-            PasselEvent event = getPasselEvents().get(index);
-            ((EditText) findViewById(R.id.eventName)).setText(event.getEventName());
-            ((EditText) findViewById(R.id.description_input)).setText(event.getEventDescription());
-            ((TextView) findViewById(R.id.start_time_data)).setText(event.getEventTime());
-            ((TextView) findViewById(R.id.end_time_data)).setText(event.getEndTime());
-            ((EditText) findViewById(R.id.start_date_data)).setText(event.getEventDate());
-            ((EditText) findViewById(R.id.end_date_data)).setText(event.getEndDate());
-            ((EditText) findViewById(R.id.location_input)).setText(event.getEventCoordinates().get(0)+","+event.getEventCoordinates().get(1));
-            latitude = event.getEventCoordinates().get(0);
-            longitude= event.getEventCoordinates().get(1);
+            Event event = getEvents().get(index);
+            ((EditText) findViewById(R.id.name)).setText(event.getName());
+            ((EditText) findViewById(R.id.description_input)).setText(event.getDescription());
+            ((TextView) findViewById(R.id.start_time_data)).setText(event.getStart().toString());
+            ((TextView) findViewById(R.id.end_time_data)).setText(event.getEnd().toString());
+            ((EditText) findViewById(R.id.location_input)).setText(event.getLocation().toString());
 
-            guestNameList.addAll(event.getEventGuests());
+            guestNameList.addAll(event.getGuests());
             adapter.notifyDataSetChanged();
 
             setTitle("Edit Event");
@@ -193,13 +189,13 @@ public class NewEventActivity extends ActionBarActivity{
             public void onClick(View v) {
                 System.out.println("add guest");
                 String guestInputText = String.valueOf(guestInput.getText());
-                System.out.println("S"+guestInputText+"E");
-                if (!guestInputText.matches("\n")){
+                System.out.println("S" + guestInputText + "E");
+                if (!guestInputText.matches("\n")) {
                     guestNameList.add(guestInputText);
                 }
                 guestInput.setText("");
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(guestInput.getWindowToken(),0);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(guestInput.getWindowToken(), 0);
             }
         });
     }
@@ -284,8 +280,7 @@ public class NewEventActivity extends ActionBarActivity{
                 if (resultCode == RESULT_OK) {
                     Bundle res = data.getExtras();
                     String locationName = res.getString("loc_name");
-                    latitude = res.getDouble("lat");
-                    longitude = res.getDouble("lng");
+                    location = new Location(res.getDouble("lat"), res.getDouble("lng"));
                     Log.d("FIRST", "result:"+locationName);
 
                     EditText mapPickerButton = (EditText)findViewById(R.id.location_input);
@@ -297,9 +292,9 @@ public class NewEventActivity extends ActionBarActivity{
 
     private boolean createEvent(){
         try {
-            eventList = getPasselEvents();
+            eventList = getEvents();
 
-            EditText eventNameField = (EditText) findViewById(R.id.eventName);
+            EditText eventNameField = (EditText) findViewById(R.id.name);
             final String eventName = eventNameField.getText().toString();
             if(eventName == ""){
                 throw new UnsupportedOperationException("Please enter an event name");
@@ -320,24 +315,28 @@ public class NewEventActivity extends ActionBarActivity{
 
             TextView endTimeField = (TextView) findViewById(R.id.end_time_data);
             String endTime = endTimeField.getText().toString();
-
             EditText descriptionField = (EditText) findViewById(R.id.description_input);
             String description = descriptionField.getText().toString();
 
-            if(latitude == 0){
+            if(null == location) {
                 throw new UnsupportedOperationException("Please enter a location");
             }
 
-            ArrayList<Double> location = new ArrayList<>();
-            location.addAll(Arrays.asList(latitude, longitude));
-            PasselEvent newEvent = new PasselEvent(eventName, startTime, endTime, guestNameList, location, startDate, endDate, description);
+            DateFormat datetimeParser = new SimpleDateFormat("MM/dd/yyyyhh:mm a");
+
+            Event newEvent = new Event(eventName,
+                    datetimeParser.parse(startDate + startTime),
+                    datetimeParser.parse(startDate + startTime),
+                    description,
+                    guestNameList,
+                    location);
             if (isEditing){
                 eventList.set(getIntent().getIntExtra("index", 0), newEvent);
             } else {
-                eventList.add(new PasselEvent(eventName, startTime, endTime, guestNameList, location, startDate, endDate, description));
+                eventList.add(newEvent);
             }
 
-            setPasselEvents(eventList);
+            setEvents(eventList);
 
             Calendar startDateTime = Calendar.getInstance();
             int startHour = Integer.parseInt(startTime.split(":|\\s")[0]);
@@ -385,7 +384,7 @@ public class NewEventActivity extends ActionBarActivity{
         }
     }
 
-    public void setPasselEvents(ArrayList<PasselEvent> events) {
+    public void setEvents(ArrayList<Event> events) {
         String eventsKey = "PASSEL_EVENTS";
         Gson gson = new GsonBuilder().create();
 
@@ -400,8 +399,8 @@ public class NewEventActivity extends ActionBarActivity{
         }
     }
 
-    public ArrayList<PasselEvent> getPasselEvents() {
-        ArrayList<PasselEvent> parsedEvents = new ArrayList<>();
+    public ArrayList<Event> getEvents() {
+        ArrayList<Event> parsedEvents = new ArrayList<>();
         String eventsKey = "PASSEL_EVENTS";
         Gson gson = new GsonBuilder().create();
 
@@ -413,7 +412,7 @@ public class NewEventActivity extends ActionBarActivity{
         if (savedValue.equals("")) {
             parsedEvents = null;
         } else {
-            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<PasselEvent>>() {}.getType());
+            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<Event>>() {}.getType());
         }
 
         Log.d("HomeActivity: ", "Parsing successful!");
