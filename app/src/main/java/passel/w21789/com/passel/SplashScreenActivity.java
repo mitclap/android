@@ -25,6 +25,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import passel.w21789.com.passel.messaging.APIClient;
+import passel.w21789.com.passel.messaging.APIError;
+import passel.w21789.com.passel.messaging.APIResponse;
+import passel.w21789.com.passel.messaging.Ok;
+import passel.w21789.com.passel.messaging.Result;
 import passel.w21789.com.passel.messaging.SignupMessage;
 
 
@@ -70,7 +74,10 @@ public class SplashScreenActivity extends Activity {
 
         setPasselEvents(eventList);
 
-        new APIClient().signup("testUsername", "testPubKey");
+        Result<APIResponse, APIError> result = new APIClient().signup("testUsername", "testPubKey");
+        if (result.isOk()){
+            result.unwrap().getCode();
+        }
     }
 
     private void addSignUpButtonListener(){

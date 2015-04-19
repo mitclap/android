@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -30,6 +31,7 @@ public class EventMessage implements Message {
     }
 
     @Override
+    @JsonIgnore
     public String getEndpoint() {
         return "/events";
     }

@@ -58,6 +58,23 @@ public class HomeActivity extends ActionBarActivity {
             }
         });
 
+        eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = adapter.getItem(position);
+                Log.d("Item Clicked: ", item);
+
+                PasselEvent event = eventList.get(position);
+                Intent intent = createEventIntent(event);
+                intent.putExtra("index", position);
+                intent.putExtra("edit", true);
+
+                startActivity(intent);
+
+                return true;
+            }
+        });
+
         for (PasselEvent currentEvent: getPasselEvents()){
             addEvent(currentEvent);
         }

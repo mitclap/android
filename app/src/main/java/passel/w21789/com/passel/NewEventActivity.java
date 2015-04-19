@@ -3,6 +3,7 @@ package passel.w21789.com.passel;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -29,12 +30,16 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 
 import java.util.ArrayList;
+
+import org.apache.http.HttpResponse;
 import org.osmdroid.ResourceProxy;
 
 import java.io.IOException;
@@ -43,9 +48,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+
+import passel.w21789.com.passel.messaging.APIClient;
+import passel.w21789.com.passel.messaging.APIError;
+import passel.w21789.com.passel.messaging.APIResponse;
+import passel.w21789.com.passel.messaging.EventMessage;
+import passel.w21789.com.passel.messaging.Result;
+import passel.w21789.com.passel.messaging.SignupMessage;
 
 public class NewEventActivity extends ActionBarActivity{
     private TextView fromTimeEtxt;
@@ -67,6 +80,8 @@ public class NewEventActivity extends ActionBarActivity{
     private double latitude = 0;
     private double longitude = 0;
 
+    private boolean isEditing = false;
+
     ArrayList<PasselEvent> eventList = new ArrayList<>();
 
     @Override
@@ -78,6 +93,29 @@ public class NewEventActivity extends ActionBarActivity{
         addTimeOnClickListeners();
         addGuestListeners();
         addMapPickerListener();
+
+        if (getIntent().getBooleanExtra("edit", false)){
+            isEditing = true;
+            int index = getIntent().getIntExtra("index", 0);
+            PasselEvent event = getPasselEvents().get(index);
+            ((EditText) findViewById(R.id.eventName)).setText(event.getEventName());
+            ((EditText) findViewById(R.id.description_input)).setText(event.getEventDescription());
+            ((TextView) findViewById(R.id.start_time_data)).setText(event.getEventTime());
+            ((TextView) findViewById(R.id.end_time_data)).setText(event.getEndTime());
+            ((EditText) findViewById(R.id.start_date_data)).setText(event.getEventDate());
+            ((EditText) findViewById(R.id.end_date_data)).setText(event.getEndDate());
+            ((EditText) findViewById(R.id.location_input)).setText(event.getEventCoordinates().get(0)+","+event.getEventCoordinates().get(1));
+            latitude = event.getEventCoordinates().get(0);
+            longitude= event.getEventCoordinates().get(1);
+
+            guestNameList.addAll(event.getEventGuests());
+            adapter.notifyDataSetChanged();
+
+            setTitle("Edit Event");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+
+
     }
 
     @Override
@@ -201,7 +239,7 @@ public class NewEventActivity extends ActionBarActivity{
         dpDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener(){
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
                 System.out.println("Date Picker Set");
-                setDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year, TextView.BufferType.EDITABLE);
+                setDate.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year, TextView.BufferType.EDITABLE);
             }
         }, mYear, mMonth, mDay);
 
@@ -285,7 +323,7 @@ public class NewEventActivity extends ActionBarActivity{
             eventList = getPasselEvents();
 
             EditText eventNameField = (EditText) findViewById(R.id.eventName);
-            String eventName = eventNameField.getText().toString();
+            final String eventName = eventNameField.getText().toString();
             if(eventName == ""){
                 throw new UnsupportedOperationException("Please enter an event name");
             }
@@ -315,12 +353,56 @@ public class NewEventActivity extends ActionBarActivity{
 
             ArrayList<Double> location = new ArrayList<>();
             location.addAll(Arrays.asList(latitude, longitude));
-
-            eventList.add(new PasselEvent(eventName, startTime, guestNameList, location));
+            PasselEvent newEvent = new PasselEvent(eventName, startTime, endTime, guestNameList, location, startDate, endDate, description);
+            if (isEditing){
+                eventList.set(getIntent().getIntExtra("index", 0), newEvent);
+            } else {
+                eventList.add(new PasselEvent(eventName, startTime, endTime, guestNameList, location, startDate, endDate, description));
+            }
 
             setPasselEvents(eventList);
 
-            return true;
+            Calendar startDateTime = Calendar.getInstance();
+            int startHour = Integer.parseInt(startTime.split(":|\\s")[0]);
+            if (startTime.split(":|\\s")[0] == "PM"){
+                startHour +=12;
+            }
+
+            startDateTime.set(Integer.parseInt(startDate.split("/")[2]),
+                    Integer.parseInt(startDate.split("/")[0]),
+                    Integer.parseInt(startDate.split("/")[1]),
+                    startHour,
+                    Integer.parseInt(startTime.split(":|\\s")[1]));
+
+            Calendar endDateTime = Calendar.getInstance();
+            int endHour = Integer.parseInt(startTime.split(":|\\s")[0]);
+            if (endTime.split(":|\\s")[0] == "PM"){
+                endHour +=12;
+            }
+
+            endDateTime.set(Integer.parseInt(endDate.split("/")[2]),
+                    Integer.parseInt(endDate.split("/")[0]),
+                    Integer.parseInt(endDate.split("/")[1]),
+                    endHour,
+                    Integer.parseInt(endTime.split(":|\\s")[1]));
+
+
+            Result<APIResponse, APIError> result = new APIClient().addEvent(
+                            eventName,
+                            startDateTime.getTime(),
+                            endDateTime.getTime(),
+                            description);
+
+            if (result.isOk()){
+                return true;
+            } else {
+                Toast.makeText(getApplicationContext(), "Unable to communicate to server",
+                        Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+//            Log.d("NewEventActivityyy: ", message.toString());
+
         }
         catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.getMessage(),

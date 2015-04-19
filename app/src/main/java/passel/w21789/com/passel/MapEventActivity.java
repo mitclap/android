@@ -195,14 +195,23 @@ public class MapEventActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+//                openSearch();
+                Intent settingsIntent = new Intent(MapEventActivity.this, NewEventActivity.class);
+                settingsIntent.putExtra("index",getIntent().getIntExtra("index", -1));
+                settingsIntent.putExtra("edit", true);
+                MapEventActivity.this.startActivity(settingsIntent);
+                return true;
+           /* case R.id.action_create:
+                Intent myIntent = new Intent(HomeActivity.this, NewEventActivity.class);
+//        myIntent.putExtra("key", value); //Optional parameters
+                HomeActivity.this.startActivity(myIntent);
+                return true;*/
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

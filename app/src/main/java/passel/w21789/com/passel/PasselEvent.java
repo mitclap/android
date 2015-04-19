@@ -1,8 +1,5 @@
 package passel.w21789.com.passel;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.ArrayList;
 
 /**
@@ -11,8 +8,10 @@ import java.util.ArrayList;
 public class PasselEvent {
     private String eventName;
     private String eventTime;
+    private String endTime;
     private String eventDescription;
     private String eventDate;
+    private String endDate;
     private ArrayList<String> eventGuests;
     private ArrayList<Double> eventCoordinates;
 
@@ -30,6 +29,17 @@ public class PasselEvent {
         this.eventTime = eventTime;
         setEventGuests(eventGuests);
         setEventCoordinates(eventCoordinates);
+    }
+
+    public PasselEvent(String eventName, String eventTime, String endTime, ArrayList<String> eventGuests, ArrayList<Double> eventCoordinates, String eventDate, String endDate, String description){
+        this.eventName = eventName;
+        this.eventTime = eventTime;
+        setEventGuests(eventGuests);
+        setEventCoordinates(eventCoordinates);
+        this.setEndTime(endTime);
+        this.setEventDate(eventDate);
+        this.setEndDate(endDate);
+        this.eventDescription = description;
     }
 
     public String getEventTime() {
@@ -84,4 +94,19 @@ public class PasselEvent {
         this.eventName = eventName;
     }
 
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 }
