@@ -25,7 +25,7 @@ import java.util.concurrent.ExecutionException;
 public class APIClient {
 
     public static final String LOGGING_TAG = "PASSEL_APICLIENT";
-    private static final String API_BASE_URL = "http://18.189.28.225:5000";
+    private static final String API_BASE_URL = "http://18.189.45.155:5000";
 
     private ObjectMapper mapper = new ObjectMapper();
 
