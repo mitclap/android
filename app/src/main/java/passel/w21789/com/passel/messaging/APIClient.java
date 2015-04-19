@@ -7,12 +7,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -21,62 +19,43 @@ import java.util.concurrent.ExecutionException;
  */
 public class APIClient {
 
-    private static final String API_BASE_URL = "http://18.189.28.225:5000";
     public static final String LOGGING_TAG = "PASSEL_APICLIENT";
+    private static final String API_BASE_URL = "http://18.189.28.225:5000";
 
-    public HttpResponse signup(final String username, final String publicKey) {
+    private ObjectMapper mapper = new ObjectMapper();
+
+    public APIClient() {
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+    }
+
+    public Result<APIResponse, APIError> signup(final String username, final String publicKey) {
         return makeBlockingRequest(new SignupMessage(username, publicKey));
     }
 
-    public HttpResponse addEvent(String name, Date start, Date end, String description) {
+    public Result<APIResponse, APIError> addEvent(String name, Date start, Date end, String description) {
         return makeBlockingRequest(new EventMessage(name, start, end, description));
     }
 
-    private HttpResponse makeBlockingRequest(final Message message) {
-        // TODO: don't swallow exception but make the caller handle!
-        // TODO: use custom exception type with parent pointer instead of exposing raw exceptions though
-        // TODO: a la Rust's From<blah>
+    private Result<APIResponse, APIError> makeBlockingRequest(final Message message) {
         try {
             APIRequestTask task = new APIRequestTask();
             task.execute(message);
             return task.get();
         } catch (ExecutionException | InterruptedException e) {
-            Log.e(LOGGING_TAG, "had a problem posting " + message.toString(), e);
-            return null;
+            return new Err<>(new APIError(e));
         }
     }
 
-    private static String serialize(final Message message) throws JsonProcessingException {
-        return getObjectMapper().writeValueAsString(message);
-    }
-
-    private static HttpResponse post(final String endpoint, final String json) throws IOException {
-        HttpPost httpPost = new HttpPost(API_BASE_URL + endpoint);
-        httpPost.setEntity(new StringEntity(json));
-        httpPost.setHeader("Accept", "application/json");
-        httpPost.setHeader("Content-type", "application/json");
-        return new DefaultHttpClient().execute(httpPost);
-    }
-
-    private static ObjectMapper getObjectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        return mapper;
-    }
-
-    private class APIRequestTask extends AsyncTask<Message, Void, HttpResponse> {
+    private class APIRequestTask extends AsyncTask<Message, Void, Result<APIResponse, APIError>> {
         @Override
-        protected HttpResponse doInBackground(Message... messages) {
+        protected Result<APIResponse, APIError> doInBackground(Message... messages) {
             assert (1 == messages.length);
             Message message = messages[0];
             try {
-                String json = APIClient.serialize(message);
-                Log.e(LOGGING_TAG, "Made a json :)");
-                Log.e(LOGGING_TAG, json);
-                HttpResponse response = APIClient.post(message.getEndpoint(), json);
+                String json = mapper.writeValueAsString(message);
+                Result<APIResponse, APIError> result = post(message.getEndpoint(), json);
                 Log.e(LOGGING_TAG, "Request was successful :)");
-                Log.e(LOGGING_TAG, response.getEntity().toString());
-                return response;
+                return result;
             } catch (JsonProcessingException e) {
                 Log.e(LOGGING_TAG, "Couldn't serialize the json :(");
             } catch (IOException e) {
@@ -85,6 +64,29 @@ public class APIClient {
                 Log.e(LOGGING_TAG, "I just failed completely :(", e);
             }
             return null;
+        }
+
+        private Result<APIResponse, APIError> post(final String endpoint, final String json) {
+            byte[] data = json.getBytes();
+            HttpURLConnection urlConnection = null;
+            try {
+                URL url = new URL(API_BASE_URL + endpoint);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestProperty("Content-type", "application/json");
+                urlConnection.setRequestProperty("Accept", "application/json");
+
+                urlConnection.setDoOutput(true);
+                urlConnection.setFixedLengthStreamingMode(data.length);
+                new BufferedOutputStream(urlConnection.getOutputStream()).write(data);
+
+                return new Ok<>(new APIResponse(urlConnection.getResponseCode(), urlConnection.getResponseMessage()));
+            } catch (IOException e) {
+                return new Err<>(new APIError(e));
+            } finally {
+                if (null != urlConnection) {
+                    urlConnection.disconnect();
+                }
+            }
         }
     }
 }
