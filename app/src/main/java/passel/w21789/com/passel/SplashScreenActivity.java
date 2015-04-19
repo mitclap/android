@@ -18,7 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import passel.w21789.com.passel.messaging.APIClient;
+import passel.w21789.com.passel.api.APIClient;
 
 
 public class SplashScreenActivity extends Activity {

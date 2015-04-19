@@ -1,6 +1,4 @@
-package passel.w21789.com.passel.messaging;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package passel.w21789.com.passel.api.messaging;
 
 /**
  * Created by aneesh on 4/18/15.

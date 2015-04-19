@@ -1,4 +1,4 @@
-package passel.w21789.com.passel.messaging;
+package passel.w21789.com.passel.api;
 
 import lombok.Value;
 

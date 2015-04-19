@@ -1,4 +1,4 @@
-package passel.w21789.com.passel.messaging;
+package passel.w21789.com.passel.api;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -16,6 +16,9 @@ import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
+import passel.w21789.com.passel.api.messaging.EventMessage;
+import passel.w21789.com.passel.api.messaging.Message;
+import passel.w21789.com.passel.api.messaging.SignupMessage;
 import passel.w21789.com.passel.util.Err;
 import passel.w21789.com.passel.util.Ok;
 import passel.w21789.com.passel.util.Result;
