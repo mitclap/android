@@ -55,6 +55,7 @@ public class APIClient {
             Message message = messages[0];
             try {
                 String json = mapper.writeValueAsString(message);
+                Log.d(LOGGING_TAG, json);
                 Result<APIResponse, APIError> result = post(message.getEndpoint(), json);
                 Log.e(LOGGING_TAG, result.toString());
                 if (result.isOk()) {
