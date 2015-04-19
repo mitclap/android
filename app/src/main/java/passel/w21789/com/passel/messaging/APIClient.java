@@ -7,8 +7,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
@@ -54,7 +56,16 @@ public class APIClient {
             try {
                 String json = mapper.writeValueAsString(message);
                 Result<APIResponse, APIError> result = post(message.getEndpoint(), json);
-                Log.e(LOGGING_TAG, "Request was successful :)");
+                Log.e(LOGGING_TAG, result.toString());
+                if (result.isOk()) {
+                    Log.e(LOGGING_TAG, "Request was successful :)");
+                    APIResponse response = result.unwrap();
+                    Log.e(LOGGING_TAG, Integer.toString(response.getCode()));
+                    Log.e(LOGGING_TAG, response.getResponse());
+                } else {
+                    APIError error = ((Err<APIResponse, APIError>) result).get();
+                    Log.e(LOGGING_TAG, "got an error", error);
+                }
                 return result;
             } catch (JsonProcessingException e) {
                 Log.e(LOGGING_TAG, "Couldn't serialize the json :(");
@@ -71,13 +82,17 @@ public class APIClient {
             HttpURLConnection urlConnection = null;
             try {
                 URL url = new URL(API_BASE_URL + endpoint);
+                Log.e(LOGGING_TAG, url.toString());
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestProperty("Content-type", "application/json");
                 urlConnection.setRequestProperty("Accept", "application/json");
 
                 urlConnection.setDoOutput(true);
                 urlConnection.setFixedLengthStreamingMode(data.length);
-                new BufferedOutputStream(urlConnection.getOutputStream()).write(data);
+                BufferedOutputStream body = new BufferedOutputStream(urlConnection.getOutputStream());
+                body.write(data);
+                body.flush();
+                body.close();
 
                 return new Ok<>(new APIResponse(urlConnection.getResponseCode(), urlConnection.getResponseMessage()));
             } catch (IOException e) {
