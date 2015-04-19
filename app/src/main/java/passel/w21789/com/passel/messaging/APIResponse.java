@@ -8,10 +8,10 @@ import lombok.Value;
 @Value
 public class APIResponse {
     private int code;
-    private String response;
+    private String body;
 
-    public APIResponse(int code, String response) {
+    public APIResponse(int code, String body) {
         this.code = code;
-        this.response = response;
+        this.body = body;
     }
 }

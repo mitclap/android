@@ -400,9 +400,6 @@ public class NewEventActivity extends ActionBarActivity{
                         Toast.LENGTH_LONG).show();
                 return false;
             }
-
-//            Log.d("NewEventActivityyy: ", message.toString());
-
         }
         catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.getMessage(),

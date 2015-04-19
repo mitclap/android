@@ -74,10 +74,7 @@ public class SplashScreenActivity extends Activity {
 
         setPasselEvents(eventList);
 
-        Result<APIResponse, APIError> result = new APIClient().signup("testUsername", "testPubKey");
-        if (result.isOk()){
-            result.unwrap().getCode();
-        }
+        new APIClient().signup("testUsername", "testPubKey");
     }
 
     private void addSignUpButtonListener(){
