@@ -1,4 +1,6 @@
-package passel.w21789.com.passel.messaging;
+package passel.w21789.com.passel.util;
+
+import passel.w21789.com.passel.util.Ok;
 
 /**
  * Created by aneesh on 4/18/15.

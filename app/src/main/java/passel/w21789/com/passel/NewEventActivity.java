@@ -35,7 +35,7 @@ import java.util.Calendar;
 import passel.w21789.com.passel.messaging.APIClient;
 import passel.w21789.com.passel.messaging.APIError;
 import passel.w21789.com.passel.messaging.APIResponse;
-import passel.w21789.com.passel.messaging.Result;
+import passel.w21789.com.passel.util.Result;
 
 public class NewEventActivity extends ActionBarActivity{
     private TextView fromTimeEtxt;

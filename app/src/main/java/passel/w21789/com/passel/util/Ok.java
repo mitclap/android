@@ -1,4 +1,4 @@
-package passel.w21789.com.passel.messaging;
+package passel.w21789.com.passel.util;
 
 /**
  * Created by aneesh on 4/18/15.
