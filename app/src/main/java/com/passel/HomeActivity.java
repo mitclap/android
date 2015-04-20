@@ -17,19 +17,13 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.passel.data.Event;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.passel.R;
-
-import com.passel.data.Event;
 
 public class HomeActivity extends ActionBarActivity {
 
-    HashMap<Integer, String> eventMap = new HashMap();
-
-    ArrayList<String> eventNameList=new ArrayList<String>();
+    ArrayList<String> eventNameList=new ArrayList<>();
     ArrayList<Event> eventList = new ArrayList<>();
     ArrayAdapter<String> adapter;
 
@@ -38,7 +32,7 @@ public class HomeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        adapter = new ArrayAdapter<String>(this,
+        adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 eventNameList);
         final ListView eventListView = (ListView) findViewById(R.id.eventListView);
@@ -78,18 +72,6 @@ public class HomeActivity extends ActionBarActivity {
             addEvent(currentEvent);
         }
 
-//        ArrayList<String> studyGuests = new ArrayList<>();
-//        studyGuests.addAll(Arrays.asList("Aneesh", "Carlos"));
-//
-//        ArrayList<Double> studyLocation = new ArrayList<>();
-//        studyLocation.addAll(Arrays.asList(42.35965, -71.09206));
-//
-//        addEvent(new PasselEvent("Study Sesh", "8:00PM", studyGuests, studyLocation));
-//        addEvent(new PasselEvent("Team Passel Meeting", "5:00 PM"));
-
-
-
-
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
                         eventListView,
@@ -127,33 +109,15 @@ public class HomeActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(HomeActivity.this, NewEventActivity.class);
-                //        myIntent.putExtra("key", value); //Optional parameters
                 HomeActivity.this.startActivityForResult(myIntent, 2);
             }
         });
     }
 
-//    private void addMapButtonListener(){
-//        Button mapButton = (Button) findViewById(R.id.mapButton);
-//        mapButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent myIntent = new Intent(HomeActivity.this, MapEventActivity.class);
-////        myIntent.putExtra("key", value); //Optional parameters
-//                HomeActivity.this.startActivity(myIntent);
-//            }
-//        });
-//    }
-
-    //Adds a new row to the ListView with contents of message
-    public void addItems(String message) {
-        eventNameList.add(message);
-        adapter.notifyDataSetChanged();
-    }
-
     public void addEvent(Event event) {
         eventList.add(event);
-        addItems(event.getName());
+        eventNameList.add(event.getName());
+        adapter.notifyDataSetChanged();
         setPasselEvents(eventList);
     }
 
@@ -185,7 +149,6 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     public ArrayList<Event> getPasselEvents() {
-        ArrayList<Event> parsedEvents = new ArrayList<>();
         String eventsKey = "PASSEL_EVENTS";
         Gson gson = new GsonBuilder().create();
 
@@ -194,9 +157,9 @@ public class HomeActivity extends ActionBarActivity {
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
         String savedValue = sharedPref.getString(eventsKey, "");
-        if (savedValue.equals("")) {
-            parsedEvents = null;
-        } else {
+
+        ArrayList<Event> parsedEvents = null;
+        if (!savedValue.equals("")) {
             parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<Event>>() {}.getType());
         }
 
@@ -209,11 +172,8 @@ public class HomeActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
-
-
     }
 
     @Override
