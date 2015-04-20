@@ -11,7 +11,6 @@ public class Some<T> extends Optional<T> {
         this.value = value;
     }
 
-
     @Override
     public boolean isPresent() {
         return true;

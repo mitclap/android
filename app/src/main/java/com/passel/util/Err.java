@@ -4,8 +4,9 @@ package com.passel.util;
  * Created by aneesh on 4/18/15.
  */
 public class Err<T, E> extends Result<T, E> {
-    private E error;
-    public Err(E error) {
+    private final E error;
+
+    public Err(final E error) {
         this.error = error;
     }
 

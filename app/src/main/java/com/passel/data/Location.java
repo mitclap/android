@@ -7,10 +7,10 @@ import lombok.Value;
  */
 @Value
 public class Location {
-    private double latitude;
-    private double longitude;
+    double latitude;
+    double longitude;
 
-    public Location(double latitude, double longitude) {
+    public Location(final double latitude, final double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }

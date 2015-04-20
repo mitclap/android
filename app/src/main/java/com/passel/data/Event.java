@@ -7,14 +7,16 @@ import lombok.Value;
 
 @Value
 public class Event {
-    private String name;
-    private Date start;
-    private Date end;
-    private String description;
-    private List<String> guests;
-    private Location location;
+    String name;
+    Date start;
+    Date end;
+    String description;
+    List<String> guests;
+    Location location;
 
-    public Event(String name, Date start, Date end, String description, List<String> guests, Location location){
+    public Event(final String name, final Date start, final Date end,
+                 final String description, final List<String> guests,
+                 final Location location){
         this.name = name;
         this.start = start;
         this.end = end;
