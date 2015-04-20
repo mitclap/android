@@ -3,12 +3,10 @@ package com.passel.data;
 import java.util.Date;
 import java.util.List;
 
-import hrisey.Parcelable;
 import lombok.Value;
 
 @Value
-@Parcelable
-public final class Event implements android.os.Parcelable {
+public class Event {
     String name;
     Date start;
     Date end;

@@ -1,14 +1,12 @@
 package com.passel.data;
 
-import hrisey.Parcelable;
 import lombok.Value;
 
 /**
  * Created by aneesh on 4/19/15.
  */
 @Value
-@Parcelable
-public final class Location implements android.os.Parcelable {
+public class Location {
     double latitude;
     double longitude;
 

@@ -22,8 +22,12 @@ public class BackgroundGPSService extends Service {
     private void sendMessage(Location location) {
         Log.d("sender", "Broadcasting message");
 
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+
         Intent intent = new Intent("send-location-data");
-        intent.putExtra("location", location);
+        intent.putExtra("lat", lat);
+        intent.putExtra("lng", lng);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

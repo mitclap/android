@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.passel.data.Event;
-import com.passel.data.Location;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -117,9 +116,9 @@ public class MapEventActivity extends ActionBarActivity {
     private BroadcastReceiver locationMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Location location = intent.getParcelableExtra("location");
-            double lat = location.getLatitude();
-            double lng = location.getLongitude();
+            // Get extra data included in the Intent
+            double lat = intent.getDoubleExtra("lat", 0);
+            double lng = intent.getDoubleExtra("lng",0);
             selfMarker.setPosition(new GeoPoint(lat, lng));
             map.invalidate();
 
