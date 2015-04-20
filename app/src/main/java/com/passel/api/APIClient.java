@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.passel.BuildConfig;
 import com.passel.api.messaging.EventMessage;
 
 import java.io.BufferedOutputStream;
@@ -58,7 +59,10 @@ public class APIClient {
     private class APIRequestTask extends AsyncTask<Message, Void, Result<APIResponse, APIError>> {
         @Override
         protected Result<APIResponse, APIError> doInBackground(Message... messages) {
-            assert (1 == messages.length);
+            if (BuildConfig.DEBUG && !(1 == messages.length)) {
+                Log.e(LOGGING_TAG, "Too many messages given to send");
+                throw new IllegalArgumentException();
+            }
             Message message = messages[0];
             try {
                 String requestBody = mapper.writeValueAsString(message);
