@@ -74,7 +74,7 @@ public class MapEventActivity extends ActionBarActivity {
         selfMarker = new Marker(map);
         selfMarker.setTitle("You");
         selfMarker.setPosition(new GeoPoint(startPoint));
-        selfMarker.setIcon(getResources().getDrawable(R.drawable.marker_node));
+        selfMarker.setIcon(getResources().getDrawable(R.drawable.ic_map_marker));
         map.getOverlays().add(selfMarker);
 
         addPersonMarker(42.33,-71.07,"Lisandro", "ETA: 5 min.");
