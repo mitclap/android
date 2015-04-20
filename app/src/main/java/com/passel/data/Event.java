@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Value;
 
 @Value
-public class Event {
+public final class Event {
     String name;
     Date start;
     Date end;

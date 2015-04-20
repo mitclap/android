@@ -6,7 +6,7 @@ import lombok.Value;
  * Created by aneesh on 4/19/15.
  */
 @Value
-public class Location {
+public final class Location {
     double latitude;
     double longitude;
 
