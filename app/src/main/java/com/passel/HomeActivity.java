@@ -86,7 +86,6 @@ public class HomeActivity extends ActionBarActivity {
         FloatingActionButton fabButton = new FloatingActionButton.Builder(this)
                 .withDrawable(getResources().getDrawable(R.drawable.ic_action_content_add))
                 .withButtonColor(getResources().getColor(R.color.dark_primary_color))
-                .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
                 .withMargins(0, 0, 8, 8)
                 .create();
         fabButton.setOnClickListener(new View.OnClickListener() {

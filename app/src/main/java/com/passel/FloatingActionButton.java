@@ -108,7 +108,7 @@ public class FloatingActionButton extends View {
     static public class Builder {
         private FrameLayout.LayoutParams params;
         private final Activity activity;
-        int gravity = Gravity.BOTTOM | Gravity.RIGHT; // default bottom right
+        int gravity = Gravity.BOTTOM | Gravity.END;
         Drawable drawable;
         int color = Color.WHITE;
         int size = 0;
