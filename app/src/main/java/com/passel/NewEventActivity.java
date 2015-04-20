@@ -27,6 +27,7 @@ import com.passel.api.APIClient;
 import com.passel.api.APIError;
 import com.passel.api.APIResponse;
 import com.passel.data.Event;
+import com.passel.data.JsonMapper;
 import com.passel.data.Location;
 import com.passel.util.Result;
 
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class NewEventActivity extends ActionBarActivity{
+public class NewEventActivity extends ActionBarActivity {
     private TextView fromTimeEtxt;
     private TextView toTimeEtxt;
     private ImageButton fromDateButton;
@@ -51,7 +52,7 @@ public class NewEventActivity extends ActionBarActivity{
     private Button addGuestButton;
     private ListView guestList;
     private ArrayAdapter<String> adapter;
-    private ArrayList<String> guestNameList=new ArrayList<String>();
+    private ArrayList<String> guestNameList = new ArrayList<String>();
 
     private boolean isEditing = false;
 
@@ -107,7 +108,7 @@ public class NewEventActivity extends ActionBarActivity{
                 finish();
                 return true;
             case R.id.new_event_check:
-                if (createEvent()){
+                if (createEvent()) {
                     Intent intent = new Intent();
                     Bundle conData = new Bundle();
                     intent.putExtras(conData);
@@ -120,12 +121,12 @@ public class NewEventActivity extends ActionBarActivity{
         }
     }
 
-    private void addDateOnClickListeners(){
+    private void addDateOnClickListeners() {
         fromDateButton = (ImageButton) findViewById(R.id.start_date_button);
         toDateButton = (ImageButton) findViewById(R.id.end_date_button);
 
-        fromDateButton.setOnClickListener(new OnClickListener(){
-            public void onClick(View v){
+        fromDateButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
                 setDate(R.id.start_date_data);
             }
         });
@@ -139,7 +140,7 @@ public class NewEventActivity extends ActionBarActivity{
 
     }
 
-    private void addTimeOnClickListeners(){
+    private void addTimeOnClickListeners() {
         fromTimeEtxt = (TextView) findViewById(R.id.start_time_data);
         toTimeEtxt = (TextView) findViewById(R.id.end_time_data);
 
@@ -158,7 +159,7 @@ public class NewEventActivity extends ActionBarActivity{
         });
     }
 
-    private void addGuestListeners(){
+    private void addGuestListeners() {
 
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
@@ -173,7 +174,7 @@ public class NewEventActivity extends ActionBarActivity{
         guestInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER){
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
                     addGuestButton.callOnClick();
                 }
                 return false;
@@ -196,7 +197,7 @@ public class NewEventActivity extends ActionBarActivity{
         });
     }
 
-    private void setDate(int id){
+    private void setDate(int id) {
 
         final EditText setDate = (EditText) findViewById(id);
 
@@ -205,8 +206,8 @@ public class NewEventActivity extends ActionBarActivity{
         int mMonth = calendar.get(Calendar.MONTH);
         int mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-        dpDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener(){
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+        dpDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 System.out.println("Date Picker Set");
                 setDate.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year, TextView.BufferType.EDITABLE);
             }
@@ -215,38 +216,38 @@ public class NewEventActivity extends ActionBarActivity{
         dpDialog.show();
     }
 
-    private void setTime(int id){
+    private void setTime(int id) {
 
         final TextView setTime = (TextView) findViewById(id);
         String setTimeText = setTime.getText().toString();
-        int mHour =  Integer.parseInt(setTimeText.substring(0,2));
-        int mMinute = Integer.parseInt(setTimeText.substring(3,5));
+        int mHour = Integer.parseInt(setTimeText.substring(0, 2));
+        int mMinute = Integer.parseInt(setTimeText.substring(3, 5));
         String textMeridiem = setTimeText.substring(6);
 
-        if (textMeridiem.equals("PM")){
+        if (textMeridiem.equals("PM")) {
             System.out.println("In if loop");
             mHour += 12;
-        } else if (textMeridiem.equals("AM") && mHour== 12){
+        } else if (textMeridiem.equals("AM") && mHour == 12) {
             mHour = 0;
         }
 
-        tpDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener(){
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute){
+        tpDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 int modHour = hourOfDay % 12;
                 String sHour = String.valueOf(modHour);
-                if (modHour == 0){
+                if (modHour == 0) {
                     sHour = "12";
                 }
                 String sMinute = String.valueOf(minute);
                 String meridiem = "AM";
-                if (modHour < 10 && modHour >0){
+                if (modHour < 10 && modHour > 0) {
                     sHour = "0" + sHour;
                 }
-                if (hourOfDay > 11){
+                if (hourOfDay > 11) {
                     meridiem = "PM";
                 }
 
-                if (minute < 10){
+                if (minute < 10) {
                     sMinute = "0" + minute;
                 }
                 setTime.setText(sHour + ":" + sMinute + " " + meridiem);
@@ -256,8 +257,8 @@ public class NewEventActivity extends ActionBarActivity{
         tpDialog.show();
     }
 
-    private void addMapPickerListener(){
-        EditText mapPickerButton = (EditText)findViewById(R.id.location_input);
+    private void addMapPickerListener() {
+        EditText mapPickerButton = (EditText) findViewById(R.id.location_input);
         mapPickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -271,22 +272,22 @@ public class NewEventActivity extends ActionBarActivity{
 
     /* Called when the map activity's finished */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
+        switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
                     Bundle res = data.getExtras();
                     String locationName = res.getString("loc_name");
                     location = new Location(res.getDouble("lat"), res.getDouble("lng"));
-                    Log.d("FIRST", "result:"+locationName);
+                    Log.d("FIRST", "result:" + locationName);
 
-                    EditText mapPickerButton = (EditText)findViewById(R.id.location_input);
+                    EditText mapPickerButton = (EditText) findViewById(R.id.location_input);
                     mapPickerButton.setText(locationName);
                 }
                 break;
         }
     }
 
-    private boolean createEvent(){
+    private boolean createEvent() {
         try {
             // TOOD: change check mark to spinning animation for the duration
             // of this method, then do something at the end to validate to the
@@ -296,7 +297,7 @@ public class NewEventActivity extends ActionBarActivity{
             // TOOD: just fix validation in general
             EditText eventNameField = (EditText) findViewById(R.id.name);
             final String eventName = eventNameField.getText().toString();
-            if(eventName == ""){
+            if (eventName == "") {
                 throw new UnsupportedOperationException("Please enter an event name");
             }
 
@@ -309,7 +310,7 @@ public class NewEventActivity extends ActionBarActivity{
             TextView startTimeField = (TextView) findViewById(R.id.start_time_data);
             String startTime = startTimeField.getText().toString();
 
-            if(startTime == ""){
+            if (startTime == "") {
                 throw new UnsupportedOperationException("Please enter a start time");
             }
 
@@ -318,7 +319,7 @@ public class NewEventActivity extends ActionBarActivity{
             EditText descriptionField = (EditText) findViewById(R.id.description_input);
             String description = descriptionField.getText().toString();
 
-            if(null == location) {
+            if (null == location) {
                 throw new UnsupportedOperationException("Please enter a location");
             }
 
@@ -330,7 +331,7 @@ public class NewEventActivity extends ActionBarActivity{
                     description,
                     guestNameList,
                     location);
-            if (isEditing){
+            if (isEditing) {
                 ((PasselApplication) getApplication()).updateEvent(
                         getIntent().getIntExtra("index", 0),
                         newEvent);
@@ -340,8 +341,8 @@ public class NewEventActivity extends ActionBarActivity{
 
             Calendar startDateTime = Calendar.getInstance();
             int startHour = Integer.parseInt(startTime.split(":|\\s")[0]);
-            if (startTime.split(":|\\s")[0] == "PM"){
-                startHour +=12;
+            if (startTime.split(":|\\s")[0] == "PM") {
+                startHour += 12;
             }
 
             startDateTime.set(Integer.parseInt(startDate.split("/")[2]),
@@ -352,8 +353,8 @@ public class NewEventActivity extends ActionBarActivity{
 
             Calendar endDateTime = Calendar.getInstance();
             int endHour = Integer.parseInt(startTime.split(":|\\s")[0]);
-            if (endTime.split(":|\\s")[0] == "PM"){
-                endHour +=12;
+            if (endTime.split(":|\\s")[0] == "PM") {
+                endHour += 12;
             }
 
             endDateTime.set(Integer.parseInt(endDate.split("/")[2]),
@@ -362,14 +363,14 @@ public class NewEventActivity extends ActionBarActivity{
                     endHour,
                     Integer.parseInt(endTime.split(":|\\s")[1]));
 
+            JsonMapper mapper = ((PasselApplication) getApplication()).getJsonMapper();
+            Result<APIResponse, APIError> result = new APIClient(mapper).addEvent(
+                    eventName,
+                    startDateTime.getTime(),
+                    endDateTime.getTime(),
+                    description);
 
-            Result<APIResponse, APIError> result = new APIClient().addEvent(
-                            eventName,
-                            startDateTime.getTime(),
-                            endDateTime.getTime(),
-                            description);
-
-            if (result.isOk()){
+            if (result.isOk()) {
                 return true;
             } else {
                 Toast.makeText(getApplicationContext(), "Unable to communicate to server",

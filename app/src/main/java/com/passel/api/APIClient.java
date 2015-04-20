@@ -4,25 +4,23 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.passel.BuildConfig;
 import com.passel.api.messaging.EventMessage;
+import com.passel.api.messaging.Message;
+import com.passel.api.messaging.SignupMessage;
+import com.passel.data.JsonMapper;
+import com.passel.util.Err;
+import com.passel.util.Ok;
+import com.passel.util.Result;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
-
-import com.passel.api.messaging.Message;
-import com.passel.api.messaging.SignupMessage;
-import com.passel.util.Err;
-import com.passel.util.Ok;
-import com.passel.util.Result;
 
 /**
  * Created by aneesh on 4/18/15.
@@ -32,10 +30,14 @@ public class APIClient {
     public static final String LOGGING_TAG = "PASSEL_APICLIENT";
     private static final String API_BASE_URL = "http://18.189.121.244:5000";
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private final JsonMapper mapper;
 
-    public APIClient() {
-        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"));
+    public APIClient() { // External usage of the API
+        this.mapper = new JsonMapper();
+    }
+
+    public APIClient(final JsonMapper mapper) { // Reuse a mapper
+        this.mapper = mapper;
     }
 
     public Result<APIResponse, APIError> signup(final String username, final String publicKey) {
@@ -65,7 +67,7 @@ public class APIClient {
             }
             Message message = messages[0];
             try {
-                String requestBody = mapper.writeValueAsString(message);
+                String requestBody = mapper.serialize(message);
                 Log.d(LOGGING_TAG, "Sending request to " + message.getEndpoint() + ":" + requestBody);
                 Result<APIResponse, APIError> result = post(message.getEndpoint(), requestBody);
                 if (result.isOk()) {
