@@ -5,9 +5,9 @@ package com.passel.util;
  */
 public class Some<T> extends Optional<T> {
 
-    private T value;
+    private final T value;
 
-    public Some(T value) {
+    public Some(final T value) {
         this.value = value;
     }
 

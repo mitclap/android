@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -24,8 +23,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.passel.api.APIClient;
 import com.passel.api.APIError;
 import com.passel.api.APIResponse;
@@ -291,8 +288,12 @@ public class NewEventActivity extends ActionBarActivity{
 
     private boolean createEvent(){
         try {
+            // TOOD: change check mark to spinning animation for the duration
+            // of this method, then do something at the end to validate to the
+            // user that the event was sucessfully saved
             eventList = ((PasselApplication) getApplication()).getEvents();
 
+            // TOOD: just fix validation in general
             EditText eventNameField = (EditText) findViewById(R.id.name);
             final String eventName = eventNameField.getText().toString();
             if(eventName == ""){
@@ -330,12 +331,12 @@ public class NewEventActivity extends ActionBarActivity{
                     guestNameList,
                     location);
             if (isEditing){
-                eventList.set(getIntent().getIntExtra("index", 0), newEvent);
+                ((PasselApplication) getApplication()).updateEvent(
+                        getIntent().getIntExtra("index", 0),
+                        newEvent);
             } else {
-                eventList.add(newEvent);
+                ((PasselApplication) getApplication()).addEvent(newEvent);
             }
-
-            setEvents(eventList);
 
             Calendar startDateTime = Calendar.getInstance();
             int startHour = Integer.parseInt(startTime.split(":|\\s")[0]);
@@ -375,26 +376,10 @@ public class NewEventActivity extends ActionBarActivity{
                         Toast.LENGTH_LONG).show();
                 return false;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.getMessage(),
                     Toast.LENGTH_LONG).show();
             return false;
-        }
-    }
-
-    public void setEvents(List<Event> events) {
-        String eventsKey = "PASSEL_EVENTS";
-        Gson gson = new GsonBuilder().create();
-
-        Context context = getBaseContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        if (events == null) {
-            editor.putString(eventsKey, "").commit();
-        } else {
-            editor.putString(eventsKey, gson.toJson(events)).commit();
         }
     }
 }

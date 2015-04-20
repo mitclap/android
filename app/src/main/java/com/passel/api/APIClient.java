@@ -29,7 +29,7 @@ import com.passel.util.Result;
 public class APIClient {
 
     public static final String LOGGING_TAG = "PASSEL_APICLIENT";
-    private static final String API_BASE_URL = "http://18.189.28.225:5000";
+    private static final String API_BASE_URL = "http://18.189.121.244:5000";
 
     private ObjectMapper mapper = new ObjectMapper();
 

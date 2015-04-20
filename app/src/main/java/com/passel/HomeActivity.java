@@ -64,7 +64,6 @@ public class HomeActivity extends ActionBarActivity {
             eventList.add(currentEvent);
             eventNameList.add(currentEvent.getName());
             adapter.notifyDataSetChanged();
-            setPasselEvents(eventList);
         }
 
         SwipeDismissListViewTouchListener touchListener =
@@ -113,21 +112,6 @@ public class HomeActivity extends ActionBarActivity {
         intent.putExtra("event_lng", event.getLocation().getLongitude());
         return intent;
 
-    }
-
-    public void setPasselEvents(ArrayList<Event> events) {
-        String eventsKey = "PASSEL_EVENTS";
-        Gson gson = new GsonBuilder().create();
-
-        Context context = getBaseContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        if (events == null) {
-            editor.putString(eventsKey, "").commit();
-        } else {
-            editor.putString(eventsKey, gson.toJson(events)).commit();
-        }
     }
 
     @Override

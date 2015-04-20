@@ -9,9 +9,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.passel.data.Event;
+import com.passel.data.Location;
 import com.passel.util.Optional;
 import com.passel.util.Some;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,7 +30,25 @@ public class PasselApplication extends Application {
 
     public PasselApplication() {
         super();
-        events = Optional.empty();
+
+        // TODO remove the demo event here
+        // TODO: switch to joda-time maybe
+        Calendar cal = Calendar.getInstance();
+        cal.setLenient(false);
+        cal.setTimeInMillis(0);
+        cal.set(2015, Calendar.APRIL, 21, 20, 0, 0);
+        Date start = cal.getTime();
+        cal.add(Calendar.HOUR_OF_DAY, 1);
+        Date end = cal.getTime();
+
+
+        List<Event> dummyEvents = new ArrayList<>();
+        dummyEvents.add(new Event("Study Session",
+                start, end,
+                "Study for 21W.789",
+                Arrays.asList("Aneesh", "Carlos"),
+                new Location(42.35965, -71.09206)));
+        events = new Some(dummyEvents);
     }
 
     @Override
@@ -36,6 +59,24 @@ public class PasselApplication extends Application {
         // so don't load anything here
         // TODO: load data lazily (on request, not in this method)
         // from file into memory as cache
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // TODO
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onLowMemory() {
+        // TODO
+        super.onLowMemory();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        // TODO
+        super.onTrimMemory(level);
     }
 
     public List<Event> getEvents() {
@@ -54,7 +95,7 @@ public class PasselApplication extends Application {
 
                     if (!savedValue.equals("")) {
                         List<Event> eventsList = gson.fromJson(savedValue,
-                                new TypeToken<List<Event>>() {}.getType());
+                                new TypeToken<ArrayList<Event>>() {}.getType());
                         events = new Some<>(eventsList);
                     }
                 }
@@ -63,19 +104,38 @@ public class PasselApplication extends Application {
         return events.get();
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+    // TODO: use type safety to ensure that events are loaded
+    /**
+     * Precondition: events are loaded
+     * @param index
+     * @param event
+     */
+    public void updateEvent(int index, Event event) {
+        events.get().set(index, event);
+        syncEvents();
     }
 
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
+    /**
+     * Precondition: events are loaded
+     * @param event
+     */
+    public void addEvent(Event event) {
+        events.get().add(event);
+        syncEvents();
     }
 
-    @Override
-    public void onTrimMemory(int level) {
-        super.onTrimMemory(level);
-    }
+    private void syncEvents() {
+        String eventsKey = "PASSEL_EVENTS";
+        Gson gson = new GsonBuilder().create();
 
+        Context context = getBaseContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (events == null) {
+            editor.putString(eventsKey, "").commit();
+        } else {
+            editor.putString(eventsKey, gson.toJson(events)).commit();
+        }
+    }
 }
