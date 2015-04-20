@@ -1,8 +1,6 @@
 package com.passel;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -14,12 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.passel.data.Event;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends ActionBarActivity {
 
