@@ -28,19 +28,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.passel.api.APIClient;
+import com.passel.api.APIError;
 import com.passel.api.APIResponse;
+import com.passel.data.Event;
+import com.passel.data.Location;
+import com.passel.util.Result;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import com.passel.R;
-
-import com.passel.api.APIError;
-import com.passel.data.Event;
-import com.passel.data.Location;
-import com.passel.util.Result;
 
 public class NewEventActivity extends ActionBarActivity{
     private TextView fromTimeEtxt;

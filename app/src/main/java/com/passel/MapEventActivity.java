@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.passel.data.Event;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -26,10 +27,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
-import com.passel.R;
-
-import com.passel.data.Event;
 
 public class MapEventActivity extends ActionBarActivity {
     HashMap<String, Marker> peopleMarkerHashMap = new HashMap<>();

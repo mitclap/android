@@ -1,8 +1,20 @@
 package com.passel;
 
 
-import java.io.File;
-import java.io.FileInputStream;
+import android.app.Service;
+import android.content.Intent;
+import android.location.Location;
+import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,22 +26,6 @@ import java.util.TimerTask;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import android.app.Service;
-import android.content.Intent;
-import android.location.Location;
-import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-
-import com.passel.R;
 
 public class PeerLocationDataStreamingService extends Service {
 

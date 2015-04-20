@@ -1,34 +1,22 @@
 package com.passel;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.app.Activity;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.CalendarView;
-
-import android.database.Cursor;
-import android.provider.CalendarContract;
-import android.text.format.DateFormat;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import com.passel.R;
-
-/** Temporarily identical to the NewEventActivity
- * TODO: Discuss representation of events that will populate home screen
- * TODO: Change this so that it actually edits an event
- */
+// TODO: Change this so that it actually edits an event
 public class EditEventActivity extends Activity {
     private EditText fromDateEtxt;
     private EditText toDateEtxt;

@@ -13,8 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.passel.R;
-
 public class LocationPickerActivity extends Activity {
 
 	private WebView locationPickerView;
