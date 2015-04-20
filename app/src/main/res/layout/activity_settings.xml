@@ -59,7 +59,6 @@
         android:id="@+id/totalLateness"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.03"
-        android:editable="false"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
