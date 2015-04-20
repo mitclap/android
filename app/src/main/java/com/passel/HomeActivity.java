@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class HomeActivity extends ActionBarActivity {
 
-    ArrayList<String> eventNameList=new ArrayList<>();
+    ArrayList<String> eventNameList = new ArrayList<>();
     ArrayList<Event> eventList = new ArrayList<>();
     ArrayAdapter<String> adapter;
 
@@ -69,7 +69,10 @@ public class HomeActivity extends ActionBarActivity {
         });
 
         for (Event currentEvent: getPasselEvents()){
-            addEvent(currentEvent);
+            eventList.add(currentEvent);
+            eventNameList.add(currentEvent.getName());
+            adapter.notifyDataSetChanged();
+            setPasselEvents(eventList);
         }
 
         SwipeDismissListViewTouchListener touchListener =
@@ -112,13 +115,6 @@ public class HomeActivity extends ActionBarActivity {
                 HomeActivity.this.startActivityForResult(myIntent, 2);
             }
         });
-    }
-
-    public void addEvent(Event event) {
-        eventList.add(event);
-        eventNameList.add(event.getName());
-        adapter.notifyDataSetChanged();
-        setPasselEvents(eventList);
     }
 
     Intent createEventIntent(Event event){

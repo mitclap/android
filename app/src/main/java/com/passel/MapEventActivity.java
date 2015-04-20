@@ -36,7 +36,6 @@ public class MapEventActivity extends ActionBarActivity {
 
     Event event;
 
-    Marker startMarker;
     Marker eventMarker;
     Marker selfMarker;
 
@@ -144,21 +143,6 @@ public class MapEventActivity extends ActionBarActivity {
             Log.d("receiver", "Got message");
         }
     };
-
-    public void setEvents(ArrayList<Event> events) {
-        String eventsKey = "PASSEL_EVENTS";
-        Gson gson = new GsonBuilder().create();
-
-        Context context = getBaseContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        if (events == null) {
-            editor.putString(eventsKey, "").commit();
-        } else {
-            editor.putString(eventsKey, gson.toJson(events)).commit();
-        }
-    }
 
     public ArrayList<Event> getEvents() {
         ArrayList<Event> parsedEvents = new ArrayList<>();
