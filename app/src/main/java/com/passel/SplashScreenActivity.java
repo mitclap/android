@@ -13,7 +13,6 @@ import android.widget.Button;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.passel.data.Event;
 import com.passel.data.Location;
 
@@ -92,29 +91,6 @@ public class SplashScreenActivity extends Activity {
             editor.putString(eventsKey, gson.toJson(events)).commit();
         }
     }
-
-    public ArrayList<Event> getPasselEvents() {
-        ArrayList<Event> parsedEvents = new ArrayList<>();
-        String eventsKey = "PASSEL_EVENTS";
-        Gson gson = new GsonBuilder().create();
-
-        Context context = getBaseContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-
-        String savedValue = sharedPref.getString(eventsKey, "");
-        if (savedValue.equals("")) {
-            parsedEvents = null;
-        } else {
-            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<Event>>() {}.getType());
-        }
-
-        Log.d("HomeActivity: ", "Parsing successful!");
-        Log.d("HomeActivity: ", savedValue);
-
-        return parsedEvents;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -16,10 +16,10 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.passel.data.Event;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends ActionBarActivity {
 
@@ -57,7 +57,10 @@ public class HomeActivity extends ActionBarActivity {
             }
         });
 
-        for (Event currentEvent: getPasselEvents()){
+
+
+        for (Event currentEvent:
+                ((PasselApplication) getApplication()).getEvents()) {
             eventList.add(currentEvent);
             eventNameList.add(currentEvent.getName());
             adapter.notifyDataSetChanged();
@@ -126,28 +129,6 @@ public class HomeActivity extends ActionBarActivity {
             editor.putString(eventsKey, gson.toJson(events)).commit();
         }
     }
-
-    public ArrayList<Event> getPasselEvents() {
-        String eventsKey = "PASSEL_EVENTS";
-        Gson gson = new GsonBuilder().create();
-
-        Context context = getBaseContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-
-        String savedValue = sharedPref.getString(eventsKey, "");
-
-        ArrayList<Event> parsedEvents = null;
-        if (!savedValue.equals("")) {
-            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<Event>>() {}.getType());
-        }
-
-        Log.d("HomeActivity: ", "Parsing successful!");
-        Log.d("HomeActivity: ", savedValue);
-
-        return parsedEvents;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,12 +1,16 @@
 package com.passel;
 
 import android.app.Application;
-import android.content.ComponentCallbacks;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.passel.data.Event;
-import com.passel.util.None;
 import com.passel.util.Optional;
+import com.passel.util.Some;
 
 import java.util.List;
 
@@ -15,25 +19,48 @@ import java.util.List;
  */
 public class PasselApplication extends Application {
 
-    private Optional<List<Event>> events;
+    // TODO: double check that Android has the new volatile semantics
+    // which were introduced in JDK 1.5
+    private volatile Optional<List<Event>> events;
 
     public PasselApplication() {
         super();
         events = Optional.empty();
     }
 
-    /**
-     * Called when the application is starting, before any activity, service,
-     * or receiver objects (excluding content providers) have been created.
-     * Implementations should be as quick as possible (for example using
-     * lazy initialization of state) since the time spent in this function
-     * directly impacts the performance of starting the first activity,
-     * service, or receiver in a process.
-     * If you override this method, be sure to call super.onCreate().
-     */
     @Override
     public void onCreate() {
         super.onCreate();
+        // This is called before anything else (except content providers)
+        // are created
+        // so don't load anything here
+        // TODO: load data lazily (on request, not in this method)
+        // from file into memory as cache
+    }
+
+    public List<Event> getEvents() {
+        if (!events.isPresent()) {
+            synchronized (this) {
+                if (!events.isPresent()) {
+                    String eventsKey = "PASSEL_EVENTS";
+                    Gson gson = new GsonBuilder().create();
+
+                    Context context = getBaseContext();
+                    SharedPreferences sharedPref = context.getSharedPreferences(
+                            getString(R.string.preference_file_key),
+                            Context.MODE_PRIVATE);
+
+                    String savedValue = sharedPref.getString(eventsKey, "");
+
+                    if (!savedValue.equals("")) {
+                        List<Event> eventsList = gson.fromJson(savedValue,
+                                new TypeToken<List<Event>>() {}.getType());
+                        events = new Some<>(eventsList);
+                    }
+                }
+            }
+        }
+        return events.get();
     }
 
     @Override

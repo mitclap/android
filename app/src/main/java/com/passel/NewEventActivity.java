@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.passel.api.APIClient;
 import com.passel.api.APIError;
 import com.passel.api.APIResponse;
@@ -38,6 +37,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class NewEventActivity extends ActionBarActivity{
     private TextView fromTimeEtxt;
@@ -58,7 +58,7 @@ public class NewEventActivity extends ActionBarActivity{
 
     private boolean isEditing = false;
 
-    ArrayList<Event> eventList = new ArrayList<>();
+    List<Event> eventList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class NewEventActivity extends ActionBarActivity{
         if (getIntent().getBooleanExtra("edit", false)) {
             isEditing = true;
             int index = getIntent().getIntExtra("index", 0);
-            Event event = getEvents().get(index);
+            Event event = ((PasselApplication) getApplication()).getEvents().get(index);
             ((EditText) findViewById(R.id.name)).setText(event.getName());
             ((EditText) findViewById(R.id.description_input)).setText(event.getDescription());
             ((TextView) findViewById(R.id.start_time_data)).setText(event.getStart().toString());
@@ -291,7 +291,7 @@ public class NewEventActivity extends ActionBarActivity{
 
     private boolean createEvent(){
         try {
-            eventList = getEvents();
+            eventList = ((PasselApplication) getApplication()).getEvents();
 
             EditText eventNameField = (EditText) findViewById(R.id.name);
             final String eventName = eventNameField.getText().toString();
@@ -383,7 +383,7 @@ public class NewEventActivity extends ActionBarActivity{
         }
     }
 
-    public void setEvents(ArrayList<Event> events) {
+    public void setEvents(List<Event> events) {
         String eventsKey = "PASSEL_EVENTS";
         Gson gson = new GsonBuilder().create();
 
@@ -396,27 +396,5 @@ public class NewEventActivity extends ActionBarActivity{
         } else {
             editor.putString(eventsKey, gson.toJson(events)).commit();
         }
-    }
-
-    public ArrayList<Event> getEvents() {
-        ArrayList<Event> parsedEvents = new ArrayList<>();
-        String eventsKey = "PASSEL_EVENTS";
-        Gson gson = new GsonBuilder().create();
-
-        Context context = getBaseContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-
-        String savedValue = sharedPref.getString(eventsKey, "");
-        if (savedValue.equals("")) {
-            parsedEvents = null;
-        } else {
-            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<Event>>() {}.getType());
-        }
-
-        Log.d("HomeActivity: ", "Parsing successful!");
-        Log.d("HomeActivity: ", savedValue);
-
-        return parsedEvents;
     }
 }

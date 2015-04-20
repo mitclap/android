@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
@@ -12,9 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.passel.data.Event;
 
 import org.osmdroid.api.IMapController;
@@ -60,7 +56,7 @@ public class MapEventActivity extends ActionBarActivity {
 //                eventCoordinates
 //                );
         Log.d("MapEventActivity", Integer.toString(getIntent().getIntExtra("index", -1)));
-        event = getEvents().get(getIntent().getIntExtra("index", -1));
+        event = ((PasselApplication) getApplication()).getEvents().get(getIntent().getIntExtra("index", -1));
 
         IMapController mapController = map.getController();
         mapController.setZoom(18);
@@ -143,29 +139,6 @@ public class MapEventActivity extends ActionBarActivity {
             Log.d("receiver", "Got message");
         }
     };
-
-    public ArrayList<Event> getEvents() {
-        ArrayList<Event> parsedEvents = new ArrayList<>();
-        String eventsKey = "PASSEL_EVENTS";
-        Gson gson = new GsonBuilder().create();
-
-        Context context = getBaseContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-
-        String savedValue = sharedPref.getString(eventsKey, "");
-        if (savedValue.equals("")) {
-            parsedEvents = null;
-        } else {
-            parsedEvents = gson.fromJson(savedValue, new TypeToken<ArrayList<Event>>() {}.getType());
-        }
-
-        Log.d("HomeActivity: ", "Parsing successful!");
-        Log.d("HomeActivity: ", savedValue);
-
-        return parsedEvents;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
