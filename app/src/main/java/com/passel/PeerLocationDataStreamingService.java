@@ -82,7 +82,6 @@ public class PeerLocationDataStreamingService extends Service {
         double lng = location.getLongitude();
 
         Intent intent = new Intent("send-peer-location-data");
-        // You can also include some extra data.
         intent.putExtra("lat", lat);
         intent.putExtra("lng", lng);
         intent.putExtra("name", name);
