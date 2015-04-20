@@ -52,7 +52,7 @@ public class NewEventActivity extends ActionBarActivity {
     private Button addGuestButton;
     private ListView guestList;
     private ArrayAdapter<String> adapter;
-    private ArrayList<String> guestNameList = new ArrayList<String>();
+    private ArrayList<String> guestNameList = new ArrayList<>();
 
     private boolean isEditing = false;
 
