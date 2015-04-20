@@ -29,8 +29,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/osmbonuspack_v5.1.jar')
-    provided "org.projectlombok:lombok:1.12.6"
-
+    provided 'org.projectlombok:lombok:1.12.6'
+    provided 'pl.mg6.hrisey:hrisey:0.3.1'
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'org.osmdroid:osmdroid-android:4.3'
     compile 'org.slf4j:slf4j-api:1.7.12'

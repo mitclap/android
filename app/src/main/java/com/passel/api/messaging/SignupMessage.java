@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Value
 // No need to call super implementation of equals and hashcode; explicitly let Lombok know this is OK
 @EqualsAndHashCode(callSuper = false)
-public class SignupMessage implements Message {
+public final class SignupMessage implements Message {
 
     private final String username;
     private final String publicKey;
