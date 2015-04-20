@@ -4,12 +4,22 @@ import android.app.Application;
 import android.content.ComponentCallbacks;
 import android.content.res.Configuration;
 
+import com.passel.data.Event;
+import com.passel.util.None;
+import com.passel.util.Optional;
+
+import java.util.List;
+
 /**
  * Created by aneesh on 4/19/15.
  */
 public class PasselApplication extends Application {
+
+    private Optional<List<Event>> events;
+
     public PasselApplication() {
         super();
+        events = Optional.empty();
     }
 
     /**
