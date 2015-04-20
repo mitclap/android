@@ -40,13 +40,8 @@ public class HomeActivity extends ActionBarActivity {
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = adapter.getItem(position);
-                Log.d("Item Clicked: ", item);
-
-                Event event = eventList.get(position);
-                Intent intent = createEventIntent(event);
+                Intent intent = createEventIntent(eventList.get(position));
                 intent.putExtra("index", position);
-
                 startActivity(intent);
             }
         });
@@ -54,16 +49,10 @@ public class HomeActivity extends ActionBarActivity {
         eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = adapter.getItem(position);
-                Log.d("Item Clicked: ", item);
-
-                Event event = eventList.get(position);
-                Intent intent = createEventIntent(event);
+                Intent intent = createEventIntent(eventList.get(position));
                 intent.putExtra("index", position);
                 intent.putExtra("edit", true);
-
                 startActivity(intent);
-
                 return true;
             }
         });
@@ -99,16 +88,11 @@ public class HomeActivity extends ActionBarActivity {
         eventListView.setOnScrollListener(touchListener.makeScrollListener());
         FloatingActionButton fabButton = new FloatingActionButton.Builder(this)
                 .withDrawable(getResources().getDrawable(R.drawable.ic_action_content_add))
-                .withButtonColor(R.color.dark_primary_color)
+                .withButtonColor(getResources().getColor(R.color.dark_primary_color))
                 .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
                 .withMargins(0, 0, 8, 8)
                 .create();
-        fabButton.setFloatingActionButtonColor(getResources().getColor(R.color.dark_primary_color));
-        addFABButtonListener(fabButton);
-    }
-
-    private void addFABButtonListener(FloatingActionButton fab) {
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(HomeActivity.this, NewEventActivity.class);
@@ -118,11 +102,10 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     Intent createEventIntent(Event event){
-        Intent intent = new Intent(HomeActivity.this, MapEventActivity.class);
+        Intent intent = new Intent(this, MapEventActivity.class);
         intent.putExtra("event_name", event.getName());
         intent.putExtra("event_time", event.getStart().toString());
         intent.putStringArrayListExtra("event_guests", new ArrayList<>(event.getGuests()));
-        Log.d("HomeActivity: ", event.getLocation().toString());
         intent.putExtra("event_lat", event.getLocation().getLatitude());
         intent.putExtra("event_lng", event.getLocation().getLongitude());
         return intent;
@@ -174,10 +157,6 @@ public class HomeActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
         switch (item.getItemId()) {
             case R.id.action_settings:
 //                openSearch();
