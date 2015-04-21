@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:andoid="http://schemas.android.com/apk/res-auto"
-    package="passel.w21789.com.passel">
+    package="com.passel">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -11,20 +10,17 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
+        android:name=".data.PasselApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:supportsRtl="true" >
         <activity
-            android:name=".SplashScreenActivity"
-            android:label="@string/title_activity_splash_screen" >
+            android:name="com.passel.SplashScreenActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,72 +28,72 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LogInActivity"
+            android:name="com.passel.LogInActivity"
             android:label="@string/title_activity_log_in" >
         </activity>
         <activity
-            android:name=".SignUpActivity"
+            android:name="com.passel.SignUpActivity"
             android:label="@string/title_activity_sign_up" >
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name="com.passel.HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
         <activity
-            android:name=".NewEventActivity"
+            android:name="com.passel.NewEventActivity"
             android:label="@string/title_activity_new_event"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName="com.passel.HomeActivity"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="passel.w21789.com.passel.HomeActivity" />
+                android:value="com.passel.HomeActivity" />
         </activity>
         <activity
-            android:name=".MapEventActivity"
+            android:name="com.passel.MapEventActivity"
             android:label="@string/title_activity_map_event"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName="com.passel.HomeActivity" >
         </activity>
 
         <service
-            android:name=".BackgroundGPSService"
+            android:name="com.passel.BackgroundGPSService"
             android:enabled="true"
             android:exported="true" >
         </service>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.passel.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName="com.passel.HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="passel.w21789.com.passel.HomeActivity" />
+                android:value="com.passel.HomeActivity" />
         </activity>
         <activity
-            android:name=".EditEventActivity"
+            android:name="com.passel.EditEventActivity"
             android:label="@string/title_activity_edit_event"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName="com.passel.HomeActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="passel.w21789.com.passel.HomeActivity" />
+                android:value="com.passel.HomeActivity" />
         </activity>
 
         <service
-            android:name=".PeerLocationDataStreamingService"
+            android:name="com.passel.PeerLocationDataStreamingService"
             android:enabled="true"
             android:exported="true" >
         </service>
 
         <activity
-            android:name=".ChangePasswordActivity"
+            android:name="com.passel.ChangePasswordActivity"
             android:label="@string/title_activity_change_password"
-            android:parentActivityName=".SettingsActivity" >
+            android:parentActivityName="com.passel.SettingsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ChangePasswordActivity" />
+                android:value="com.passel.ChangePasswordActivity" />
         </activity>
         <activity
-            android:name=".LocationPickerActivity"
+            android:name="com.passel.LocationPickerActivity"
             android:label="Pick a Location">
         </activity>
     </application>

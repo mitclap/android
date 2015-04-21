@@ -19,7 +19,7 @@
                 android:layout_span="3"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/eventName"
+                android:id="@+id/name"
                 android:editable="true"
                 android:enabled="true"
                 android:hint="Enter Title"
@@ -54,7 +54,7 @@
                 android:paddingRight="16dp"
                 android:textSize="16sp"
                 android:layout_marginBottom="10dp"
-                android:layout_below="@+id/eventName"
+                android:layout_below="@+id/name"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:hint="Start Date"
@@ -168,12 +168,13 @@
                 android:layout_column="1"
                 android:layout_span="2"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/description_input"
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp"
                 android:paddingRight="16dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
                 android:textSize="16sp"
                 android:layout_below="@+id/location_input"
                 android:layout_alignParentLeft="true"
@@ -222,8 +223,5 @@
                 android:dividerHeight="1dp"
                 android:layout_below="@+id/guest_input"/>
         </TableRow>
-
-
-
     </TableLayout>
 </ScrollView>

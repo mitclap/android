@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "passel.w21789.com.passel"
+        applicationId "com.passel"
         minSdkVersion 15
         targetSdkVersion 21
         versionCode 1
@@ -21,6 +21,9 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -30,14 +33,9 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'org.osmdroid:osmdroid-android:4.3'
-    compile 'org.slf4j:slf4j-api:1.7.+'
-    compile 'com.google.code.gson:gson:2.3.1'
-    compile 'org.apache.commons:commons-lang3:3.3.2'
-    compile 'com.koushikdutta.async:androidasync:2.+'
-    compile 'com.loopj.android:android-async-http:1.4.6'
+    compile 'org.slf4j:slf4j-api:1.7.12'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.4.4'
     compile 'com.google.android.gms:play-services:7.0.0'
     compile 'org.zeromq:jeromq:0.3.4'
     compile 'com.klinkerapps:android-chips:+@aar'
-
 }
