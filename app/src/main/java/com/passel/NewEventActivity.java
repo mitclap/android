@@ -33,6 +33,7 @@ import com.passel.data.NewEvent;
 import com.passel.util.Result;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -268,93 +269,109 @@ public class NewEventActivity extends ActionBarActivity {
     }
 
     private boolean createEvent() {
+        // TOOD: change check mark to spinning animation for the duration
+        // of this method, then do something at the end to validate to the
+        // user that the event was sucessfully saved
+        eventList = ((PasselApplication) getApplication()).getEvents();
+
+        // TOOD: just fix validation in general
+        EditText eventNameField = (EditText) findViewById(R.id.name);
+        final String eventName = eventNameField.getText().toString();
+
+        if ((!eventName.matches("^[a-zA-Z0-9]+$") || (eventName.length() > 30))) {
+            showToast("Please enter a valid event name:  only lowercase/uppercase letters and numbers, max of 30 chars.");
+            return false;
+        }
+
+        EditText startDateField = (EditText) findViewById(R.id.start_date_data);
+        String startDate = startDateField.getText().toString();
+
+        EditText endDateField = (EditText) findViewById(R.id.end_date_data);
+        String endDate = endDateField.getText().toString();
+
+        TextView startTimeField = (TextView) findViewById(R.id.start_time_data);
+        String startTime = startTimeField.getText().toString();
+
+        if (startTime == "") {
+            showToast("Please enter a start time");
+            return false;
+        }
+
+        TextView endTimeField = (TextView) findViewById(R.id.end_time_data);
+        String endTime = endTimeField.getText().toString();
+        EditText descriptionField = (EditText) findViewById(R.id.description_input);
+        String description = descriptionField.getText().toString();
+
+        if (description.length() > 1000) {
+            showToast("Please enter a valid description: max of 1000 chars.");
+            return false;
+        }
+
+        if (null == location) {
+            showToast("Please enter a location");
+            return false;
+        }
+
+        DateFormat datetimeParser = new SimpleDateFormat("MM/dd/yyyyhh:mm a");
+
+        NewEvent newEvent = null;
+
         try {
-            // TOOD: change check mark to spinning animation for the duration
-            // of this method, then do something at the end to validate to the
-            // user that the event was sucessfully saved
-            eventList = ((PasselApplication) getApplication()).getEvents();
-
-            // TOOD: just fix validation in general
-            EditText eventNameField = (EditText) findViewById(R.id.name);
-            final String eventName = eventNameField.getText().toString();
-            if (eventName == "") {
-                throw new UnsupportedOperationException("Please enter an event name");
-            }
-
-            EditText startDateField = (EditText) findViewById(R.id.start_date_data);
-            String startDate = startDateField.getText().toString();
-
-            EditText endDateField = (EditText) findViewById(R.id.end_date_data);
-            String endDate = endDateField.getText().toString();
-
-            TextView startTimeField = (TextView) findViewById(R.id.start_time_data);
-            String startTime = startTimeField.getText().toString();
-
-            if (startTime == "") {
-                throw new UnsupportedOperationException("Please enter a start time");
-            }
-
-            TextView endTimeField = (TextView) findViewById(R.id.end_time_data);
-            String endTime = endTimeField.getText().toString();
-            EditText descriptionField = (EditText) findViewById(R.id.description_input);
-            String description = descriptionField.getText().toString();
-
-            if (null == location) {
-                throw new UnsupportedOperationException("Please enter a location");
-            }
-
-            DateFormat datetimeParser = new SimpleDateFormat("MM/dd/yyyyhh:mm a");
-
-            NewEvent newEvent = new NewEvent(eventName,
+            newEvent = new NewEvent(eventName,
                     datetimeParser.parse(startDate + startTime),
                     datetimeParser.parse(startDate + startTime),
                     description,
                     guestNameList,
                     location);
-            ((PasselApplication) getApplication()).addEvent(newEvent);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-            Calendar startDateTime = Calendar.getInstance();
-            int startHour = Integer.parseInt(startTime.split(":|\\s")[0]);
-            if (startTime.split(":|\\s")[0] == "PM") {
-                startHour += 12;
-            }
+        ((PasselApplication) getApplication()).addEvent(newEvent);
 
-            startDateTime.set(Integer.parseInt(startDate.split("/")[2]),
-                    Integer.parseInt(startDate.split("/")[0]),
-                    Integer.parseInt(startDate.split("/")[1]),
-                    startHour,
-                    Integer.parseInt(startTime.split(":|\\s")[1]));
+        Calendar startDateTime = Calendar.getInstance();
+        int startHour = Integer.parseInt(startTime.split(":|\\s")[0]);
+        if (startTime.split(":|\\s")[0] == "PM") {
+            startHour += 12;
+        }
 
-            Calendar endDateTime = Calendar.getInstance();
-            int endHour = Integer.parseInt(startTime.split(":|\\s")[0]);
-            if (endTime.split(":|\\s")[0] == "PM") {
-                endHour += 12;
-            }
+        startDateTime.set(Integer.parseInt(startDate.split("/")[2]),
+                Integer.parseInt(startDate.split("/")[0]),
+                Integer.parseInt(startDate.split("/")[1]),
+                startHour,
+                Integer.parseInt(startTime.split(":|\\s")[1]));
 
-            endDateTime.set(Integer.parseInt(endDate.split("/")[2]),
-                    Integer.parseInt(endDate.split("/")[0]),
-                    Integer.parseInt(endDate.split("/")[1]),
-                    endHour,
-                    Integer.parseInt(endTime.split(":|\\s")[1]));
+        Calendar endDateTime = Calendar.getInstance();
+        int endHour = Integer.parseInt(startTime.split(":|\\s")[0]);
+        if (endTime.split(":|\\s")[0] == "PM") {
+            endHour += 12;
+        }
 
-            JsonMapper mapper = ((PasselApplication) getApplication()).getJsonMapper();
-            Result<APIResponse, APIError> result = new APIClient(mapper).addEvent(
-                    eventName,
-                    startDateTime.getTime(),
-                    endDateTime.getTime(),
-                    description);
+        endDateTime.set(Integer.parseInt(endDate.split("/")[2]),
+                Integer.parseInt(endDate.split("/")[0]),
+                Integer.parseInt(endDate.split("/")[1]),
+                endHour,
+                Integer.parseInt(endTime.split(":|\\s")[1]));
 
-            if (result.isOk()) {
-                return true;
-            } else {
-                Toast.makeText(getApplicationContext(), "Unable to communicate to server",
-                        Toast.LENGTH_LONG).show();
-                return false;
-            }
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(),
+        JsonMapper mapper = ((PasselApplication) getApplication()).getJsonMapper();
+        Result<APIResponse, APIError> result = new APIClient(mapper).addEvent(
+                eventName,
+                startDateTime.getTime(),
+                endDateTime.getTime(),
+                description);
+
+        if (result.isOk()) {
+            return true;
+        } else {
+            Toast.makeText(getApplicationContext(), "Unable to communicate to server",
                     Toast.LENGTH_LONG).show();
             return false;
         }
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_LONG).show();
+        return;
     }
 }
