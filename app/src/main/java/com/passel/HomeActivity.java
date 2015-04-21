@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,26 +14,29 @@ import android.widget.ListView;
 import com.passel.data.Event;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends ActionBarActivity {
 
-    ArrayList<String> eventNameList = new ArrayList<>();
-    ArrayList<Event> eventList = new ArrayList<>();
+    private List<String> eventNames;
     ArrayAdapter<String> adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1,
-                eventNameList);
+        final List<Event> events = ((PasselApplication) getApplication()).getEvents();
+        eventNames = new ArrayList<>(events.size());
+        for (Event currentEvent: events) {
+            eventNames.add(currentEvent.getName());
+        }
+
         final ListView eventListView = (ListView) findViewById(R.id.eventListView);
-        eventListView.setAdapter(adapter);
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                List<Event> eventList = ((PasselApplication) getApplication()).getEvents();
                 Intent intent = createEventIntent(eventList.get(position));
                 intent.putExtra("index", position);
                 startActivity(intent);
@@ -44,6 +46,7 @@ public class HomeActivity extends ActionBarActivity {
         eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                List<Event> eventList = ((PasselApplication) getApplication()).getEvents();
                 Intent intent = createEventIntent(eventList.get(position));
                 intent.putExtra("index", position);
                 intent.putExtra("edit", true);
@@ -52,16 +55,7 @@ public class HomeActivity extends ActionBarActivity {
             }
         });
 
-
-
-        for (Event currentEvent:
-                ((PasselApplication) getApplication()).getEvents()) {
-            eventList.add(currentEvent);
-            eventNameList.add(currentEvent.getName());
-            adapter.notifyDataSetChanged();
-        }
-
-        SwipeDismissListViewTouchListener touchListener =
+        final SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
                         eventListView,
                         new SwipeDismissListViewTouchListener.DismissCallbacks() {
@@ -71,23 +65,33 @@ public class HomeActivity extends ActionBarActivity {
                             }
 
                             @Override
-                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                            public void onDismiss(ListView listView,
+                                                  int[] reverseSortedPositions) {
+                                // TODO actually remove event
+                                // TODO: Add undo functionality and handle
+                                // AOOBException that sometimes pops up
                                 for (int position : reverseSortedPositions) {
                                     adapter.remove(adapter.getItem(position));
                                 }
                                 adapter.notifyDataSetChanged();
                             }
                         });
-        //TODO: Add undo functionality and handle AOOBException that sometimes pops up
         eventListView.setOnTouchListener(touchListener);
-        // Setting this scroll listener is required to ensure that during ListView scrolling,
-        // we don't look for swipes.
+        // Setting this scroll listener is required to ensure that
+        // during ListView scrolling, we don't look for swipes.
         eventListView.setOnScrollListener(touchListener.makeScrollListener());
-        FloatingActionButton fabButton = new FloatingActionButton.Builder(this)
+
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                eventNames);
+//        adapter.notifyDataSetChanged(); TODO see if needed
+        eventListView.setAdapter(adapter);
+
+        final FloatingActionButton fabButton = new FloatingActionButton.Builder(this)
                 .withDrawable(getResources().getDrawable(R.drawable.ic_action_content_add))
                 .withButtonColor(getResources().getColor(R.color.dark_primary_color))
                 .withMargins(0, 0, 8, 8)
-                .create();
+                .create(); // Also adds the button to the screen
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,6 +99,7 @@ public class HomeActivity extends ActionBarActivity {
                 HomeActivity.this.startActivityForResult(myIntent, 2);
             }
         });
+
     }
 
     Intent createEventIntent(Event event){
