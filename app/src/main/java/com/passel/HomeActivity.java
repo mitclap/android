@@ -43,18 +43,6 @@ public class HomeActivity extends ActionBarActivity {
             }
         });
 
-        eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                List<Event> eventList = ((PasselApplication) getApplication()).getEvents();
-                Intent intent = createEventIntent(eventList.get(position));
-                intent.putExtra("index", position);
-                intent.putExtra("edit", true);
-                startActivity(intent);
-                return true;
-            }
-        });
-
         final SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
                         eventListView,
