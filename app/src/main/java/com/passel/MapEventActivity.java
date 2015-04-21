@@ -77,8 +77,8 @@ public class MapEventActivity extends ActionBarActivity {
         selfMarker.setIcon(getResources().getDrawable(R.drawable.ic_map_marker));
         map.getOverlays().add(selfMarker);
 
-        addPersonMarker(42.33,-71.07,"Lisandro", "ETA: 5 min.");
-        addPersonMarker(42.7,-71.11,"Carlos", "ETA: 9 min.");
+        addPersonMarker(42.33, -71.07, "Lisandro", "ETA: 5 min.");
+        addPersonMarker(42.7, -71.11, "Carlos", "ETA: 9 min.");
 
         //Local messages passed go through here
         LocalBroadcastManager.getInstance(this).registerReceiver(locationMessageReceiver,
@@ -94,15 +94,14 @@ public class MapEventActivity extends ActionBarActivity {
         startService(PeerLocationIntent);
     }
 
-    private void addPersonMarker(double lat, double lon, String name, String eta){
+    private void addPersonMarker(double lat, double lon, String name, String eta) {
         Marker personMarker;
         if (peopleMarkerHashMap.containsKey(name)) {
             personMarker = peopleMarkerHashMap.get(name);
 
-        }
-        else {
+        } else {
             personMarker = new Marker(map);
-            peopleMarkerHashMap.put(name,personMarker);
+            peopleMarkerHashMap.put(name, personMarker);
         }
         personMarker.setPosition(new GeoPoint(lat, lon));
         personMarker.setTitle(name);
@@ -118,7 +117,7 @@ public class MapEventActivity extends ActionBarActivity {
         public void onReceive(Context context, Intent intent) {
             // Get extra data included in the Intent
             double lat = intent.getDoubleExtra("lat", 0);
-            double lng = intent.getDoubleExtra("lng",0);
+            double lng = intent.getDoubleExtra("lng", 0);
             selfMarker.setPosition(new GeoPoint(lat, lng));
             map.invalidate();
 
@@ -131,10 +130,10 @@ public class MapEventActivity extends ActionBarActivity {
         public void onReceive(Context context, Intent intent) {
             // Get extra data included in the Intent
             double lat = intent.getDoubleExtra("lat", 0);
-            double lng = intent.getDoubleExtra("lng",0);
+            double lng = intent.getDoubleExtra("lng", 0);
             String name = intent.getStringExtra("name");
             String eta = "ETA: " + intent.getStringExtra("eta") + " min.";
-            addPersonMarker(lat,lng,name, eta);
+            addPersonMarker(lat, lng, name, eta);
 
             Log.d("receiver", "Got message");
         }
@@ -157,7 +156,7 @@ public class MapEventActivity extends ActionBarActivity {
             case R.id.action_edit:
 //                openSearch();
                 Intent settingsIntent = new Intent(MapEventActivity.this, NewEventActivity.class);
-                settingsIntent.putExtra("index",getIntent().getIntExtra("index", -1));
+                settingsIntent.putExtra("index", getIntent().getIntExtra("index", -1));
                 settingsIntent.putExtra("edit", true);
                 MapEventActivity.this.startActivity(settingsIntent);
                 return true;
