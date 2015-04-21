@@ -29,6 +29,7 @@ import com.passel.api.APIResponse;
 import com.passel.data.Event;
 import com.passel.data.JsonMapper;
 import com.passel.data.Location;
+import com.passel.data.NewEvent;
 import com.passel.util.Result;
 
 import java.text.DateFormat;
@@ -325,12 +326,13 @@ public class NewEventActivity extends ActionBarActivity {
 
             DateFormat datetimeParser = new SimpleDateFormat("MM/dd/yyyyhh:mm a");
 
-            Event newEvent = new Event(eventName,
+            NewEvent newEvent = new NewEvent(eventName,
                     datetimeParser.parse(startDate + startTime),
                     datetimeParser.parse(startDate + startTime),
                     description,
                     guestNameList,
                     location);
+            // TODO: move editing logic to EditEventActivity
             if (isEditing) {
                 ((PasselApplication) getApplication()).updateEvent(
                         getIntent().getIntExtra("index", 0),

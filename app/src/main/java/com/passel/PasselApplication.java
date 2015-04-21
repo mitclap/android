@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.passel.data.Event;
 import com.passel.data.JsonMapper;
 import com.passel.data.Location;
+import com.passel.data.NewEvent;
 import com.passel.util.Optional;
 import com.passel.util.Some;
 
@@ -45,7 +46,7 @@ public class PasselApplication extends Application {
 
 
         List<Event> dummyEvents = new ArrayList<>();
-        dummyEvents.add(new Event("Study Session",
+        dummyEvents.add(new NewEvent("Study Session",
                 start, end,
                 "Study for 21W.789",
                 Arrays.asList("Aneesh", "Carlos"),
