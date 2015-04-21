@@ -70,9 +70,7 @@ public class EditEventActivity extends Activity {
 
     private boolean editEvent(){
         // TODO fix this
-        ((PasselApplication) getApplication()).updateEvent(
-                getIntent().getIntExtra("index", 0),
-                null); // TODO Ew null
+        ((PasselApplication) getApplication()).updateEvent(null); // TODO Ew null
 
         return true;
     }
