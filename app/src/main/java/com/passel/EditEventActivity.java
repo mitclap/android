@@ -10,6 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.passel.data.Event;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,9 +46,33 @@ public class EditEventActivity extends Activity {
         builder.appendPath(Long.toString(time));
         Intent intent = new Intent(Intent.ACTION_VIEW, builder.build());
         startActivity(intent);
+
+        if (getIntent().getBooleanExtra("edit", false)) {
+            int index = getIntent().getIntExtra("index", 0);
+            Event event = ((PasselApplication) getApplication()).getEvents().get(index);
+            ((EditText) findViewById(R.id.name)).setText(event.getName());
+            ((EditText) findViewById(R.id.description_input)).setText(event.getDescription());
+            ((TextView) findViewById(R.id.start_time_data)).setText(event.getStart().toString());
+            ((TextView) findViewById(R.id.end_time_data)).setText(event.getEnd().toString());
+            ((EditText) findViewById(R.id.location_input)).setText(event.getLocation().toString());
+
+            //guestNameList.addAll(event.getGuests());
+            //adapter.notifyDataSetChanged();
+
+            setTitle("Edit Event");
+            //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+
+
+
     }
 
-    private boolean createEvent(){
+    private boolean editEvent(){
+        // TODO fix this
+        ((PasselApplication) getApplication()).updateEvent(
+                getIntent().getIntExtra("index", 0),
+                null); // TODO Ew null
+
         return true;
     }
 
@@ -69,7 +96,7 @@ public class EditEventActivity extends Activity {
                 finish();
                 return true;
             case R.id.new_event_check:
-                if (createEvent()){
+                if (editEvent()){
                     finish();
                 }
                 return true;

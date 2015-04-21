@@ -37,21 +37,15 @@ public class HomeActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 List<Event> eventList = ((PasselApplication) getApplication()).getEvents();
-                Intent intent = createEventIntent(eventList.get(position));
+                Event event = eventList.get(position);
+                Intent intent = new Intent(HomeActivity.this, MapEventActivity.class);
+                intent.putExtra("event_name", event.getName());
+                intent.putExtra("event_time", event.getStart().toString());
+                intent.putStringArrayListExtra("event_guests", new ArrayList<>(event.getGuests()));
+                intent.putExtra("event_lat", event.getLocation().getLatitude());
+                intent.putExtra("event_lng", event.getLocation().getLongitude());
                 intent.putExtra("index", position);
                 startActivity(intent);
-            }
-        });
-
-        eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                List<Event> eventList = ((PasselApplication) getApplication()).getEvents();
-                Intent intent = createEventIntent(eventList.get(position));
-                intent.putExtra("index", position);
-                intent.putExtra("edit", true);
-                startActivity(intent);
-                return true;
             }
         });
 
@@ -99,17 +93,6 @@ public class HomeActivity extends ActionBarActivity {
                 HomeActivity.this.startActivityForResult(myIntent, 2);
             }
         });
-
-    }
-
-    Intent createEventIntent(Event event){
-        Intent intent = new Intent(this, MapEventActivity.class);
-        intent.putExtra("event_name", event.getName());
-        intent.putExtra("event_time", event.getStart().toString());
-        intent.putStringArrayListExtra("event_guests", new ArrayList<>(event.getGuests()));
-        intent.putExtra("event_lat", event.getLocation().getLatitude());
-        intent.putExtra("event_lng", event.getLocation().getLongitude());
-        return intent;
 
     }
 

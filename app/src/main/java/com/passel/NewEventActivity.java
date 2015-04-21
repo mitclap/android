@@ -55,8 +55,6 @@ public class NewEventActivity extends ActionBarActivity {
     private ArrayAdapter<String> adapter;
     private ArrayList<String> guestNameList = new ArrayList<>();
 
-    private boolean isEditing = false;
-
     List<Event> eventList = new ArrayList<>();
 
     @Override
@@ -68,25 +66,6 @@ public class NewEventActivity extends ActionBarActivity {
         addTimeOnClickListeners();
         addGuestListeners();
         addMapPickerListener();
-
-        if (getIntent().getBooleanExtra("edit", false)) {
-            isEditing = true;
-            int index = getIntent().getIntExtra("index", 0);
-            Event event = ((PasselApplication) getApplication()).getEvents().get(index);
-            ((EditText) findViewById(R.id.name)).setText(event.getName());
-            ((EditText) findViewById(R.id.description_input)).setText(event.getDescription());
-            ((TextView) findViewById(R.id.start_time_data)).setText(event.getStart().toString());
-            ((TextView) findViewById(R.id.end_time_data)).setText(event.getEnd().toString());
-            ((EditText) findViewById(R.id.location_input)).setText(event.getLocation().toString());
-
-            guestNameList.addAll(event.getGuests());
-            adapter.notifyDataSetChanged();
-
-            setTitle("Edit Event");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-
-
     }
 
     @Override
@@ -332,14 +311,7 @@ public class NewEventActivity extends ActionBarActivity {
                     description,
                     guestNameList,
                     location);
-            // TODO: move editing logic to EditEventActivity
-            if (isEditing) {
-                ((PasselApplication) getApplication()).updateEvent(
-                        getIntent().getIntExtra("index", 0),
-                        newEvent);
-            } else {
-                ((PasselApplication) getApplication()).addEvent(newEvent);
-            }
+            ((PasselApplication) getApplication()).addEvent(newEvent);
 
             Calendar startDateTime = Calendar.getInstance();
             int startHour = Integer.parseInt(startTime.split(":|\\s")[0]);
