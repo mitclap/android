@@ -3,10 +3,11 @@ package com.passel;
 
 import android.app.Service;
 import android.content.Intent;
-import android.location.Location;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import com.passel.data.Location;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -76,33 +77,27 @@ public class PeerLocationDataStreamingService extends Service {
     }
 
     private void sendMessage(Location location, String name, String eta) {
-        Log.d("sender", "Broadcasting message");
-
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
-
         Intent intent = new Intent("send-peer-location-data");
-        intent.putExtra("lat", lat);
-        intent.putExtra("lng", lng);
+        intent.putExtra("location", location);
         intent.putExtra("name", name);
         intent.putExtra("eta", eta);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     private List<Location> decodeGPX(int resourceID){
-        List<Location> list = new ArrayList<Location>();
-
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        InputStream inputStream = getResources().openRawResource(resourceID);
         try {
             Log.d("debug: ", "parsing gpx!");
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            InputStream inputStream = getResources().openRawResource(resourceID);
             Document document = documentBuilder.parse(inputStream);
             Element elementRoot = document.getDocumentElement();
 
             NodeList nodelist_trkpt = elementRoot.getElementsByTagName("wpt");
+            int numLocations = nodelist_trkpt.getLength();
+            List<Location> locations = new ArrayList<>(numLocations);
 
-            for(int i = 0; i < nodelist_trkpt.getLength(); i++){
+            for(int i = 0; i < numLocations; i++){
 
                 Node node = nodelist_trkpt.item(i);
                 NamedNodeMap attributes = node.getAttributes();
@@ -113,17 +108,11 @@ public class PeerLocationDataStreamingService extends Service {
                 String newLongitude = attributes.getNamedItem("lon").getTextContent();
                 Double newLongitude_double = Double.parseDouble(newLongitude);
 
-                String newLocationName = newLatitude + ":" + newLongitude;
-                Location newLocation = new Location(newLocationName);
-                newLocation.setLatitude(newLatitude_double);
-                newLocation.setLongitude(newLongitude_double);
+                Location newLocation = new Location(newLatitude_double, newLongitude_double);
 
-                list.add(newLocation);
-
+                locations.add(newLocation);
             }
-            Log.d("debug: ", "done parsing gpx");
-            Log.d("debug: ", "list size: " + Integer.toString(list.size()));
-            inputStream.close();
+            return locations;
 
         } catch (ParserConfigurationException e) {
             // TODO Auto-generated catch block
@@ -137,9 +126,14 @@ public class PeerLocationDataStreamingService extends Service {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                // Already closed
+            }
         }
-
-        return list;
+        return null; // TODO better error handling here
     }
 
     @Override

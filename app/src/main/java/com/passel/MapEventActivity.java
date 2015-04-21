@@ -112,43 +112,30 @@ public class MapEventActivity extends ActionBarActivity {
     private BroadcastReceiver locationMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            double lat = intent.getDoubleExtra("lat", 0);
-            double lng = intent.getDoubleExtra("lng", 0);
-            selfMarker.setPosition(new GeoPoint(lat, lng));
+            Location location = intent.getParcelableExtra("location");
+            selfMarker.setPosition(new GeoPoint(location.getLatitude(), location.getLongitude()));
             map.invalidate();
-
-            Log.d("receiver", "Got message");
         }
     };
 
     private BroadcastReceiver peerLocationMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            double lat = intent.getDoubleExtra("lat", 0);
-            double lng = intent.getDoubleExtra("lng", 0);
+            Location location = intent.getParcelableExtra("location");
             String name = intent.getStringExtra("name");
             String eta = "ETA: " + intent.getStringExtra("eta") + " min.";
-            addPersonMarker(lat, lng, name, eta);
-
-            Log.d("receiver", "Got message");
+            addPersonMarker(location.getLatitude(), location.getLongitude(), name, eta);
         }
     };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_map_event, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
         switch (item.getItemId()) {
             case R.id.action_edit:
 //                openSearch();

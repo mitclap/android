@@ -3,13 +3,14 @@ package com.passel;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import com.passel.data.Location;
 
 public class BackgroundGPSService extends Service {
 
@@ -19,15 +20,10 @@ public class BackgroundGPSService extends Service {
     LocationManager locationManagerGPS;
     LocationListener locationListener;
 
-    private void sendMessage(Location location) {
+    private void sendMessage(android.location.Location location) {
         Log.d("sender", "Broadcasting message");
-
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
-
         Intent intent = new Intent("send-location-data");
-        intent.putExtra("lat", lat);
-        intent.putExtra("lng", lng);
+        intent.putExtra("location", new Location(location));
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -36,7 +32,7 @@ public class BackgroundGPSService extends Service {
 
         locationListener = new LocationListener() {
             @Override
-            public void onLocationChanged(Location location) {
+            public void onLocationChanged(android.location.Location location) {
                 sendMessage(location);  // send to the main Activity so user can see
             }
 
@@ -61,7 +57,7 @@ public class BackgroundGPSService extends Service {
                 REQUEST_LOCATION_UPDATE_MINDISTANCE_METER, // 500
                 locationListener);
 
-        Location lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        android.location.Location lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         if (lastLocation == null){
             lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
