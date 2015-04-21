@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.passel.data.Event;
+import com.passel.data.Location;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -20,8 +21,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class MapEventActivity extends ActionBarActivity {
@@ -30,12 +29,17 @@ public class MapEventActivity extends ActionBarActivity {
     Intent BackgroundGPSIntent;
     Intent PeerLocationIntent;
 
-    Event event;
-
     Marker eventMarker;
     Marker selfMarker;
 
     MapView map;
+
+    protected static void showOnMap(Context context, int index) {
+        // TODO: take an event instead of an id
+        Intent intent = new Intent(context, MapEventActivity.class);
+        intent.putExtra("index", index);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,20 +51,13 @@ public class MapEventActivity extends ActionBarActivity {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
-        ArrayList<Double> eventCoordinates = new ArrayList<>();
-        eventCoordinates.addAll(Arrays.asList(getIntent().getDoubleExtra("event_lat", 0), getIntent().getDoubleExtra("event_lng", 0)));
-
-//        passelEvent = new PasselEvent(getIntent().getStringExtra("event_name"),
-//                getIntent().getStringExtra("event_time"),
-//                getIntent().getStringArrayListExtra("event_guests"),
-//                eventCoordinates
-//                );
         Log.d("MapEventActivity", Integer.toString(getIntent().getIntExtra("index", -1)));
-        event = ((PasselApplication) getApplication()).getEvents().get(getIntent().getIntExtra("index", -1));
-
+        Event event = ((PasselApplication) getApplication())
+                .getEvents().get(getIntent().getIntExtra("index", -1));
+        Location location = event.getLocation();
         IMapController mapController = map.getController();
         mapController.setZoom(18);
-        GeoPoint startPoint = new GeoPoint(event.getLocation().getLatitude(), event.getLocation().getLongitude());
+        GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
 //        GeoPoint startPoint = new GeoPoint(42.35965, -71.09206);
         mapController.setCenter(startPoint);
 
