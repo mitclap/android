@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.passel.data.Event;
+import com.passel.data.PasselApplication;
 
 import java.util.ArrayList;
 import java.util.List;

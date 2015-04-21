@@ -29,7 +29,7 @@ import com.passel.api.APIResponse;
 import com.passel.data.Event;
 import com.passel.data.JsonMapper;
 import com.passel.data.Location;
-import com.passel.data.NewEvent;
+import com.passel.data.PasselApplication;
 import com.passel.util.Result;
 
 import java.text.DateFormat;
@@ -314,10 +314,8 @@ public class NewEventActivity extends ActionBarActivity {
 
         DateFormat datetimeParser = new SimpleDateFormat("MM/dd/yyyyhh:mm a");
 
-        NewEvent newEvent = null;
-
         try {
-            newEvent = new NewEvent(eventName,
+            ((PasselApplication) getApplication()).createEvent(eventName,
                     datetimeParser.parse(startDate + startTime),
                     datetimeParser.parse(startDate + startTime),
                     description,
@@ -326,8 +324,6 @@ public class NewEventActivity extends ActionBarActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        ((PasselApplication) getApplication()).addEvent(newEvent);
 
         Calendar startDateTime = Calendar.getInstance();
         int startHour = Integer.parseInt(startTime.split(":|\\s")[0]);

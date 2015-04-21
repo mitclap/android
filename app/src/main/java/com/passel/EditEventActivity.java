@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.passel.data.Event;
+import com.passel.data.PasselApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

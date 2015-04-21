@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.passel.data.Event;
 import com.passel.data.Location;
+import com.passel.data.PasselApplication;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;

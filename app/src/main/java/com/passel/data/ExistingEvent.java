@@ -9,16 +9,17 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(callSuper = true)
 public final class ExistingEvent extends Event {
-    int id;
+    int globalId;
 
-    public ExistingEvent(int id,
+    public ExistingEvent(int localId,
                          final String name,
                          final Date start,
                          final Date end,
                          final String description,
                          final List<String> guests,
-                         final Location location) {
-        super(name, start, end, description, guests, location);
-        this.id = id;
+                         final Location location,
+                         int globalId) {
+        super(localId, name, start, end, description, guests, location);
+        this.globalId = globalId;
     }
 }

@@ -8,14 +8,15 @@ import lombok.Value;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
-public final class NewEvent extends Event {
+final class NewEvent extends Event {
 
-    public NewEvent(final String name,
-                    final Date start,
-                    final Date end,
-                    final String description,
-                    final List<String> guests,
-                    final Location location) {
-        super(name, start, end, description, guests, location);
+    NewEvent(final int localId,
+             final String name,
+             final Date start,
+             final Date end,
+             final String description,
+             final List<String> guests,
+             final Location location) {
+        super(localId, name, start, end, description, guests, location);
     }
 }

@@ -16,6 +16,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
 public abstract class Event {
+    int localId;
     String name;
     Date start;
     Date end;
@@ -23,12 +24,14 @@ public abstract class Event {
     List<String> guests;
     Location location;
 
-    protected Event(final String name,
+    protected Event(final int localId,
+                    final String name,
                     final Date start,
                     final Date end,
                     final String description,
                     final List<String> guests,
                     final Location location) {
+        this.localId = localId;
         this.name = name;
         this.start = start;
         this.end = end;

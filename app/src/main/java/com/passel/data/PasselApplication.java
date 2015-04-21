@@ -1,4 +1,4 @@
-package com.passel;
+package com.passel.data;
 
 import android.app.Application;
 import android.content.Context;
@@ -8,10 +8,7 @@ import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.passel.data.Event;
-import com.passel.data.JsonMapper;
-import com.passel.data.Location;
-import com.passel.data.NewEvent;
+import com.passel.R;
 import com.passel.util.Optional;
 import com.passel.util.Some;
 
@@ -22,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * In the data layer because it handles data persistence
  * Created by aneesh on 4/19/15.
  */
 public class PasselApplication extends Application {
@@ -46,7 +44,7 @@ public class PasselApplication extends Application {
 
 
         List<Event> dummyEvents = new ArrayList<>();
-        dummyEvents.add(new NewEvent("Study Session",
+        dummyEvents.add(new NewEvent(0, "Study Session",
                 start, end,
                 "Study for 21W.789",
                 Arrays.asList("Aneesh", "Carlos"),
@@ -137,11 +135,19 @@ public class PasselApplication extends Application {
 
     /**
      * Precondition: events are loaded
-     *
-     * @param event
      */
-    public void addEvent(Event event) {
-        events.get().add(event);
+    public void createEvent(final String name,
+                            final Date start,
+                            final Date end,
+                            final String description,
+                            final List<String> guests,
+                            final Location location) {
+        // TODO: write the new event to sql,
+        // then make a NewEvent object in memory
+        // and add to the list
+        int index = events.get().size();
+        Event newEvent = new NewEvent(index, name, start, end, description, guests, location);
+        events.get().add(newEvent);
         syncEvents();
     }
 
