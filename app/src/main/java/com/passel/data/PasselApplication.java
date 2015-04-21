@@ -127,9 +127,8 @@ public class PasselApplication extends Application {
      * @param index
      * @param event
      */
-
-    public void updateEvent(int index, Event event) {
-        events.get().set(index, event);
+    public void updateEvent(int localId, Event event) {
+        events.get().set(localId, event);
         syncEvents();
     }
 
