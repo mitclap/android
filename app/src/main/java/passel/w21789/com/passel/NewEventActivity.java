@@ -40,8 +40,8 @@ import passel.w21789.com.passel.util.Result;
 public class NewEventActivity extends ActionBarActivity{
     private TextView fromTimeEtxt;
     private TextView toTimeEtxt;
-    private ImageButton fromDateButton;
-    private ImageButton toDateButton;
+    private TextView fromDateView;
+    private TextView toDateView;
 
     private Calendar calendar;
 
@@ -49,7 +49,6 @@ public class NewEventActivity extends ActionBarActivity{
     private TimePickerDialog tpDialog;
 
     private EditText guestInput;
-    private Button addGuestButton;
     private ListView guestList;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> guestNameList=new ArrayList<String>();
@@ -66,6 +65,9 @@ public class NewEventActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
+        setDefaultDate();
+        setDefaultTime();
+
         addDateOnClickListeners();
         addTimeOnClickListeners();
         addGuestListeners();
@@ -79,8 +81,8 @@ public class NewEventActivity extends ActionBarActivity{
             ((EditText) findViewById(R.id.description_input)).setText(event.getEventDescription());
             ((TextView) findViewById(R.id.start_time_data)).setText(event.getEventTime());
             ((TextView) findViewById(R.id.end_time_data)).setText(event.getEndTime());
-            ((EditText) findViewById(R.id.start_date_data)).setText(event.getEventDate());
-            ((EditText) findViewById(R.id.end_date_data)).setText(event.getEndDate());
+            ((TextView) findViewById(R.id.start_date_data)).setText(event.getEventDate());
+            ((TextView) findViewById(R.id.end_date_data)).setText(event.getEndDate());
             ((EditText) findViewById(R.id.location_input)).setText(event.getEventCoordinates().get(0)+","+event.getEventCoordinates().get(1));
             latitude = event.getEventCoordinates().get(0);
             longitude= event.getEventCoordinates().get(1);
@@ -128,17 +130,64 @@ public class NewEventActivity extends ActionBarActivity{
         }
     }
 
-    private void addDateOnClickListeners(){
-        fromDateButton = (ImageButton) findViewById(R.id.start_date_button);
-        toDateButton = (ImageButton) findViewById(R.id.end_date_button);
+    private void setDefaultDate(){
+        fromDateView = (TextView) findViewById(R.id.start_date_data);
+        toDateView = (TextView) findViewById(R.id.end_date_data);
 
-        fromDateButton.setOnClickListener(new OnClickListener(){
+        calendar = Calendar.getInstance();
+        int mYear = calendar.get(Calendar.YEAR);
+        int mMonth = calendar.get(Calendar.MONTH);
+        int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+        fromDateView.setText((mMonth + 1) + "/" + mDay + "/" + mYear);
+        toDateView.setText((mMonth + 1) + "/" + mDay + "/" + mYear);
+    }
+
+    private void setDefaultTime(){
+        fromTimeEtxt = (TextView) findViewById(R.id.start_time_data);
+        toTimeEtxt = (TextView) findViewById(R.id.end_time_data);
+
+        calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        String timeText = "";
+
+        if (hour==23){
+            hour = 0;
+            timeText += "12:";
+        } else {
+            hour += 1;
+
+        }
+
+        int modHour = hour % 12;
+        String sHour = String.valueOf(modHour);
+        if (modHour == 0){
+            sHour = "12";
+        }
+        String meridiem = "AM";
+        if (modHour < 10 && modHour >0){
+            sHour = "0" + sHour;
+        }
+        if (hour > 11){
+            meridiem = "PM";
+        }
+
+        fromTimeEtxt.setText(sHour + ":" + "00" + " " + meridiem);
+        toTimeEtxt.setText(sHour + ":" + "30" + " " + meridiem);
+
+    }
+
+    private void addDateOnClickListeners(){
+        fromDateView = (TextView) findViewById(R.id.start_date_data);
+        toDateView = (TextView) findViewById(R.id.end_date_data);
+
+        fromDateView.setOnClickListener(new OnClickListener(){
             public void onClick(View v){
                 setDate(R.id.start_date_data);
             }
         });
 
-        toDateButton.setOnClickListener(new OnClickListener() {
+        toDateView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 setDate(R.id.end_date_data);
@@ -173,7 +222,6 @@ public class NewEventActivity extends ActionBarActivity{
                 guestNameList);
 
         guestInput = (EditText) findViewById(R.id.guest_input);
-        addGuestButton = (Button) findViewById(R.id.add_guest_button);
         guestList = (ListView) findViewById(R.id.guest_list_view);
         guestList.setAdapter(adapter);
 
@@ -182,31 +230,24 @@ public class NewEventActivity extends ActionBarActivity{
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER){
-                    addGuestButton.callOnClick();
+                    System.out.println("add guest");
+                    String guestInputText = String.valueOf(guestInput.getText());
+                    System.out.println("S"+guestInputText+"E");
+                    if (!guestInputText.matches("\n")){
+                        guestNameList.add(guestInputText);
+                    }
+                    guestInput.setText("");
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(guestInput.getWindowToken(),0);
                 }
                 return false;
-            }
-        });
-
-        addGuestButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("add guest");
-                String guestInputText = String.valueOf(guestInput.getText());
-                System.out.println("S"+guestInputText+"E");
-                if (!guestInputText.matches("\n")){
-                    guestNameList.add(guestInputText);
-                }
-                guestInput.setText("");
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(guestInput.getWindowToken(),0);
             }
         });
     }
 
     private void setDate(int id){
 
-        final EditText setDate = (EditText) findViewById(id);
+        final TextView setDate = (TextView) findViewById(id);
 
         calendar = Calendar.getInstance();
         int mYear = calendar.get(Calendar.YEAR);
@@ -305,10 +346,10 @@ public class NewEventActivity extends ActionBarActivity{
                 throw new UnsupportedOperationException("Please enter an event name");
             }
 
-            EditText startDateField = (EditText) findViewById(R.id.start_date_data);
+            TextView startDateField = (TextView) findViewById(R.id.start_date_data);
             String startDate = startDateField.getText().toString();
 
-            EditText endDateField = (EditText) findViewById(R.id.end_date_data);
+            TextView endDateField = (TextView) findViewById(R.id.end_date_data);
             String endDate = endDateField.getText().toString();
 
             TextView startTimeField = (TextView) findViewById(R.id.start_time_data);
