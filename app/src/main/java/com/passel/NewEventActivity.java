@@ -17,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -40,20 +39,8 @@ import java.util.Calendar;
 import java.util.List;
 
 public class NewEventActivity extends ActionBarActivity {
-    private TextView fromTimeEtxt;
-    private TextView toTimeEtxt;
-    private ImageButton fromDateButton;
-    private ImageButton toDateButton;
-
-    private Calendar calendar;
     private Location location;
-    private DatePickerDialog dpDialog;
-    private TimePickerDialog tpDialog;
 
-    private EditText guestInput;
-    private Button addGuestButton;
-    private ListView guestList;
-    private ArrayAdapter<String> adapter;
     private ArrayList<String> guestNameList = new ArrayList<>();
 
     List<Event> eventList = new ArrayList<>();
@@ -63,10 +50,41 @@ public class NewEventActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-        addDateOnClickListeners();
-        addTimeOnClickListeners();
+        findViewById(R.id.start_date_button).setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                setDate(R.id.start_date_data);
+            }
+        });
+
+        findViewById(R.id.end_date_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDate(R.id.end_date_data);
+            }
+        });
+        findViewById(R.id.start_time_data).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTime(R.id.start_time_data);
+            }
+        });
+
+        findViewById(R.id.end_time_data).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTime(R.id.end_time_data);
+            }
+        });
+
+        findViewById(R.id.location_input).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(NewEventActivity.this, LocationPickerActivity.class);
+                NewEventActivity.this.startActivityForResult(myIntent, 1);
+            }
+        });
+
         addGuestListeners();
-        addMapPickerListener();
     }
 
     @Override
@@ -102,53 +120,15 @@ public class NewEventActivity extends ActionBarActivity {
         }
     }
 
-    private void addDateOnClickListeners() {
-        fromDateButton = (ImageButton) findViewById(R.id.start_date_button);
-        toDateButton = (ImageButton) findViewById(R.id.end_date_button);
-
-        fromDateButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                setDate(R.id.start_date_data);
-            }
-        });
-
-        toDateButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDate(R.id.end_date_data);
-            }
-        });
-
-    }
-
-    private void addTimeOnClickListeners() {
-        fromTimeEtxt = (TextView) findViewById(R.id.start_time_data);
-        toTimeEtxt = (TextView) findViewById(R.id.end_time_data);
-
-        fromTimeEtxt.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setTime(R.id.start_time_data);
-            }
-        });
-
-        toTimeEtxt.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setTime(R.id.end_time_data);
-            }
-        });
-    }
-
     private void addGuestListeners() {
 
-        adapter = new ArrayAdapter<String>(this,
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 guestNameList);
 
-        guestInput = (EditText) findViewById(R.id.guest_input);
-        addGuestButton = (Button) findViewById(R.id.add_guest_button);
-        guestList = (ListView) findViewById(R.id.guest_list_view);
+        final EditText guestInput = (EditText) findViewById(R.id.guest_input);
+        final Button addGuestButton = (Button) findViewById(R.id.add_guest_button);
+        final ListView guestList = (ListView) findViewById(R.id.guest_list_view);
         guestList.setAdapter(adapter);
 
         //Listening to see if a user pressed enter if they are entering a Guest
@@ -165,9 +145,7 @@ public class NewEventActivity extends ActionBarActivity {
         addGuestButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("add guest");
                 String guestInputText = String.valueOf(guestInput.getText());
-                System.out.println("S" + guestInputText + "E");
                 if (!guestInputText.matches("\n")) {
                     guestNameList.add(guestInputText);
                 }
@@ -182,12 +160,12 @@ public class NewEventActivity extends ActionBarActivity {
 
         final EditText setDate = (EditText) findViewById(id);
 
-        calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         int mYear = calendar.get(Calendar.YEAR);
         int mMonth = calendar.get(Calendar.MONTH);
         int mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-        dpDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog dpDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 System.out.println("Date Picker Set");
                 setDate.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year, TextView.BufferType.EDITABLE);
@@ -212,7 +190,7 @@ public class NewEventActivity extends ActionBarActivity {
             mHour = 0;
         }
 
-        tpDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog tpDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 int modHour = hourOfDay % 12;
                 String sHour = String.valueOf(modHour);
@@ -238,19 +216,6 @@ public class NewEventActivity extends ActionBarActivity {
         tpDialog.show();
     }
 
-    private void addMapPickerListener() {
-        EditText mapPickerButton = (EditText) findViewById(R.id.location_input);
-        mapPickerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("NewEventActivity", "Here!");
-                Intent myIntent = new Intent(NewEventActivity.this, LocationPickerActivity.class);
-//        myIntent.putExtra("key", value); //Optional parameters
-                NewEventActivity.this.startActivityForResult(myIntent, 1);
-            }
-        });
-    }
-
     /* Called when the map activity's finished */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -259,8 +224,7 @@ public class NewEventActivity extends ActionBarActivity {
                     Bundle res = data.getExtras();
                     String locationName = res.getString("loc_name");
                     location = new Location(res.getDouble("lat"), res.getDouble("lng"));
-                    Log.d("FIRST", "result:" + locationName);
-
+                    // Make sure the edit text isn't blank after getting a location
                     EditText mapPickerButton = (EditText) findViewById(R.id.location_input);
                     mapPickerButton.setText(locationName);
                 }
