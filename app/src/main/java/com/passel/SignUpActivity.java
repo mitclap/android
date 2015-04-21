@@ -42,8 +42,8 @@ public class SignUpActivity extends Activity {
             return;
         }
 
-        if (!usernameInput.matches("^[a-zA-Z0-9]+$")) {
-            showToast("Invalid username: only lowercase/uppercase letters and numbers");
+        if ((!usernameInput.matches("^[a-zA-Z0-9]+$") || (usernameInput.length() > 30))) {
+            showToast("Invalid username: only lowercase/uppercase letters and numbers, max of 30 chars.");
             return;
         }
 
