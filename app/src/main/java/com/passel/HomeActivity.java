@@ -36,16 +36,7 @@ public class HomeActivity extends ActionBarActivity {
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                List<Event> eventList = ((PasselApplication) getApplication()).getEvents();
-                Event event = eventList.get(position);
-                Intent intent = new Intent(HomeActivity.this, MapEventActivity.class);
-                intent.putExtra("event_name", event.getName());
-                intent.putExtra("event_time", event.getStart().toString());
-                intent.putStringArrayListExtra("event_guests", new ArrayList<>(event.getGuests()));
-                intent.putExtra("event_lat", event.getLocation().getLatitude());
-                intent.putExtra("event_lng", event.getLocation().getLongitude());
-                intent.putExtra("index", position);
-                startActivity(intent);
+                MapEventActivity.showOnMap(HomeActivity.this, position);
             }
         });
 
@@ -106,15 +97,9 @@ public class HomeActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-//                openSearch();
                 Intent settingsIntent = new Intent(HomeActivity.this, SettingsActivity.class);
                 HomeActivity.this.startActivity(settingsIntent);
                 return true;
-           /* case R.id.action_create:
-                Intent myIntent = new Intent(HomeActivity.this, NewEventActivity.class);
-//        myIntent.putExtra("key", value); //Optional parameters
-                HomeActivity.this.startActivity(myIntent);
-                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
         }
