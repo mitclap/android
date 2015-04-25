@@ -96,6 +96,11 @@
             android:name="com.passel.LocationPickerActivity"
             android:label="Pick a Location">
         </activity>
+
+        <activity
+            android:name="com.passel.VenmoWebViewActivity"
+            android:label="Venmo"
+            ></activity>
     </application>
 
 </manifest>
