@@ -24,5 +24,11 @@
     <string name="locationpicker_button_query">Choose</string>
     <string name="locationpicker_button_zoom_in">+</string>
     <string name="locationpicker_button_zoom_out">-</string>
+    <string name="recipient_hint">Phone or Email</string>
+    <string name="amount_hint">Amount</string>
+    <string name="note_hint">Note</string>
+    <string name="pay_title">Pay</string>
+    <string name="charge_title">Charge</string>
+
 
 </resources>

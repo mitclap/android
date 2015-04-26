@@ -7,9 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import com.passel.VenmoLibrary.VenmoResponse;
 
 public class SettingsActivity extends ActionBarActivity {
-
+   // protected final int REQUEST_CODE_VENMO_APP_SWITCH = 9002;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +24,47 @@ public class SettingsActivity extends ActionBarActivity {
                 SettingsActivity.this.startActivity(myIntent);
             }
         });
+        Button venmoButton = (Button) findViewById(R.id.btnVenmo);
+        venmoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Change this on deploy
+               // Intent venmoIntent = VenmoLibrary.openVenmoPayment(appId, "Passel", "15555555555", "0.01", "Testing", "charge");
+             //   startActivityForResult(venmoIntent, REQUEST_CODE_VENMO_APP_SWITCH);
+                Intent myIntent = new Intent(SettingsActivity.this, VenmoTestActivity.class);
+//        myIntent.putExtra("key", value); //Optional parameters
+                SettingsActivity.this.startActivity(myIntent);
+            }
+        });
     }
+/*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        switch(requestCode) {
+            case REQUEST_CODE_VENMO_APP_SWITCH: {
+                if(resultCode == RESULT_OK) {
+                    String signedrequest = data.getStringExtra("signedrequest");
+                    if(signedrequest != null) {
+                        VenmoResponse response = (new VenmoLibrary()).validateVenmoPaymentResponse(signedrequest, app_secret);
+                        if(response.getSuccess().equals("1")) {
+                            //Payment successful.  Use data from response object to display a success message
+                            String note = response.getNote();
+                            String amount = response.getAmount();
+                        }
+                    }
+                    else {
+                        String error_message = data.getStringExtra("error_message");
+                        //An error ocurred.  Make sure to display the error_message to the user
+                    }
+                }
+                else if(resultCode == RESULT_CANCELED) {
+                    //The user cancelled the payment
+                }
+                break;
+            }
+        }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
