@@ -15,7 +15,6 @@ import org.json.simple.JSONValue;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.crypto.Mac;
@@ -84,40 +83,28 @@ public class VenmoLibrary {
     /**
      * Takes multiple recipients, the amount, and note, and returns an Intent object
      */
-    public static Intent openVenmoPaymentWithMultipleRecipients(String myAppId, String myAppName, ArrayList<String> recipients,
+    public static Intent openVenmoPaymentWithMultipleRecipients(String myAppId, String myAppName, String[] recipients,
                                           String amount, String note, String txn) {
         String venmo_uri = "venmosdk://paycharge?txn=" + txn;
 
-        if (!recipients.equals(null) && recipients.size() >0) {
+        if (!recipients.equals(null) && recipients.length>0) {
             venmo_uri += "&recipients=";
-
-            //Handle singleton case
-            if (recipients.size() == 0) {
+            for (int i=0; i < recipients.length; i++) {
+                //check to see if the current recipient is last in array
                 try {
-                    String recipient = recipients.get(0);
-                    venmo_uri += URLEncoder.encode(recipient, "UTF-8");
+                    String recipient = recipients[i];
+                    if (i != recipients.length -1) {
+                        venmo_uri += URLEncoder.encode(recipient, "UTF-8") + ","; //Comma to separate recipients
+                    } else {
+                        //last recipient, no need for comma
+                        venmo_uri += URLEncoder.encode(recipient, "UTF-8");
+                    }
                 } catch (UnsupportedEncodingException e) {
                     Log.e("venmo_library", "cannot encode recipients");
                 }
-            } else {
-                //Handle multiple recipients
-                for (int i = 0; i < recipients.size(); i++) {
-                    //check to see if the current recipient is last in array
-                    try {
-                        String recipient = recipients.get(i);
-                        if (i != recipients.size() - 1) {
-                            venmo_uri += URLEncoder.encode(recipient, "UTF-8") + ","; //Comma to separate recipients
-                        } else {
-                            //last recipient, no need for comma
-                            venmo_uri += URLEncoder.encode(recipient, "UTF-8");
-                        }
-                    } catch (UnsupportedEncodingException e) {
-                        Log.e("venmo_library", "cannot encode recipients");
-                    }
 
-                }
             }
-        System.out.println("URI after recipients: " + venmo_uri);
+            System.out.println("URI after recipients: " + venmo_uri);
         }
         if (!amount.equals("")) {
             try {
@@ -256,98 +243,6 @@ public class VenmoLibrary {
             } catch (UnsupportedEncodingException e) {
                 Log.e("venmo_library", "cannot encode recipients");
             }
-        }
-        if (!amount.equals("")) {
-            try {
-                venmo_uri += "&amount=" + URLEncoder.encode(amount, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                Log.e("venmo_library", "cannot encode amount");
-            }
-        }
-        if (!note.equals("")) {
-            try {
-                venmo_uri += "&note=" + URLEncoder.encode(note, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                Log.e("venmo_library", "cannot encode note");
-            }
-        }
-
-        try {
-            venmo_uri+= "&app_id=" + URLEncoder.encode(myAppId, "UTF-8");
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            Log.e("venmo_library", "cannot encode app ID");
-        }
-
-        try {
-            venmo_uri+= "&app_name=" + URLEncoder.encode(myAppName, "UTF-8");
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            Log.e("venmo_library", "cannot encode app Name");
-        }
-
-        try {
-            venmo_uri+= "&app_local_id=" + URLEncoder.encode("abcd", "UTF-8");
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            Log.e("venmo_library", "cannot encode app local id");
-        }
-
-        try {
-            venmo_uri+= "&client=" + URLEncoder.encode("android", "UTF-8");
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            Log.e("venmo_library", "cannot encode client=android");
-        }
-
-
-
-        venmo_uri = venmo_uri.replaceAll("\\+", "%20"); // use %20 encoding instead of +
-
-        return venmo_uri;
-    }
-
-    /*
-     * Takes the recipients, amount, and note, and returns a String representing the URL to visit to complete the transaction
-     */
-    public static String openVenmoPaymentInWebViewWithMultipleRecipients(String myAppId, String myAppName, ArrayList<String> recipients, String amount, String note, String txn)
-    {
-        String venmo_uri = "https://venmo.com/touch/signup_to_pay?txn=" + txn;
-
-        if (!recipients.equals(null) && recipients.size() >0) {
-            venmo_uri += "&recipients=";
-
-            //Handle singleton case
-            if (recipients.size() == 0) {
-                try {
-                    String recipient = recipients.get(0);
-                    venmo_uri += URLEncoder.encode(recipient, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    Log.e("venmo_library", "cannot encode recipients");
-                }
-            } else {
-                //Handle multiple recipients
-                for (int i = 0; i < recipients.size(); i++) {
-                    //check to see if the current recipient is last in array
-                    try {
-                        String recipient = recipients.get(i);
-                        if (i != recipients.size() - 1) {
-                            venmo_uri += URLEncoder.encode(recipient, "UTF-8") + ","; //Comma to separate recipients
-                        } else {
-                            //last recipient, no need for comma
-                            venmo_uri += URLEncoder.encode(recipient, "UTF-8");
-                        }
-                    } catch (UnsupportedEncodingException e) {
-                        Log.e("venmo_library", "cannot encode recipients");
-                    }
-
-                }
-            }
-            System.out.println("URI after recipients: " + venmo_uri);
         }
         if (!amount.equals("")) {
             try {
