@@ -1,15 +1,22 @@
 package com.passel;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Adapted from https://github.com/mgottein/app-switch-demo/
@@ -22,6 +29,8 @@ public class VenmoTestActivity extends Activity {
     private EditText mNote;
     private Button mPay;
     private Button mCharge;
+    private ArrayList<String> mRecipientList;
+
 
     private static final String APP_NAME = "App Switch Demo";
     private static final String APP_SECRET = "vGgLeNF7ERp7ZGphvY38ZKdT4jrxWes4";
@@ -36,6 +45,8 @@ public class VenmoTestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_venmo_test);
         mRecipient = (AutoCompleteTextView) findViewById(R.id.recipient);
+        mRecipientList = new ArrayList<>();
+
         mAmount = (EditText) findViewById(R.id.amount);
         mNote = (EditText) findViewById(R.id.note);
         mPay = (Button) findViewById(R.id.pay);
@@ -43,6 +54,7 @@ public class VenmoTestActivity extends Activity {
 
         mAdapter = new RecipientAdapter(this);
         mRecipient.setAdapter(mAdapter);
+        addRecipientsListener();
 
         mPay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,22 +90,50 @@ public class VenmoTestActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    private void addRecipientsListener() {
+
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                mRecipientList);
+
+        //final EditText recipientInput = (AutoCompleteTextView) findViewById(R.id.recipient);
+        final ListView recipientList = (ListView) findViewById(R.id.recipient_list_view);
+        recipientList.setAdapter(adapter);
+
+        //Listening to see if a user pressed enter if they are entering a Guest
+        mRecipient.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    String guestInputText = String.valueOf(mRecipient.getText());
+                    if (!guestInputText.matches("\n")) {
+                        mRecipientList.add(guestInputText);
+                    }
+                    mRecipient.setText("");
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mRecipient.getWindowToken(), 0);
+                }
+                return false;
+            }
+        });
+    }
     private void doTransactionWithInput(String txn) {
-        String recipient = mRecipient.getText().toString();
+        ArrayList<String> recipients = mRecipientList;
         String amount = mAmount.getText().toString();
         String note = mNote.getText().toString();
-        doTransaction(recipient, amount, note, txn);
+        doTransaction(recipients, amount, note, txn);
     }
 
-    private void doTransaction(String recipient, String amount, String note, String txn) {
+    private void doTransaction(ArrayList<String> recipients, String amount, String note, String txn) {
         try {
-            Intent venmoIntent = VenmoLibrary.openVenmoPayment(APP_ID, APP_NAME, recipient, amount, note, txn);
+            Intent venmoIntent = VenmoLibrary.openVenmoPaymentWithMultipleRecipients(APP_ID, APP_NAME, recipients, amount, note, txn);
             startActivityForResult(venmoIntent, VENMO_REQUEST_CODE); //1 is the requestCode we are using for Venmo. Feel free to change this to another number.
         }
         catch (android.content.ActivityNotFoundException e) //Venmo native app not install on device, so let's instead open a mobile web version of Venmo in a WebView
         {
             Intent venmoIntent = new Intent(VenmoTestActivity.this, VenmoWebViewActivity.class);
-            String venmo_uri = VenmoLibrary.openVenmoPaymentInWebView(APP_ID, APP_NAME, recipient, amount, note, txn);
+            String venmo_uri = VenmoLibrary.openVenmoPaymentInWebViewWithMultipleRecipients(APP_ID, APP_NAME, recipients, amount, note, txn);
             venmoIntent.putExtra("url", venmo_uri);
             startActivityForResult(venmoIntent, VENMO_REQUEST_CODE);
         }
