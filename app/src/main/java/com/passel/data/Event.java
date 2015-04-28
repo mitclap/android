@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 
 /**
  * Exists mostly for code reuse.
+ * TODO: Moar docuemntation pl0x
  */
 @EqualsAndHashCode
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
