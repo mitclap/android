@@ -30,6 +30,7 @@ import com.passel.api.APIClient;
 import com.passel.api.APIError;
 import com.passel.api.APIResponse;
 import com.passel.data.Event;
+import com.passel.data.ExistingEvent;
 import com.passel.data.JsonMapper;
 import com.passel.data.Location;
 import com.passel.data.PasselApplication;
@@ -47,6 +48,7 @@ import java.util.List;
 // TODO: Change this so that it actually edits an event
 public class EditEventActivity extends ActionBarActivity {
     private Location location;
+    private int localEventID;
 
     private ArrayList<String> guestNameList = new ArrayList<>();
 
@@ -97,6 +99,8 @@ public class EditEventActivity extends ActionBarActivity {
         Event event = ((PasselApplication) getApplication()).getEvents().get(index);
 
         guestNameList.addAll(event.getGuests());
+        location = event.getLocation();
+        localEventID = event.getLocalId();
 
         DateFormat timeFormat = new SimpleDateFormat("hh:mm a");
         DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
@@ -110,8 +114,6 @@ public class EditEventActivity extends ActionBarActivity {
         ((EditText) findViewById(R.id.location_input)).setText(event.getLocation().toString());
 
         setTitle("Edit Event");
-
-
 
     }
 
@@ -298,12 +300,17 @@ public class EditEventActivity extends ActionBarActivity {
         DateFormat datetimeParser = new SimpleDateFormat("MM/dd/yyyyhh:mm a");
 
         try {
-            ((PasselApplication) getApplication()).createEvent(eventName,
+            ExistingEvent updatedEvent = new ExistingEvent(localEventID,
+                    eventName,
                     datetimeParser.parse(startDate + startTime),
                     datetimeParser.parse(startDate + startTime),
                     description,
                     guestNameList,
-                    location);
+                    location,
+                    0);//TODO: replace with global id when implemented
+
+            ((PasselApplication) getApplication()).updateEvent(updatedEvent);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
