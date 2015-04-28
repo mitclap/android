@@ -140,7 +140,7 @@ public class MapEventActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_edit:
 //                openSearch();
-                Intent settingsIntent = new Intent(MapEventActivity.this, NewEventActivity.class);
+                Intent settingsIntent = new Intent(MapEventActivity.this, EditEventActivity.class);
                 settingsIntent.putExtra("index", getIntent().getIntExtra("index", -1));
                 settingsIntent.putExtra("edit", true);
                 MapEventActivity.this.startActivity(settingsIntent);
