@@ -81,6 +81,72 @@ public class VenmoLibrary {
     }
 
     /**
+     * Takes multiple recipients, the amount, and note, and returns an Intent object
+     */
+    public static Intent openVenmoPaymentWithMultipleRecipients(String myAppId, String myAppName, String[] recipients,
+                                          String amount, String note, String txn) {
+        String venmo_uri = "venmosdk://paycharge?txn=" + txn;
+
+        if (!recipients.equals(null) && recipients.length>0) {
+            venmo_uri += "&recipients=";
+            for (int i=0; i < recipients.length; i++) {
+                //check to see if the current recipient is last in array
+                try {
+                    String recipient = recipients[i];
+                    if (i != recipients.length -1) {
+                        venmo_uri += URLEncoder.encode(recipient, "UTF-8") + ","; //Comma to separate recipients
+                    } else {
+                        //last recipient, no need for comma
+                        venmo_uri += URLEncoder.encode(recipient, "UTF-8");
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    Log.e("venmo_library", "cannot encode recipients");
+                }
+
+            }
+            System.out.println("URI after recipients: " + venmo_uri);
+        }
+        if (!amount.equals("")) {
+            try {
+                venmo_uri += "&amount=" + URLEncoder.encode(amount, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                Log.e("venmo_library", "cannot encode amount");
+            }
+        }
+        if (!note.equals("")) {
+            try {
+                venmo_uri += "&note=" + URLEncoder.encode(note, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                Log.e("venmo_library", "cannot encode note");
+            }
+        }
+
+        try {
+            venmo_uri += "&app_id=" + URLEncoder.encode(myAppId, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.e("venmo_library", "cannot encode app ID");
+        }
+
+        try {
+            venmo_uri += "&app_name=" + URLEncoder.encode(myAppName, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.e("venmo_library", "cannot encode app Name");
+        }
+
+        try {
+            venmo_uri += "&app_local_id=" + URLEncoder.encode("abcd", "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.e("venmo_library", "cannot encode app local id");
+        }
+
+        venmo_uri += "&using_new_sdk=true";
+
+        venmo_uri = venmo_uri.replaceAll("\\+", "%20"); // use %20 encoding instead of +
+
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(venmo_uri));
+    }
+
+    /**
      * Called once control has been given back to your app - it takes the signed_payload, decodes
      * it, and gives you the response object which gives you details about the transaction -
      * whether it was successful, the note, the amount,etc.
