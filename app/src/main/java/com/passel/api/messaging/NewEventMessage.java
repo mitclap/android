@@ -14,7 +14,7 @@ import lombok.Value;
 @Value
 // No need to call super implementation of equals and hashcode; explicitly let Lombok know this is OK
 @EqualsAndHashCode(callSuper = false)
-public final class EventMessage implements Message {
+public final class NewEventMessage implements Message {
 
     private final String name;
     private final Date start;
@@ -22,10 +22,10 @@ public final class EventMessage implements Message {
     private final String description;
 
     @JsonCreator
-    public EventMessage(@JsonProperty("name") String name,
-                        @JsonProperty("start") Date start,
-                        @JsonProperty("end") Date end,
-                        @JsonProperty("description") String description) {
+    public NewEventMessage(@JsonProperty("name") String name,
+                           @JsonProperty("start") Date start,
+                           @JsonProperty("end") Date end,
+                           @JsonProperty("description") String description) {
         this.name = name;
         this.start = start;
         this.end = end;

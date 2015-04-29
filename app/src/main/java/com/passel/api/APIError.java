@@ -7,4 +7,7 @@ public class APIError extends Exception {
     public APIError(Throwable throwable) {
         super(throwable);
     }
+    public APIError(String message) {
+        super(message);
+    }
 }

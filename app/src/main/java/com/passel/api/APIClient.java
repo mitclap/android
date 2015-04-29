@@ -3,15 +3,19 @@ package com.passel.api;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.passel.BuildConfig;
-import com.passel.api.messaging.EventMessage;
+import com.passel.api.messaging.NewEventMessage;
 import com.passel.api.messaging.Message;
 import com.passel.api.messaging.SignupMessage;
 import com.passel.data.JsonMapper;
+import com.passel.data.PasselApplication;
 import com.passel.util.Err;
 import com.passel.util.Ok;
+import com.passel.util.Optional;
 import com.passel.util.Result;
+import com.passel.util.Some;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -28,13 +32,9 @@ import java.util.concurrent.ExecutionException;
 public class APIClient {
 
     public static final String LOGGING_TAG = "PASSEL_APICLIENT";
-    private static final String API_BASE_URL = "http://18.189.121.244:5000";
+    private static final String API_BASE_URL = "http://18.111.124.242:5000";
 
     private final JsonMapper mapper;
-
-    public APIClient() { // External usage of the API
-        this.mapper = new JsonMapper();
-    }
 
     public APIClient(final JsonMapper mapper) { // Reuse a mapper
         this.mapper = mapper;
@@ -45,7 +45,17 @@ public class APIClient {
     }
 
     public Result<APIResponse, APIError> addEvent(String name, Date start, Date end, String description) {
-        return makeBlockingRequest(new EventMessage(name, start, end, description));
+        return makeBlockingRequest(new NewEventMessage(name, start, end, description));
+    }
+
+    public Result<APIResponse,APIError> getEvents() {
+        return makeBlockingRequest(new Message() {
+            @Override
+            @JsonIgnore
+            public String getEndpoint() {
+                return "/events?attendee_id=" + Integer.toString(1); // TODO: don't hardcode ID
+            }
+        });
     }
 
     private Result<APIResponse, APIError> makeBlockingRequest(final Message message) {
@@ -68,8 +78,15 @@ public class APIClient {
             Message message = messages[0];
             try {
                 String requestBody = mapper.serialize(message);
+                Optional<String> json;
+                if (requestBody.equals("{}")) {
+                    json = Optional.empty();
+                    requestBody = "";
+                } else {
+                    json = new Some(requestBody);
+                }
                 Log.d(LOGGING_TAG, "Sending request to " + message.getEndpoint() + ":" + requestBody);
-                Result<APIResponse, APIError> result = post(message.getEndpoint(), requestBody);
+                Result<APIResponse, APIError> result = request(message.getEndpoint(), json);
                 if (result.isOk()) {
                     APIResponse response = result.unwrap();
                     Log.d(LOGGING_TAG, "[" + Integer.toString(response.getCode()) + "] " + response.getBody());
@@ -84,27 +101,32 @@ public class APIClient {
             return null;
         }
 
-        private Result<APIResponse, APIError> post(final String endpoint, final String json) {
-            byte[] data = json.getBytes();
+        private Result<APIResponse, APIError> request(final String endpoint, final Optional<String> json) {
             HttpURLConnection urlConnection = null;
             try {
                 URL url = new URL(API_BASE_URL + endpoint);
                 urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestProperty("Content-type", "application/json");
                 urlConnection.setRequestProperty("Accept", "application/json");
 
-                urlConnection.setDoOutput(true);
-                urlConnection.setFixedLengthStreamingMode(data.length);
-                BufferedOutputStream requestBody = new BufferedOutputStream(urlConnection.getOutputStream());
-                requestBody.write(data);
-                requestBody.flush();
-                requestBody.close();
+                if (json.isPresent()) {
+                    byte[] data = json.get().getBytes();
+                    urlConnection.setRequestProperty("Content-type", "application/json");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setFixedLengthStreamingMode(data.length);
+                    BufferedOutputStream requestBody = new BufferedOutputStream(urlConnection.getOutputStream());
+                    requestBody.write(data);
+                    requestBody.flush();
+                    requestBody.close();
+                }
 
                 InputStream responseBody;
                 try {
                     responseBody = urlConnection.getInputStream();
                 } catch (IOException e) {
                     responseBody = urlConnection.getErrorStream();
+                }
+                if (null == responseBody) {
+                    return new Err<>(new APIError("Could not get a response stream."));
                 }
                 Scanner s = new Scanner(responseBody).useDelimiter("\\A");
                 return new Ok<>(new APIResponse(urlConnection.getResponseCode(), s.hasNext() ? s.next() : ""));

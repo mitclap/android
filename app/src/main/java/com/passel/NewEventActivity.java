@@ -283,7 +283,7 @@ public class NewEventActivity extends ActionBarActivity {
         EditText eventNameField = (EditText) findViewById(R.id.name);
         final String eventName = eventNameField.getText().toString();
 
-        if ((!eventName.matches("^[a-zA-Z0-9]+$") || (eventName.length() > 30))) {
+        if ((!eventName.matches("^[a-zA-Z0-9][a-zA-Z0-9 ]*[a-zA-Z0-9]$") || (eventName.length() > 30))) {
             showToast("Please enter a valid event name:  only lowercase/uppercase letters and numbers, max of 30 chars.");
             return false;
         }
