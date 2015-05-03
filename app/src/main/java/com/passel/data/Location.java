@@ -3,6 +3,9 @@ package com.passel.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Value;
 
 /**
@@ -29,7 +32,9 @@ public final class Location implements Parcelable {
     double latitude;
     double longitude;
 
-    public Location(final double latitude, final double longitude) {
+    @JsonCreator
+    public Location(@JsonProperty("latitude") final double latitude,
+                    @JsonProperty("longtitude") final double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -54,5 +59,4 @@ public final class Location implements Parcelable {
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
     }
-
 }
