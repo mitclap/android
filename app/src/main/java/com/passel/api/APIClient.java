@@ -6,11 +6,12 @@ import android.util.Log;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.passel.BuildConfig;
-import com.passel.api.messaging.NewEventMessage;
+import com.passel.api.messaging.CheckinMessage;
 import com.passel.api.messaging.Message;
+import com.passel.api.messaging.NewEventMessage;
 import com.passel.api.messaging.SignupMessage;
 import com.passel.data.JsonMapper;
-import com.passel.data.PasselApplication;
+import com.passel.data.Location;
 import com.passel.util.Err;
 import com.passel.util.Ok;
 import com.passel.util.Optional;
@@ -44,8 +45,13 @@ public class APIClient {
         return makeBlockingRequest(new SignupMessage(username, publicKey));
     }
 
-    public Result<APIResponse, APIError> addEvent(String name, Date start, Date end, String description) {
+    public Result<APIResponse, APIError> addEvent(final String name, final Date start, final Date end, final String description) {
         return makeBlockingRequest(new NewEventMessage(name, start, end, description));
+    }
+
+    public Result<APIResponse, APIError> addCheckin(final int eventId, final Date timestamp, final Location location) {
+        // TODO: lookup account id instead of hardcoding a 1
+        return makeBlockingRequest(new CheckinMessage(1, eventId, timestamp, location));
     }
 
     public Result<APIResponse,APIError> getEvents() {
