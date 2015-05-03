@@ -34,7 +34,11 @@ public final class Location implements Parcelable {
 
     @JsonCreator
     public Location(@JsonProperty("latitude") final double latitude,
-                    @JsonProperty("longtitude") final double longitude) {
+                    @JsonProperty("longitude") final double longitude) {
+        if (Math.abs(latitude) > 90 || Math.abs(longitude) > 90) {
+            throw new IllegalArgumentException(String.format(
+                    "(%f, %f) is out of earthly bounds", latitude, longitude));
+        }
         this.latitude = latitude;
         this.longitude = longitude;
     }
