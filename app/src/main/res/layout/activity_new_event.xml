@@ -198,14 +198,14 @@
                 android:layout_span="2"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:id="@+id/guest_input"
+                android:id="@+id/attendee_input"
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp"
                 android:paddingRight="16dp"
                 android:layout_marginBottom="10dp"
                 android:textSize="16sp"
                 android:hint="Invite Passel user"
-                android:layout_below="@+id/guest_label"
+                android:layout_below="@+id/attendee_label"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>
         </TableRow>
@@ -217,9 +217,9 @@
                 android:layout_span="2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/guest_list_view"
+                android:id="@+id/attendee_list_view"
                 android:dividerHeight="1dp"
-                android:layout_below="@+id/guest_input"/>
+                android:layout_below="@+id/attendee_input"/>
         </TableRow>
     </TableLayout>
 </ScrollView>

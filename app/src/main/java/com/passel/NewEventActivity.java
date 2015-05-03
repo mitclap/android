@@ -41,7 +41,7 @@ import java.util.List;
 public class NewEventActivity extends ActionBarActivity {
     private Location location;
 
-    private ArrayList<String> guestNameList = new ArrayList<>();
+    private ArrayList<String> attendeeNameList = new ArrayList<>();
 
     List<Event> eventList = new ArrayList<>();
 
@@ -126,24 +126,24 @@ public class NewEventActivity extends ActionBarActivity {
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
-                guestNameList);
+                attendeeNameList);
 
-        final EditText guestInput = (EditText) findViewById(R.id.guest_input);
-        final ListView guestList = (ListView) findViewById(R.id.guest_list_view);
-        guestList.setAdapter(adapter);
+        final EditText attendeeInput = (EditText) findViewById(R.id.attendee_input);
+        final ListView attendeeList = (ListView) findViewById(R.id.attendee_list_view);
+        attendeeList.setAdapter(adapter);
 
         //Listening to see if a user pressed enter if they are entering a Guest
-        guestInput.setOnKeyListener(new View.OnKeyListener() {
+        attendeeInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    String guestInputText = String.valueOf(guestInput.getText());
-                    if (!guestInputText.matches("\n")) {
-                        guestNameList.add(guestInputText);
+                    String attendeeInputText = String.valueOf(attendeeInput.getText());
+                    if (!attendeeInputText.matches("\n")) {
+                        attendeeNameList.add(attendeeInputText);
                     }
-                    guestInput.setText("");
+                    attendeeInput.setText("");
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(guestInput.getWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(attendeeInput.getWindowToken(), 0);
                 }
                 return false;
             }
@@ -324,7 +324,7 @@ public class NewEventActivity extends ActionBarActivity {
                     datetimeParser.parse(startDate + startTime),
                     datetimeParser.parse(startDate + startTime),
                     description,
-                    guestNameList,
+                    attendeeNameList,
                     location);
         } catch (ParseException e) {
             e.printStackTrace();
