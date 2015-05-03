@@ -35,7 +35,4 @@ dependencies {
     compile 'org.osmdroid:osmdroid-android:4.3'
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.4.4'
-    compile 'com.google.android.gms:play-services:7.0.0'
-    compile 'org.zeromq:jeromq:0.3.4'
-    compile 'com.klinkerapps:android-chips:+@aar'
 }
