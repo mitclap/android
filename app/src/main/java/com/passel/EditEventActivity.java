@@ -98,7 +98,7 @@ public class EditEventActivity extends ActionBarActivity {
         int index = getIntent().getIntExtra("index", 0);
         Event event = ((PasselApplication) getApplication()).getEvents().get(index);
 
-        guestNameList.addAll(event.getGuests());
+        guestNameList.addAll(event.getAttendees());
         location = event.getLocation();
         localEventID = event.getLocalId();
 

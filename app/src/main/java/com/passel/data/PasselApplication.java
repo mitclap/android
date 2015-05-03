@@ -124,7 +124,6 @@ public class PasselApplication extends Application {
     /**
      * Precondition: events are loaded
      *
-     * @param index
      * @param event
      */
     public void updateEvent(final Event event) {
@@ -139,13 +138,13 @@ public class PasselApplication extends Application {
                             final Date start,
                             final Date end,
                             final String description,
-                            final List<String> guests,
+                            final List<String> attendees,
                             final Location location) {
         // TODO: write the new event to sql,
         // then make a NewEvent object in memory
         // and add to the list
         int index = events.get().size();
-        Event newEvent = new NewEvent(index, name, start, end, description, guests, location);
+        Event newEvent = new NewEvent(index, name, start, end, description, attendees, location);
         events.get().add(newEvent);
         syncEvents();
     }

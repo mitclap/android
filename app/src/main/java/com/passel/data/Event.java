@@ -21,7 +21,7 @@ public abstract class Event {
     Date start;
     Date end;
     String description;
-    List<String> guests;
+    List<String> attendees;
     Location location;
 
     protected Event(final int localId,
@@ -29,14 +29,14 @@ public abstract class Event {
                     final Date start,
                     final Date end,
                     final String description,
-                    final List<String> guests,
+                    final List<String> attendees,
                     final Location location) {
         this.localId = localId;
         this.name = name;
         this.start = start;
         this.end = end;
         this.description = description;
-        this.guests = guests;
+        this.attendees = attendees;
         this.location = location;
     }
 

@@ -15,8 +15,8 @@ final class NewEvent extends Event {
              final Date start,
              final Date end,
              final String description,
-             final List<String> guests,
+             final List<String> attendees,
              final Location location) {
-        super(localId, name, start, end, description, guests, location);
+        super(localId, name, start, end, description, attendees, location);
     }
 }
