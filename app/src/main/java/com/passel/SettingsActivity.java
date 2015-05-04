@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import com.passel.VenmoLibrary.VenmoResponse;
 
 public class SettingsActivity extends ActionBarActivity {
    // protected final int REQUEST_CODE_VENMO_APP_SWITCH = 9002;
@@ -31,7 +30,7 @@ public class SettingsActivity extends ActionBarActivity {
                 //TODO: Change this on deploy
                // Intent venmoIntent = VenmoLibrary.openVenmoPayment(appId, "Passel", "15555555555", "0.01", "Testing", "charge");
              //   startActivityForResult(venmoIntent, REQUEST_CODE_VENMO_APP_SWITCH);
-                Intent myIntent = new Intent(SettingsActivity.this, VenmoTestActivity.class);
+                Intent myIntent = new Intent(SettingsActivity.this, PaymentActivity.class);
 //        myIntent.putExtra("key", value); //Optional parameters
                 SettingsActivity.this.startActivity(myIntent);
             }

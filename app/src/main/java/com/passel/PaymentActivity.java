@@ -9,12 +9,18 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 /**
  * Adapted from https://github.com/mgottein/app-switch-demo/
+ *
+ * Payment Activity: The activity to be launched after an event has finished and it is necesssary
+ * to charge Venmo-enabled attendees who arrived late.
+ *
+ * TODO: Is there a user-class that contains all user info
  */
-public class VenmoTestActivity extends Activity {
+public class PaymentActivity extends Activity {
 
     private AutoCompleteTextView mRecipient;
     private RecipientAdapter mAdapter;
@@ -22,8 +28,9 @@ public class VenmoTestActivity extends Activity {
     private EditText mNote;
     private Button mPay;
     private Button mCharge;
+    private ListView mList;
 
-    private static final String APP_NAME = "App Switch Demo";
+    private static final String APP_NAME = "Passel";
     private static final String APP_SECRET = "vGgLeNF7ERp7ZGphvY38ZKdT4jrxWes4";
     private static final String APP_ID = "1873";
     private static final int VENMO_REQUEST_CODE = 1;
@@ -34,7 +41,7 @@ public class VenmoTestActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_venmo_test);
+        setContentView(R.layout.activity_payment);
         mRecipient = (AutoCompleteTextView) findViewById(R.id.recipient);
         mAmount = (EditText) findViewById(R.id.amount);
         mNote = (EditText) findViewById(R.id.note);
@@ -44,12 +51,10 @@ public class VenmoTestActivity extends Activity {
         mAdapter = new RecipientAdapter(this);
         mRecipient.setAdapter(mAdapter);
 
-        mPay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                doTransactionWithInput(PAY);
-            }
-        });
+        //TODO: Populate list with EXTRA_* info sent from intent
+        mList = (ListView) findViewById(R.id.chargees);
+        final String[] CANNED_DATA = new String[] {"Ben Bitdiddle", "38 minutes late"}; //TODO: Remove
+        final String CHARGE_RATE = "0.03";
 
         mCharge.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +67,7 @@ public class VenmoTestActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_venmo_test, menu);
+        getMenuInflater().inflate(R.menu.menu_payment, menu);
         return true;
     }
 
@@ -92,7 +97,7 @@ public class VenmoTestActivity extends Activity {
         }
         catch (android.content.ActivityNotFoundException e) //Venmo native app not install on device, so let's instead open a mobile web version of Venmo in a WebView
         {
-            Intent venmoIntent = new Intent(VenmoTestActivity.this, VenmoWebViewActivity.class);
+            Intent venmoIntent = new Intent(PaymentActivity.this, VenmoWebViewActivity.class);
             String venmo_uri = VenmoLibrary.openVenmoPaymentInWebView(APP_ID, APP_NAME, recipient, amount, note, txn);
             venmoIntent.putExtra("url", venmo_uri);
             startActivityForResult(venmoIntent, VENMO_REQUEST_CODE);

@@ -103,7 +103,7 @@
             android:label="Venmo">
         </activity>
         <activity
-            android:name="com.passel.VenmoTestActivity"
+            android:name=".PaymentActivity"
             android:label="Venmo Test" >
         </activity>
     </application>

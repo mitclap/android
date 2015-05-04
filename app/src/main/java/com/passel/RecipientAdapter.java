@@ -13,7 +13,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 /**
- * Created by matthewgotteiner on 8/6/14.
+ * Heavily borrow from app-switch-demo
  */
 public class RecipientAdapter extends CursorAdapter {
 
