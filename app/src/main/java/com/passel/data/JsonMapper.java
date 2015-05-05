@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 
 /**
@@ -45,5 +46,9 @@ public class JsonMapper {
             Log.e("PASSEL_JsonMapper", "IOException when deserializing a string", e);
             throw new RuntimeException();
         }
+    }
+
+    public JavaType constructType(Type type) {
+        return mapper.constructType(type);
     }
 }

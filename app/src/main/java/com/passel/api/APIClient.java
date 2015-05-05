@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.passel.BuildConfig;
+import com.passel.api.messaging.AccountCreatedMessage;
 import com.passel.api.messaging.CheckinMessage;
 import com.passel.api.messaging.EmptyMessage;
 import com.passel.api.messaging.NewEventMessage;
@@ -51,7 +52,7 @@ public class APIClient {
                                                 final String publicKey) {
         return makeBlockingRequest(new Request(new SignupMessage(username, publicKey),
                 "/accounts",
-                mapper.getTypeFactory().constructParametricType(Map.class, String.class, Integer.class)));
+                mapper.constructType(AccountCreatedMessage.class)));
     }
 
     public Result<APIResponse, APIError> addEvent(final String name,
