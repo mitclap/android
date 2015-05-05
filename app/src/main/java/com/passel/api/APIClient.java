@@ -9,8 +9,10 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.passel.BuildConfig;
 import com.passel.api.messaging.AccountCreatedMessage;
+import com.passel.api.messaging.CheckinCreatedMessage;
 import com.passel.api.messaging.CheckinMessage;
 import com.passel.api.messaging.EmptyMessage;
+import com.passel.api.messaging.EventCreatedMessage;
 import com.passel.api.messaging.NewEventMessage;
 import com.passel.api.messaging.RequestMessage;
 import com.passel.api.messaging.ResponseMessage;
@@ -61,7 +63,7 @@ public class APIClient {
                                                   final String description) {
         return makeBlockingRequest(new Request(new NewEventMessage(name, start, end, description),
                 "/events",
-                mapper.getTypeFactory().constructParametricType(Map.class, String.class, Integer.class)));
+                mapper.constructType(EventCreatedMessage.class)));
     }
 
     public Result<APIResponse, APIError> addCheckin(final int eventId,
@@ -69,7 +71,7 @@ public class APIClient {
                                                     final Location location) {
         return makeBlockingRequest(new Request(new CheckinMessage(1, eventId, timestamp, location),
                 "/checkins",
-                mapper.getTypeFactory().constructParametricType(Map.class, String.class, Integer.class)));
+                mapper.constructType(CheckinCreatedMessage.class)));
     }
 
     // TODO these null response types
