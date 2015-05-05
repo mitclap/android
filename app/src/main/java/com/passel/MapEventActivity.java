@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.passel.data.Event;
 import com.passel.data.Location;
@@ -22,6 +23,8 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class MapEventActivity extends ActionBarActivity {
@@ -34,6 +37,11 @@ public class MapEventActivity extends ActionBarActivity {
     Marker selfMarker;
 
     MapView map;
+
+    static final double WALKING_SPEED = 3.6;//in km/h
+    Location eventLocation;
+    Date eventTime;
+    ArrayList<String> arrivedNames = new ArrayList<>();
 
     protected static void showOnMap(Context context, int index) {
         // TODO: take an event instead of an id
@@ -56,6 +64,8 @@ public class MapEventActivity extends ActionBarActivity {
         Event event = ((PasselApplication) getApplication())
                 .getEvents().get(getIntent().getIntExtra("index", -1));
         Location location = event.getLocation();
+        eventLocation = location;
+        eventTime = event.getStart();
         IMapController mapController = map.getController();
         mapController.setZoom(18);
         GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
@@ -114,7 +124,18 @@ public class MapEventActivity extends ActionBarActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Location location = intent.getParcelableExtra("location");
+            int eta = getETA(location);
+            if (eta == 0 && !arrivedNames.contains("YOU")){
+                arrivedNames.add("YOU");
+                int minutesLate = getMinutesLate();
+                if (minutesLate <= 0 ){
+                    showToast("You were on time by " + Integer.toString(minutesLate*-1) + " minutes");
+                } else {
+                    showToast("You were " + Integer.toString(minutesLate) + " minutes late.");
+                }
+            }
             selfMarker.setPosition(new GeoPoint(location.getLatitude(), location.getLongitude()));
+            selfMarker.setSubDescription("ETA: " + Integer.toString(eta) + "min");
             map.invalidate();
         }
     };
@@ -124,7 +145,16 @@ public class MapEventActivity extends ActionBarActivity {
         public void onReceive(Context context, Intent intent) {
             Location location = intent.getParcelableExtra("location");
             String name = intent.getStringExtra("name");
-            String eta = "ETA: " + intent.getStringExtra("eta") + " min.";
+            String eta = "ETA: " + getETA(location) + " min.";
+            if (getETA(location) == 0 && !arrivedNames.contains(name)){
+                arrivedNames.add(name);
+                int minutesLate = getMinutesLate();
+                if (minutesLate <= 0 ){
+                    showToast(name + " was on time by " + Integer.toString(minutesLate*-1) + " minutes");
+                } else {
+                    showToast(name + " was " + Integer.toString(minutesLate) + " minutes late.");
+                }
+            }
             addPersonMarker(location.getLatitude(), location.getLongitude(), name, eta);
         }
     };
@@ -163,5 +193,47 @@ public class MapEventActivity extends ActionBarActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(locationMessageReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(peerLocationMessageReceiver);
         super.onDestroy();
+    }
+
+    private double getDistance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        dist = dist * 1.609344; //convert to km
+        return (dist);
+    }
+
+    /*converts decimal degrees to radians*/
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    /*converts radians to decimal degrees*/
+    private double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
+
+    private int getETA(Location location) {
+        double distance  = getDistance(location.getLatitude(),
+                location.getLongitude(),
+                eventLocation.getLatitude(),
+                eventLocation.getLongitude());
+        Log.d("Distance:", Double.toString(distance));
+        Log.d("Time in hrs:", Double.toString(distance/WALKING_SPEED));
+        return (int) Math.round((distance/WALKING_SPEED)*60);
+    }
+
+    private int getMinutesLate(){
+        Date currentDate = new Date();
+        long diff = (currentDate.getTime() - eventTime.getTime())/(1000*60);
+        return (int) Math.round(diff);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_LONG).show();
+        return;
     }
 }
