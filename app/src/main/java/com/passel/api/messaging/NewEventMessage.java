@@ -1,7 +1,6 @@
 package com.passel.api.messaging;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -14,7 +13,7 @@ import lombok.Value;
 @Value
 // No need to call super implementation of equals and hashcode; explicitly let Lombok know this is OK
 @EqualsAndHashCode(callSuper = false)
-public final class NewEventMessage implements Message {
+public final class NewEventMessage implements RequestMessage {
 
     private final String name;
     private final Date start;
@@ -30,11 +29,5 @@ public final class NewEventMessage implements Message {
         this.start = start;
         this.end = end;
         this.description = description;
-    }
-
-    @Override
-    @JsonIgnore
-    public String getEndpoint() {
-        return "/events";
     }
 }

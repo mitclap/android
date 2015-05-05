@@ -1,17 +1,29 @@
 package com.passel.api;
 
+import com.passel.api.messaging.ResponseMessage;
+
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.Value;
 
 /**
  * Created by aneesh on 4/18/15.
  */
 @Value
-public class APIResponse {
+public class APIResponse<T> {
     private int code;
-    private String body;
+    @Getter(AccessLevel.NONE) private ResponseMessage<T> response;
 
-    public APIResponse(int code, String body) {
+    public APIResponse(final int code, final ResponseMessage<T> response) {
         this.code = code;
-        this.body = body;
+        this.response = response;
+    }
+
+    public String getMessage() {
+        return response.getMessage();
+    }
+
+    public T getData() {
+        return response.getData();
     }
 }
