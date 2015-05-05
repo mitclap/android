@@ -14,11 +14,13 @@ import android.widget.TextView;
 public class ChargeeListAdapter extends ArrayAdapter<String> {
     private final Context context;
     private final String[] values;
+    private final View.OnClickListener listener;
 
-    public ChargeeListAdapter(Context context, String[] values) {
+    public ChargeeListAdapter(Context context, String[] values, View.OnClickListener listener) {
         super(context, R.layout.charge_row_layout, values);
         this.context = context;
         this.values = values;
+        this.listener = listener;
     }
 
     @Override
@@ -41,12 +43,7 @@ public class ChargeeListAdapter extends ArrayAdapter<String> {
         nameView.setText(values[0]); //Settext to CANNED Ben Bitdiddle
         descView.setText(values[1]); //settext to CANNED 38 mins late
 
-        chargeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            //Charge Attendee, give control to Venmo Webview
-            }
-        });
+        chargeButton.setOnClickListener(this.listener);
 
         return rowView;
     }

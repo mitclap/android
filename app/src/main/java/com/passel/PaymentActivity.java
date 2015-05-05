@@ -1,6 +1,7 @@
 package com.passel;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,7 +27,6 @@ public class PaymentActivity extends Activity {
     private RecipientAdapter mAdapter;
     private EditText mAmount;
     private EditText mNote;
-    private Button mPay;
     private Button mCharge;
     private ListView mList;
 
@@ -45,7 +45,6 @@ public class PaymentActivity extends Activity {
         mRecipient = (AutoCompleteTextView) findViewById(R.id.recipient);
         mAmount = (EditText) findViewById(R.id.amount);
         mNote = (EditText) findViewById(R.id.note);
-        mPay = (Button) findViewById(R.id.pay);
         mCharge = (Button) findViewById(R.id.charge);
 
         mAdapter = new RecipientAdapter(this);
@@ -56,6 +55,13 @@ public class PaymentActivity extends Activity {
         final String[] CANNED_DATA = new String[] {"Ben Bitdiddle", "38 minutes late"}; //TODO: Remove
         final String CHARGE_RATE = "0.03";
 
+        ChargeeListAdapter adapter = new ChargeeListAdapter(this, CANNED_DATA, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doTransactionWithInput(CHARGE);
+            }
+        });
+        mList.setAdapter(adapter);
         mCharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
