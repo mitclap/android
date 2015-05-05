@@ -4,10 +4,11 @@ import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -26,11 +27,15 @@ public class JsonMapper {
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
 
+    public TypeFactory getTypeFactory() {
+        return mapper.getTypeFactory();
+    }
+
     public String serialize(final Object object) throws JsonProcessingException {
         return mapper.writeValueAsString(object);
     }
 
-    public <T> T deserialize(final String json, final TypeReference<T> type)
+    public <T> T deserialize(final String json, final JavaType type)
             throws JsonParseException, JsonMappingException {
         try {
             return mapper.readValue(json, type);

@@ -7,10 +7,9 @@ import android.content.res.Configuration;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.passel.R;
 import com.passel.util.Optional;
-import com.passel.util.Some;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +48,7 @@ public class PasselApplication extends Application {
                 "Study for 21W.789",
                 Arrays.asList("Aneesh", "Carlos"),
                 new Location(42.35965, -71.09206)));
-        events = new Some(dummyEvents);
+        events = Optional.of(dummyEvents);
     }
 
     @Override
@@ -100,9 +99,9 @@ public class PasselApplication extends Application {
                     List<Event> eventList;
                     if (!savedValue.equals("")) {
                         try {
-                            eventList = mapper.deserialize(savedValue,
-                                    new TypeReference<List<Event>>() {
-                                    });
+                            JavaType type = mapper.getTypeFactory()
+                                    .constructParametricType(List.class, Event.class);
+                            eventList = mapper.deserialize(savedValue, type);
                         } catch (JsonProcessingException e) {
                             Log.e("PASSEL_APPLICATION",
                                     "Unable to load events", e);
@@ -112,7 +111,7 @@ public class PasselApplication extends Application {
                     } else {
                         eventList = new ArrayList<>();
                     }
-                    events = new Some<>(eventList);
+                    events = Optional.of(eventList);
                 }
             }
         }

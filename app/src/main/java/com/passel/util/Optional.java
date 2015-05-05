@@ -18,6 +18,10 @@ public abstract class Optional<T> {
         }
     }
 
+    public static <T> Optional<T> of(T value) {
+        return new Some<>(value);
+    };
+
     public static <T> Optional<T> empty() {
         return new None<>();
     }

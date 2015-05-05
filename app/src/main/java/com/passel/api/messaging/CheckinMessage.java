@@ -1,7 +1,6 @@
 package com.passel.api.messaging;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.passel.data.Location;
 
@@ -15,7 +14,7 @@ import lombok.Value;
 @Value
 // No need to call super implementation of equals and hashcode; explicitly let Lombok know this is OK
 @EqualsAndHashCode(callSuper = false)
-public final class CheckinMessage implements Message {
+public final class CheckinMessage implements RequestMessage {
 
     private final int eventId;
     private final int accountId;
@@ -31,11 +30,5 @@ public final class CheckinMessage implements Message {
         this.accountId = accountId;
         this.timestamp = timestamp;
         this.location = location;
-    }
-
-    @Override
-    @JsonIgnore
-    public String getEndpoint() {
-        return "/checkins";
     }
 }
