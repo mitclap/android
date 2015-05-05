@@ -11,6 +11,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -45,7 +47,7 @@ public class PaymentActivity extends Activity {
         mRecipient = (AutoCompleteTextView) findViewById(R.id.recipient);
         mAmount = (EditText) findViewById(R.id.amount);
         mNote = (EditText) findViewById(R.id.note);
-        mCharge = (Button) findViewById(R.id.charge);
+       // mCharge = (Button) findViewById(R.id.charge);
 
         mAdapter = new RecipientAdapter(this);
         mRecipient.setAdapter(mAdapter);
@@ -58,16 +60,24 @@ public class PaymentActivity extends Activity {
         ChargeeListAdapter adapter = new ChargeeListAdapter(this, CANNED_DATA, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doTransactionWithInput(CHARGE);
+                //doTransaction(String recipient, String amount, String note, String txn)
+                RelativeLayout rl = (RelativeLayout)v.getParent();
+                String name = ((TextView) rl.findViewById(R.id.name)).getText().toString();
+                String note = ((TextView) rl.findViewById(R.id.description)).getText().toString();
+                //TODO: replace with function to calculate charge
+                //Here, we charge minutes late*charge rate
+                Float charge = Float.parseFloat(CHARGE_RATE) * 38;
+                String amount = charge.toString();
+                doTransactionWithInput(name, amount, note, CHARGE);
             }
         });
         mList.setAdapter(adapter);
-        mCharge.setOnClickListener(new View.OnClickListener() {
+       /** mCharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 doTransactionWithInput(CHARGE);
             }
-        });
+        });**/
     }
 
     @Override
@@ -89,10 +99,10 @@ public class PaymentActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void doTransactionWithInput(String txn) {
-        String recipient = mRecipient.getText().toString();
-        String amount = mAmount.getText().toString();
-        String note = mNote.getText().toString();
+    private void doTransactionWithInput(String recipient, String amount, String note, String txn) {
+      //  String recipient = mRecipient.getText().toString();
+      //  String amount = mAmount.getText().toString();
+      //  String note = mNote.getText().toString();
         doTransaction(recipient, amount, note, txn);
     }
 
